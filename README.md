@@ -36,4 +36,4 @@ Twitter Trends squad
 * d3.js 5.15.0
 * jest 25.1.0
 
-The versions of Python, d3.js, and Python libraries were selected as the most recent stable versions on 2020Feb19.
+The versions of Python, Python libraries, and Javascript libraries were selected as the most recent stable versions on 2020Feb19.
