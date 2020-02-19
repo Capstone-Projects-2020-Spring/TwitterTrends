@@ -8,7 +8,7 @@ Twitter Trends squad
 
 
 ## Dependencies
-* Python 3.8
+* Python 3.8.1
 * Python libraries
   * flask 1.1.1
   * > Werkzeug 1.0.0
