@@ -8,12 +8,20 @@ Twitter Trends squad
 
 
 ## Dependencies
-* Python 3.8?
+* Python 3.8
 * Python libraries
-  * flask _?
-  * tweepy _?
-  * search-tweets-python _?
-  * requests _?
-  * ?
-* d3.js _?
-* ?
+  * flask 1.1.1
+  * > Werkzeug 1.0.0
+  * > Jinja 2.11.1
+  * > MarkupSafe 1.1.1
+  * > ItsDangerous 1.1.0
+  * > Click 7.0
+  *
+  * tweepy 3.8.0
+  * search-tweets-python 1.5.0
+  * requests 2.22.0
+  * 
+* d3.js 5.15.0
+* 
+
+The versions of Python, d3.js, and Python libraries were selected as the most recent stable versions on 2020Feb19.
