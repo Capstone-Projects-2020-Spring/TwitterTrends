@@ -32,6 +32,8 @@ Twitter Trends squad
   * > pyyaml 5.3
   * > tweet-parser 1.13.2
   * 
+  * jsonify _?
+  * psycopg2 _?
   * 
 * d3.js 5.15.0
 * jest 25.1.0
