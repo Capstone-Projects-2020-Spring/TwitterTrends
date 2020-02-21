@@ -1,9 +1,16 @@
+import java.nio.file.FileSystems;
+
 public class AutoTestProto
 {
 
 	public void seleniumTest( )
 	{
-
-		//todo get absolute path to driver binary file then feed it to system property
+		String relativeChromeDriverPath = "/src/main/chromedriver.exe";
+		String absoluteChromeDriverPath = FileSystems.getDefault()
+													 .getPath(relativeChromeDriverPath)
+													 .normalize()
+													 .toAbsolutePath()
+													 .toString();
+		System.setProperty("webdriver.chrome.driver", absoluteChromeDriverPath);
 	}
 }
