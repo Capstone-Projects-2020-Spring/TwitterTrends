@@ -44,6 +44,7 @@ Twitter Trends squad
   * pyrsistent 0.15.7
   * zipp 2.2.0
   * psycopg2 2.8.4
+  * jsonify 0.5
   * 
   * 
 * d3.js 5.15.0
