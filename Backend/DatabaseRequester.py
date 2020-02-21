@@ -54,3 +54,5 @@ class DatabaseRequester:
         cur.close()
         self.disconnect()
         return data
+
+# end of class DatabaseRequester

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="68cc688a-e8f3-410c-8b2d-0e65d025abcd" name="Default Changelist" comment="" />
+    <list default="true" id="68cc688a-e8f3-410c-8b2d-0e65d025abcd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/test2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AlgorithmsManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/AlgorithmsManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataCache.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataCache.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DatabaseRequester.py" beforeDir="false" afterPath="$PROJECT_DIR$/DatabaseRequester.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskTest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ServerManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/ServerManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TwitterAPIManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/TwitterAPIManager.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +25,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1XiwsH5JQgGHbgMS01xbRFzNUXX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -22,8 +37,9 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ServerManager.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -32,8 +48,8 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="FlaskTest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="test2" />
+    <configuration name="ServerManager" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Backend" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -45,7 +61,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FlaskTest.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ServerManager.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -56,7 +72,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.FlaskTest" />
+        <item itemvalue="Python.ServerManager" />
       </list>
     </recent_temporary>
   </component>
@@ -78,6 +94,7 @@
       <workItem from="1582232619844" duration="1431000" />
       <workItem from="1582234896548" duration="1699000" />
       <workItem from="1582253006246" duration="7822000" />
+      <workItem from="1582261365230" duration="4304000" />
     </task>
     <servers />
   </component>
@@ -89,30 +106,34 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="679" y="139" key="#FlaskTest/0.0.1920.1050@0.0.1920.1050" timestamp="1582232431762" />
-    <state x="379" y="338" width="424" height="484" key="FileChooserDialogImpl" timestamp="1582233050208">
+    <state x="380" y="223" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582265249786">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="379" y="338" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1582233050208" />
+    <state x="380" y="223" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1582265249786" />
+    <state x="379" y="338" width="424" height="484" key="FileChooserDialogImpl" timestamp="1582265244510">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="379" y="338" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1582265244510" />
     <state x="371" y="366" width="424" height="484" key="FileChooserDialogImpl/0.27.1879.1053@0.27.1879.1053" timestamp="1582149248010" />
-    <state width="914" height="290" key="GridCell.Tab.0.bottom" timestamp="1582260919879">
+    <state width="914" height="292" key="GridCell.Tab.0.bottom" timestamp="1582265354045">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="914" height="290" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1582260919879" />
+    <state width="914" height="292" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1582265354045" />
     <state width="1033" height="229" key="GridCell.Tab.0.bottom/0.27.1879.1053@0.27.1879.1053" timestamp="1581544742046" />
-    <state width="914" height="290" key="GridCell.Tab.0.center" timestamp="1582260919879">
+    <state width="914" height="292" key="GridCell.Tab.0.center" timestamp="1582265354045">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="914" height="290" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1582260919879" />
+    <state width="914" height="292" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1582265354045" />
     <state width="1033" height="229" key="GridCell.Tab.0.center/0.27.1879.1053@0.27.1879.1053" timestamp="1581544742045" />
-    <state width="914" height="290" key="GridCell.Tab.0.left" timestamp="1582260919879">
+    <state width="914" height="292" key="GridCell.Tab.0.left" timestamp="1582265354045">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="914" height="290" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1582260919879" />
+    <state width="914" height="292" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1582265354045" />
     <state width="1033" height="229" key="GridCell.Tab.0.left/0.27.1879.1053@0.27.1879.1053" timestamp="1581544742045" />
-    <state width="914" height="290" key="GridCell.Tab.0.right" timestamp="1582260919879">
+    <state width="914" height="292" key="GridCell.Tab.0.right" timestamp="1582265354045">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="914" height="290" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1582260919879" />
+    <state width="914" height="292" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1582265354045" />
     <state width="1033" height="229" key="GridCell.Tab.0.right/0.27.1879.1053@0.27.1879.1053" timestamp="1581544742045" />
     <state x="118" y="308" key="SettingsEditor" timestamp="1582233056451">
       <screen x="0" y="0" width="1920" height="1050" />
@@ -124,12 +145,13 @@
     </state>
     <state x="1059" y="371" key="com.intellij.ide.util.TipDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1582253783741" />
     <state x="1036" y="399" key="com.intellij.ide.util.TipDialog/0.27.1879.1053@0.27.1879.1053" timestamp="1582231225530" />
-    <state x="143" y="182" width="672" height="676" key="search.everywhere.popup" timestamp="1582258715953">
+    <state x="143" y="182" width="672" height="676" key="search.everywhere.popup" timestamp="1582265536877">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="143" y="182" width="672" height="676" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1582258715953" />
+    <state x="143" y="182" width="672" height="676" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1582265536877" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/test2$FlaskTest.coverage" NAME="FlaskTest Coverage Results" MODIFIED="1582260721064" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Backend$FlaskTest.coverage" NAME="ServerManager Coverage Results" MODIFIED="1582265354014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
