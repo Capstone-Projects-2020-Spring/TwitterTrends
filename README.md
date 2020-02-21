@@ -32,8 +32,19 @@ Twitter Trends squad
   * > pyyaml 5.3
   * > tweet-parser 1.13.2
   * 
-  * jsonify _?
-  * psycopg2 _?
+  * JsonForm 0.0.2
+  * JsonSir 0.0.2
+  * easyconfig 0.1.7
+  * Resource 0.2.1
+  * api 0.0.7
+  * attrs 19.3.0
+  * importlib 1.5.0
+  * jsonschema 3.2.0
+  * nose 1.3.7
+  * pyrsistent 0.15.7
+  * zipp 2.2.0
+  * 
+  * 
   * 
 * d3.js 5.15.0
 * jest 25.1.0
