@@ -1,2 +1,0 @@
-# TwitterTrends
-Twitter Trends squad
