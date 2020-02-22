@@ -54,6 +54,14 @@ def api_test():
     return jsonify(["Test", "Test2"])
 
 
+@app.route('/testadd', methods=['GET'])
+def api_testadd():
+    db.query("DELETE FROM test_users WHERE id = 13;")
+    result = db.query(  "INSERT INTO test_users "
+                        "VALUES (13, \'dantest3@test.com\');")
+    return jsonify(result) # "Test Add Endpoint" #jsonify(result)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404

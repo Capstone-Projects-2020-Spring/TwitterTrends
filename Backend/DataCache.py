@@ -3,10 +3,6 @@
 
 class DataCache:
 
-    cache = None
-    cache_index = None
-    cache_max = None
-
     def __init__(self, cache_max=20):
         self.cache = {}
         self.cache_index = 0

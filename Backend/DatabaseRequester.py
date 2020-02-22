@@ -1,16 +1,11 @@
 import psycopg2
 from configparser import ConfigParser
 
+# TODO : Connection pooling
+# TODO : fix error with fetchall() returning none
+
+
 class DatabaseRequester:
-
-    conn = None
-    connected = False
-    host = None
-    port = None
-    database = None
-    user = None
-    password = None
-
     # get database info from direct arguments
     def __init__(self, host, port, database, user, password):
         self.conn = None
@@ -33,7 +28,8 @@ class DatabaseRequester:
                 )
                 self.connected = True
                 print("DB Connected")
-            except psycopg2.DatabaseError:
+            except psycopg2.DatabaseError as err:
+                print("[ERROR] Database Connection Failed\n", err)
                 return
 
     def disconnect(self):
@@ -45,12 +41,18 @@ class DatabaseRequester:
 
     def query(self, query_string, *argv):
         data = None
+        status = None
         if self.conn is None:
             self.connect()
         cur = self.conn.cursor()
         cur.execute(query_string, argv)
         self.conn.commit()
-        data = cur.fetchall()
+        status = cur.statusmessage
+        if cur is not None:
+            if "SELECT" in status:
+                data = cur.fetchall()
+            else:
+                data = status
         cur.close()
         self.disconnect()
         return data
