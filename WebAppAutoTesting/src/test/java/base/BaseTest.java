@@ -19,6 +19,7 @@ import java.nio.file.FileSystems;
 public class BaseTest
 {
 	static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/chromedriver.exe";
+	static final String DOMAIN_NAME = "";//todo
 
 	private static ChromeDriverService service;
 	protected WebDriver driver;
@@ -62,20 +63,7 @@ public class BaseTest
 		finally { driver.quit(); }
 	}
 
-	//todo have @BeforeAll func set up ChromeDriverService
-
-	//todo have @BeforeEach func set up RemoteWebDriver?
-
-	//todo have @AfterEach func quit the WebDriver
-
-	//todo have @AfterAll func break down ChromeDriverService
-
-	//todo implement
-
-	//TODO replicate waitForPageLoad() functionality
-	// jquery, angular, documentState checks? running javascript to check those statuses
-	// small amounts of use of thread.sleep
-	// Maybe can be simpler, because limited to a single website!?!
+	protected void loadWebsite( ) { ;}
 
 	protected static String getChromeDriverPath( )
 	{
