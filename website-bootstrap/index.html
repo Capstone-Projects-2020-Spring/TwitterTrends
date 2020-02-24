@@ -11,60 +11,53 @@
 
   </head>
 <body>
-	<nav class="navbar navbar-expand-md">
-		<a class="navbar-brand" href="#">Logo</a>
 
-		
-		<div class="search-box">
-			<input class="search-txt" type="text" placeholder="Search . . ." name="">
-			<a class="search-btn">
+	<!-- Navigation bar -->
+	
+	<!-- Logo -->
+	<nav class="navbar navbar-expand-md">
+		<a class="navbar-brand" href="#">Logo</a>  
+
+		<!-- Search Bar -->
+		<div id="search-box">
+			<input id="search-txt" type="text" placeholder="Search . . ." name="">
+			<a id="search-btn">
 				<i class="fas fa-search"></i>
 			</a>
 		</div>
 		
-		
-		<div class="drop-box">
-			<button class="drop-btn" type="reset">Analyze
+		<!-- Drop down menu -->
+		<div id="drop-box">
+			<button id="drop-btn" type="reset">Analyze
 			<i class="fas fa-caret-down"></i>
 			</button>
 			
-			<div class="dropdown-menu">
+			<div id="dropdown-menu">
 				<a href="#">Time</a>
 				<a href="#">Location</a>
 				<a href="#">Network</a>
-			</div>
+			</div> 
 		</div>	
 		
-		
-		
-		<!--
-			<label for="analyze">Analyze:  </label>
-			
-			<select id="cars">
-				<option value="time">Time</option>
-				<option value="location">Location</option>
-				<option value="network">Network</option>
-			</select>
-		-->
 	</nav>
 
 
-      
+     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
 	<div class="row">
         
+		<!-- First column -->
 		<div class="col-12 col-md-10">
-		
-		
 	<header class="page-header header container-fluid">
-		<div class="overlay"></div>
-		
+		<div id="overlay"></div> <!-- Temple Logo(delete after d3.js done*maybe*) -->
+			<!-- d3.js stuff -->
 		</div>
 	</header>
 	
-		<div class="col" style="background-color: #470a0a">
+		<!-- Second column -->
+		<div class="col" style="background-color: #470a0a"> <!-- Second column background color -->
 		
 		<br>
-		<h3 class="side-title">Top Tweets</h3>
+		<h3 class="side-title">Top Tweets</h3> 
 		<img src="images/tweets-1.jpeg" class="img-fluid">
 		
 		<br>
@@ -81,8 +74,10 @@
 	</div>
 
 	
+	<!-- Second grid view -->
 	<div class="container features">
       <div class="row">
+	  <!-- First column -->
         <div class="col-lg-4 col-md-4 col-sm-12">
 		  <br>
 		  <br>
@@ -90,6 +85,8 @@
           <img src="images/icon-1.png" class="img-fluid">
 			<p>Bla Bla Bla</p>
         </div>
+		
+		<!-- Second column -->
         <div class="col-lg-4 col-md-4 col-sm-12">
 		  <br>
 		  <br>
@@ -97,10 +94,12 @@
           <img src="images/icon-2.png" class="img-fluid">
 			<p>Bla Bla Bla</p>
         </div>
+		
+		<!-- Third column -->
           <div class="col-lg-4 col-md-4 col-sm-12">  
 		  <br>
 		  <br>
-		  <h3 class="feature-title">Team Member</h3>
+		  <h3 id="feature-title">Team Member</h3>
 			<p>Jennifer Chao</p>
 			<p>Conor Kennedy</p>
 			<p>Mike Lauw</p>
