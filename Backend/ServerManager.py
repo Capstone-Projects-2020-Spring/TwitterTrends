@@ -5,6 +5,8 @@ from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
 from TwitterAPIManager import TwitterAPIManager
 from AlgorithmsManager import AlgorithmsManager
+import DataStructures
+
 
 # SETUP DataCache
 cache = DataCache()
@@ -40,18 +42,31 @@ def home():
 @app.route('/users', methods=['GET'])
 def api_tusers():
     result = db.query("SELECT * FROM test_users;")
-    return jsonify(result)
+    users = []
+    for row in result.get_rows():
+        users.append({"id": row[0], "email": row[1]})
+
+    return jsonify(users)
 
 
 @app.route('/tweets', methods=['GET'])
 def api_ttweets():
     result = db.query("SELECT * FROM test_tweets;")
-    return jsonify(result)
+    tweets = []
+    for row in result.get_rows():
+        tweets.append(DataStructures.Tweet(row[0], row[1], row[2], row[3]).__dict__)
+    return jsonify(tweets)
 
 
 @app.route('/test', methods=['GET'])
 def api_test():
     return jsonify(["Test", "Test2"])
+
+
+@app.route('/testcd', methods=['GET'])
+def api_testcd():
+    result = db.query("SELECT * FROM test_conor_dan;");
+    return jsonify(result)
 
 
 @app.route('/testadd', methods=['GET'])

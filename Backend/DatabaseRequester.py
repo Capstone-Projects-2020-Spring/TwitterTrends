@@ -1,6 +1,8 @@
 import psycopg2
 from psycopg2 import pool
 
+import DataStructures
+
 
 class DatabaseRequester:
     # get database info from direct arguments
@@ -26,11 +28,14 @@ class DatabaseRequester:
             conn.commit()
 
             status = cur.statusmessage
+
             if cur is not None:
+                # create return object data if query is SELECT
                 if "SELECT" in status:
-                    data = cur.fetchall()
-                else:
-                    data = status
+                    colnames = [desc[0] for desc in cur.description] # name of each column
+                    rows = cur.fetchall()  # all the rows returned
+                    data = QueryTuples(colnames, rows)
+
             cur.close()
             conn.close()
             print(status)
@@ -40,3 +45,23 @@ class DatabaseRequester:
         return data
 
 # end of class DatabaseRequester
+
+
+# data class containing column names and all the rows returned by query
+class QueryTuples:
+
+    def __init__(self, colnames, rows):
+        self.colnames = colnames
+        self.rows = rows
+
+    def rows_count(self):
+        return len(self.rows)
+
+    def columns_count(self):
+        return len(self.colnames)
+
+    def get_rows(self):
+        return self.rows
+
+    def get_column_names(self):
+        return self.colnames
