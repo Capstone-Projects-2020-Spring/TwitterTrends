@@ -13,9 +13,7 @@
 <body>
 	<nav class="navbar navbar-expand-md">
 		<a class="navbar-brand" href="#">Logo</a>
-		<button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+
 		
 		<div class="search-box">
 			<input class="search-txt" type="text" placeholder="Search . . ." name="">
@@ -24,7 +22,22 @@
 			</a>
 		</div>
 		
-		<div class="collapse navbar-collapse" id="main-navigation">
+		
+		<div class="drop-box">
+			<button class="drop-btn" type="reset">Analyze
+			<i class="fas fa-caret-down"></i>
+			</button>
+			
+			<div class="dropdown-menu">
+				<a href="#">Time</a>
+				<a href="#">Location</a>
+				<a href="#">Network</a>
+			</div>
+		</div>	
+		
+		
+		
+		<!--
 			<label for="analyze">Analyze:  </label>
 			
 			<select id="cars">
@@ -32,13 +45,12 @@
 				<option value="location">Location</option>
 				<option value="network">Network</option>
 			</select>
-		</div>
+		-->
 	</nav>
 
 
-<div class="mains">
       
-	<div class="row" grid-row-gap: 0;>
+	<div class="row">
         
 		<div class="col-12 col-md-10">
 		
@@ -49,7 +61,7 @@
 		</div>
 	</header>
 	
-		<div class="col" style="background-color: #008b8b">
+		<div class="col" style="background-color: #470a0a">
 		
 		<br>
 		<h3 class="side-title">Top Tweets</h3>
@@ -68,29 +80,34 @@
 		</div>
 	</div>
 
-</div> 
 	
 	<div class="container features">
       <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-12">
+		  <br>
+		  <br>
           <h3 class="feature-title">Stuff</h3>
           <img src="images/icon-1.png" class="img-fluid">
-          <p>Bla Bla Bla</p>
+			<p>Bla Bla Bla</p>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
+		  <br>
+		  <br>
           <h3 class="feature-title">Stuff</h3>
           <img src="images/icon-2.png" class="img-fluid">
-          <p>Bla Bla Bla</p>
+			<p>Bla Bla Bla</p>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">  
-		<h3 class="feature-title">Team Member</h3>
-		<p>Jennifer Chao</p>
-		<p>Conor Kennedy</p>
-		<p>Mike Lauw</p>
-		<p>Chris Nelson</p>
-		<p>Scott Salisbury</p>
-		<p>Dan Tran</p>
-		<p>Thanh Tran</p>
+          <div class="col-lg-4 col-md-4 col-sm-12">  
+		  <br>
+		  <br>
+		  <h3 class="feature-title">Team Member</h3>
+			<p>Jennifer Chao</p>
+			<p>Conor Kennedy</p>
+			<p>Mike Lauw</p>
+			<p>Chris Nelson</p>
+			<p>Scott Salisbury</p>
+			<p>Dan Tran</p>
+			<p>Thanh Tran</p>
         </div>
       </div> 
     </div>
