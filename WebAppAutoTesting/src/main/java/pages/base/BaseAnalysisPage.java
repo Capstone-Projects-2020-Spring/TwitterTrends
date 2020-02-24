@@ -1,6 +1,6 @@
 package pages.base;
 
-import components.BaseAnalysisControlBar;
+import components.base.BaseAnalysisControlBar;
 
 /**
  * POM representation of shared components among 'Analyze _' pages on the website
