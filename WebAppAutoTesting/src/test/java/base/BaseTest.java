@@ -19,7 +19,7 @@ import java.nio.file.FileSystems;
 public class BaseTest
 {
 	static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/chromedriver.exe";
-	static final String DOMAIN_NAME = "";//todo
+	static final String DOMAIN_NAME = "www.twittervisualtrends.com";
 
 	private static ChromeDriverService service;
 	protected WebDriver driver;
@@ -63,7 +63,7 @@ public class BaseTest
 		finally { driver.quit(); }
 	}
 
-	protected void loadWebsite( ) { ;}
+	protected void loadWebsite( ) { driver.get(DOMAIN_NAME); }
 
 	protected static String getChromeDriverPath( )
 	{

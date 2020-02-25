@@ -1,6 +1,7 @@
 package components;
 
 import components.base.BaseAnalysisControlBar;
+import org.openqa.selenium.WebDriver;
 
 /**
  * POM representation of the control bar for the location analysis page
@@ -8,4 +9,8 @@ import components.base.BaseAnalysisControlBar;
 public class LocationAnalysisControlBar extends BaseAnalysisControlBar
 {
 
+	public LocationAnalysisControlBar( final WebDriver driver )
+	{
+		super(driver);
+	}
 }

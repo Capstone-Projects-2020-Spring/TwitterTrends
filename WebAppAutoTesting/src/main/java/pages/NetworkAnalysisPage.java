@@ -1,6 +1,7 @@
 package pages;
 
 import components.NetworkAnalysisControlBar;
+import org.openqa.selenium.WebDriver;
 import pages.base.BaseAnalysisPage;
 
 /**
@@ -9,8 +10,9 @@ import pages.base.BaseAnalysisPage;
 public class NetworkAnalysisPage extends BaseAnalysisPage<NetworkAnalysisControlBar>
 {
 
-	public NetworkAnalysisPage( )
+	public NetworkAnalysisPage( final WebDriver driver )
 	{
-		this.controlBar = new NetworkAnalysisControlBar();
+		super(driver);
+		this.controlBar = new NetworkAnalysisControlBar(driver);
 	}
 }

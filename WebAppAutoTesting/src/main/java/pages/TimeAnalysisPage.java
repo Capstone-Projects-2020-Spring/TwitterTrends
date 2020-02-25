@@ -1,6 +1,7 @@
 package pages;
 
 import components.TimeAnalysisControlBar;
+import org.openqa.selenium.WebDriver;
 import pages.base.BaseAnalysisPage;
 
 /**
@@ -9,8 +10,9 @@ import pages.base.BaseAnalysisPage;
 public class TimeAnalysisPage extends BaseAnalysisPage<TimeAnalysisControlBar>
 {
 
-	public TimeAnalysisPage( )
+	public TimeAnalysisPage( final WebDriver driver )
 	{
-		this.controlBar = new TimeAnalysisControlBar();
+		super(driver);
+		this.controlBar = new TimeAnalysisControlBar(driver);
 	}
 }

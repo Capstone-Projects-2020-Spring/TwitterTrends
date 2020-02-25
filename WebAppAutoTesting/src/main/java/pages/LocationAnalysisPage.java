@@ -1,6 +1,7 @@
 package pages;
 
 import components.LocationAnalysisControlBar;
+import org.openqa.selenium.WebDriver;
 import pages.base.BaseAnalysisPage;
 
 /**
@@ -9,8 +10,9 @@ import pages.base.BaseAnalysisPage;
 public class LocationAnalysisPage extends BaseAnalysisPage<LocationAnalysisControlBar>
 {
 
-	public LocationAnalysisPage( )
+	public LocationAnalysisPage( final WebDriver driver )
 	{
-		this.controlBar = new LocationAnalysisControlBar();
+		super(driver);
+		this.controlBar = new LocationAnalysisControlBar(driver);
 	}
 }
