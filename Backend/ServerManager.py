@@ -41,21 +41,32 @@ def home():
 
 @app.route('/users', methods=['GET'])
 def api_tusers():
-    result = db.query("SELECT * FROM test_users;")
-    users = []
-    for row in result.get_rows():
-        users.append({"id": row[0], "email": row[1]})
-
-    return jsonify(users)
+    if cache.should_update("users", 1):
+        result = db.query("SELECT * FROM test_users;")
+        users = []
+        for row in result.get_rows():
+            users.append({"id": row[0], "email": row[1]})
+        json = jsonify(users)
+        cache.add("users", json, 1)
+        return json
+    else:
+        print("Returning USERS results from cache")
+        return cache.retrieve("users")
 
 
 @app.route('/tweets', methods=['GET'])
 def api_ttweets():
-    result = db.query("SELECT * FROM test_tweets;")
-    tweets = []
-    for row in result.get_rows():
-        tweets.append(DataStructures.Tweet(row[0], row[1], row[2], row[3]).__dict__)
-    return jsonify(tweets)
+    if cache.should_update("tweets", 1):
+        result = db.query("SELECT * FROM test_tweets;")
+        tweets = []
+        for row in result.get_rows():
+            tweets.append(DataStructures.Tweet(row[0], row[1], row[2], row[3]).__dict__)
+        json = jsonify(tweets)
+        cache.add("tweets", json, 1)
+        return json
+    else:
+        print("Returning TWEETS results from cache")
+        return cache.retrieve("tweets")
 
 
 @app.route('/test', methods=['GET'])
