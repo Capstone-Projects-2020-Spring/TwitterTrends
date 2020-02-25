@@ -20,16 +20,28 @@ class DataCache:
     def __init__(self):
         self.cache = {}
 
-    def add(self, query_string, result_string):
-        if query_string in self.cache.keys():
-            if self.cache[query_string].get_timestamp() < (datetime.now() - timedelta(minutes=5)):
-                self.cache[query_string] = DataCacheResult(result_string, datetime.now())
-                print("CACHE NEW TIMESTAMP FOR ", "[", query_string, "]")
-            else:
-                print("CACHE ERROR ADD TOO QUICKLY ", "[",query_string, "]")
-        else:
-            print("CACHE NEW ENTRY ", "[", query_string, "]")
+    def add(self, query_string, result_string, mins=5):
+        if self.should_update(query_string, mins):
             self.cache[query_string] = DataCacheResult(result_string, datetime.now())
+            return True
+        else:
+            return False
+
+    # check if the query was requested within <mins> minutes ago (default at 5 mins)
+    # TRUE: if query was requested more than <mins> minutes ago
+    # FALSE: if query was requested less than <mins> minutes ago
+    def should_update(self, query_string, mins=5):
+        if query_string in self.cache.keys():
+            # if the query was previously called over 5 minutes ago,
+            if self.cache[query_string].get_timestamp() < (datetime.now() - timedelta(minutes=mins)):
+                print("More than 5")
+                return True
+            else:
+                print("Less than 5")
+                return False
+        else:
+            print("Query does not exist")
+            return True
 
     def retrieve(self, query_string):
         ret = None
