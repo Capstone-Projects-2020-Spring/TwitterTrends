@@ -1,3 +1,9 @@
-backend/.idea/
-backend/venv/
-backend/__pycache__/
+# hopefully the more general patterns below will obsolete these component-specific items
+# backend/.idea/
+# backend/venv/
+# backend/__pycache__/
+
+**/venv/
+**/idea/
+**/__pycache__/
+*.DS_Store
