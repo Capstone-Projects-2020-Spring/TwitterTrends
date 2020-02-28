@@ -7,17 +7,16 @@ import org.openqa.selenium.WebDriver;
 /**
  * POM representation of the elements in common among all pages of the website
  */
-public abstract class BasePage extends BasePageObject
+public abstract class BasePage<U extends NavBar> extends BasePageObject
 {
-	protected NavBar navBar;
+protected U navBar;
 
-	protected BasePage( final WebDriver driver )
-	{
-		super(driver);
-		this.navBar = new NavBar(driver);
-	}
+protected BasePage( final WebDriver driver )
+{
+	super(driver);
+}
 
-	//	TODO public abstract boolean isCurrentPage();
+//	TODO public abstract boolean isCurrentPage();
 
-	public NavBar getNavBar( ) { return navBar; }
+public NavBar getNavBar( ) { return navBar; }
 }

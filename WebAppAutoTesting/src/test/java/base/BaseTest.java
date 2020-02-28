@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import pages.HomePage;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,15 +64,20 @@ public class BaseTest
 		finally { driver.quit(); }
 	}
 
-	protected void loadWebsite( ) { driver.get(DOMAIN_NAME); }
+protected HomePage loadWebsite( )
+{
+	driver.get(DOMAIN_NAME);
+	HomePage startPage = new HomePage(driver);
+	return startPage;
+}
 
-	protected static String getChromeDriverPath( )
-	{
-		String absoluteChromeDriverPath = FileSystems.getDefault()
-													 .getPath(RELATIVE_CHROME_DRIVER_PATH)
-													 .normalize()
-													 .toAbsolutePath()
-													 .toString();
-		return absoluteChromeDriverPath;
-	}
+protected static String getChromeDriverPath( )
+{
+	String absoluteChromeDriverPath = FileSystems.getDefault()
+												 .getPath(RELATIVE_CHROME_DRIVER_PATH)
+												 .normalize()
+												 .toAbsolutePath()
+												 .toString();
+	return absoluteChromeDriverPath;
+}
 }
