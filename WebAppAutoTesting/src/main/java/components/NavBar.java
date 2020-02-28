@@ -21,6 +21,11 @@ public NavBar( final WebDriver driver )
 	super(driver);
 }
 
+public boolean isSiteTitleDisplayed( ) { return checkForDisplayedElement(siteTitleLoc); }
+
+public boolean isDropdownEnabled( ) { return checkForEnabledElement(analysisPageDropdownLoc); }
+//todo check whether dropdown can be expanded and whether the expected options are all there (see enum)
+
 //todo click title to go to homepage?
 
 /**

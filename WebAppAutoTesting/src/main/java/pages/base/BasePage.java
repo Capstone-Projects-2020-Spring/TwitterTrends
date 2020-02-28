@@ -18,5 +18,5 @@ protected BasePage( final WebDriver driver )
 
 //	TODO public abstract boolean isCurrentPage();
 
-public NavBar getNavBar( ) { return navBar; }
+public U getNavBar( ) { return navBar; }
 }

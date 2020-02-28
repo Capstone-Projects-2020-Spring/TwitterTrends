@@ -19,20 +19,22 @@ import java.nio.file.FileSystems;
  */
 public class BaseTest
 {
-	static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/chromedriver.exe";
-	static final String DOMAIN_NAME = "www.twittervisualtrends.com";
+static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/chromedriver.exe";
+static final String DOMAIN_NAME = "www.twittervisualtrends.com";
 
-	private static ChromeDriverService service;
-	protected WebDriver driver;
+private static ChromeDriverService service;
+protected WebDriver driver;
 
-	@BeforeAll
-	public static void startTestSuite( ) throws IOException
-	{
-		service = new ChromeDriverService.Builder().usingDriverExecutable(new File(getChromeDriverPath()))
-												   .usingAnyFreePort()
-												   .build();
-		service.start();
-	}
+protected HomePage startPage;
+
+@BeforeAll
+public static void startTestSuite( ) throws IOException
+{
+	service = new ChromeDriverService.Builder().usingDriverExecutable(new File(getChromeDriverPath()))
+											   .usingAnyFreePort()
+											   .build();
+	service.start();
+}
 
 	@AfterAll
 	public static void cleanupTestSuite( )
@@ -50,6 +52,7 @@ public class BaseTest
 	public void setUpTestCase( )
 	{
 		driver = new RemoteWebDriver(service.getUrl(), new ChromeOptions());
+		this.startPage = loadWebsite();
 	}
 
 	@AfterEach

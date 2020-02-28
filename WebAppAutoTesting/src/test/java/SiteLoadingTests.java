@@ -1,4 +1,8 @@
 import base.BaseTest;
+import components.NavBar;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * tests that major elements on each page of the website load and are displayed
@@ -6,5 +10,12 @@ import base.BaseTest;
  */
 public class SiteLoadingTests extends BaseTest
 {
-	//todo load the website
+
+@Test
+public void siteLoadsTest( )
+{
+	NavBar navBar = startPage.getNavBar();
+	assertTrue(navBar.isSiteTitleDisplayed());
+	assertTrue(navBar.isDropdownEnabled());
+}
 }

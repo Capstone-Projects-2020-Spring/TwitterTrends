@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class BasePageObject
 {
 protected static final int MAX_TIMEOUT = 60;
+protected static final int TEST_CHECK_TIMEOUT = 10;
 
 protected static final String JS_GET_DOC_READY_STATE = "return document.readyState;";
 protected static final String JS_GET_JQUERY_LOADED
@@ -21,13 +22,10 @@ protected static final String JS_GET_ANGULAR_LOADED
 private static final boolean IS_ANGULAR_NEEDED = false;
 
 protected WebDriver driver;
-private WebDriverWait waiter;
 
 protected BasePageObject( final WebDriver driver )
 {
 	this.driver = driver;
-	this.waiter = new WebDriverWait(driver, MAX_TIMEOUT);
-	
 	waitForPageLoad();
 }
 
@@ -56,6 +54,62 @@ protected String getText( final By loc )
 	WebElement elem = getElement(loc);
 	return getText(elem);
 }
+
+/**
+ * determines whether any element matching the given locator is loaded or loads within a short time
+ *
+ * @param loc description of the element which should be loaded
+ *
+ * @return whether any element matching the given locator is loaded or loads within a short time
+ */
+protected boolean checkForElement( final By loc )
+{
+	ExpectedCondition<Boolean> isPresent = webDriver ->
+	{
+		assert webDriver != null;
+		WebElement elem = webDriver.findElement(loc);
+		return elem != null;
+	};
+	return checkForCond(isPresent);
+}
+
+/**
+ * determines whether any element matching the given locator exists and is displayed or becomes so within a short time
+ *
+ * @param loc description of the element which should be loaded and displayed
+ *
+ * @return whether any element matching the given locator is exists and is displayed or becomes so within a short time
+ */
+protected boolean checkForDisplayedElement( final By loc )
+{
+	ExpectedCondition<Boolean> isDisplayed = webDriver ->
+	{
+		assert webDriver != null;
+		WebElement elem = webDriver.findElement(loc);
+		return elem.isDisplayed();
+	};
+	return checkForCond(isDisplayed);
+}
+
+/**
+ * determines whether any element matching the given locator exists and is enabled or becomes so within a short time
+ *
+ * @param loc description of the element which should be loaded and enabled
+ *
+ * @return whether any element matching the given locator is exists and is enabled or becomes so within a short time
+ */
+protected boolean checkForEnabledElement( final By loc )
+{
+	ExpectedCondition<Boolean> isEnabled = webDriver ->
+	{
+		assert webDriver != null;
+		WebElement elem = webDriver.findElement(loc);
+		return elem.isEnabled();
+	};
+	return checkForCond(isEnabled);
+}
+
+//todo add functions which take a webelement and 'check' if it is displayed or enabled or else becomes so in a window of time
 
 // |||||||||||||||||||||||||| INTERACTION UTILITIES ||||||||||||||||||||||||
 
@@ -132,29 +186,29 @@ protected WebElement getElement( final By loc )
 		WebElement loadedElem = webDriver.findElement(loc);
 		return loadedElem;
 	};
-	WebElement elem = waiter.until(elementLoaded);
+	WebElement elem = waitForCond(elementLoaded);
 	return elem;
 }
 
-	/**
-	 * waits for an element matching the locator to be present & displayed and then fetches/returns it
-	 *
-	 * @param loc description of the desired element
-	 *
-	 * @return the element
-	 */
-	protected WebElement getDisplayedElement( final By loc )
+/**
+ * waits for an element matching the locator to be present & displayed and then fetches/returns it
+ *
+ * @param loc description of the desired element
+ *
+ * @return the element
+ */
+protected WebElement getDisplayedElement( final By loc )
+{
+	ExpectedCondition<WebElement> elementDisplayed = webDriver ->
 	{
-		ExpectedCondition<WebElement> elementDisplayed = webDriver ->
-		{
-			assert webDriver != null;
-			WebElement displayedElem = webDriver.findElement(loc);
-			if ( !displayedElem.isDisplayed() ) {displayedElem = null;}
-			return displayedElem;
-		};
-		WebElement elem = waiter.until(elementDisplayed);
-		return elem;
-	}
+		assert webDriver != null;
+		WebElement displayedElem = webDriver.findElement(loc);
+		if ( !displayedElem.isDisplayed() ) {displayedElem = null;}
+		return displayedElem;
+	};
+	WebElement elem = waitForCond(elementDisplayed);
+	return elem;
+}
 
 /**
  * waits for an element matching the locator to be present, displayed, and enabled* and then fetches/returns it
@@ -174,7 +228,7 @@ protected WebElement getEnabledElement( final By loc )
 		if ( !enabledElem.isEnabled() ) {enabledElem = null;}
 		return enabledElem;
 	};
-	WebElement elem = waiter.until(elementEnabled);
+	WebElement elem = waitForCond(elementEnabled);
 	return elem;
 }
 
@@ -191,7 +245,7 @@ protected void waitForElementDisplayed( final WebElement elem )
 	{
 		return elem.isDisplayed();
 	};
-	waiter.until(elementDisplayed);
+	waitForCond(elementDisplayed);
 }
 
 /**
@@ -205,7 +259,59 @@ protected void waitForElementEnabled( final WebElement elem )
 	{
 		return elem.isEnabled();
 	};
-	waiter.until(elementEnabled);
+	waitForCond(elementEnabled);
+}
+
+/**
+ * waits up to some length of time for a condition to become true,
+ * either returning as soon as it becomes true or throwing an exception when the timeout is reached
+ *
+ * @param condition the condition to wait for
+ * @param timeout   how long to wait before timing out
+ */
+private <T> T waitForCond( final ExpectedCondition<T> condition, final int timeout )
+{
+	WebDriverWait waiter = new WebDriverWait(driver, timeout);
+	T result = waiter.until(condition);
+	
+	return result;
+}
+
+/**
+ * overloads {@link #waitForCond(ExpectedCondition, int)} to always use the max timeout
+ */
+private <T> T waitForCond( final ExpectedCondition<T> condition ) { return waitForCond(condition, MAX_TIMEOUT); }
+
+/**
+ * checks whether some condition is true or becomes true within some amount of time
+ *
+ * @param condition the condition to check for
+ * @param waitLen   the maximum time to wait for the condition to become true
+ *
+ * @return whether the condition is true or becomes true within the given amount of time
+ */
+private boolean checkForCond( final ExpectedCondition<Boolean> condition, final int waitLen )
+{
+	boolean wasConditionSatisfied = true;
+	
+	WebDriverWait testWaiter = new WebDriverWait(driver, waitLen);
+	try
+	{
+		testWaiter.until(condition);
+	}
+	catch ( TimeoutException e )
+	{
+		wasConditionSatisfied = false;
+	}
+	return wasConditionSatisfied;
+}
+
+/**
+ * overloads {@link #checkForCond(ExpectedCondition, int)} to always use the standard testing wait length
+ */
+private boolean checkForCond( final ExpectedCondition<Boolean> condition )
+{
+	return checkForCond(condition, TEST_CHECK_TIMEOUT);
 }
 
 // |||||||||||||||||||||||||| PAGE LOAD UTILITIES ||||||||||||||||||||||||
@@ -221,7 +327,7 @@ public void waitForPageLoad( )
 	{
 		return isDocumentReady();
 	};
-	waiter.until(pageLoaded);
+	waitForCond(pageLoaded);
 	
 	if ( !isJqueryReady() ) { sleep(sleepDuration); }
 	if ( IS_ANGULAR_NEEDED && !isAngularReady() ) { sleep(sleepDuration); }
@@ -239,7 +345,7 @@ public void waitForPageLoad( )
  */
 protected void waitForPageLoad( final WebElement oldElem )
 {
-	waiter.until(ExpectedConditions.stalenessOf(oldElem));
+	waitForCond(ExpectedConditions.stalenessOf(oldElem));
 	waitForPageLoad();
 }
 
@@ -264,16 +370,16 @@ private boolean isAngularReady( )
 }
 
 private Object executeJs( final String jsCode )
-	{
-		Object retVal = null;
-		JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-		retVal = jsExec.executeScript(jsCode);
-		return retVal;
-	}
+{
+	Object retVal = null;
+	JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+	retVal = jsExec.executeScript(jsCode);
+	return retVal;
+}
 
-	protected void sleep( final int millis )
-	{
-		try { Thread.sleep(millis); }
-		catch ( InterruptedException e ) { System.err.println("WARN- Interrupted during sleep"); }
-	}
+protected void sleep( final int millis )
+{
+	try { Thread.sleep(millis); }
+	catch ( InterruptedException e ) { System.err.println("WARN- Interrupted during sleep"); }
+}
 }
