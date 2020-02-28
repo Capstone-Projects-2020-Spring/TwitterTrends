@@ -9,8 +9,7 @@ class AlgorithmsManager:
         self.database = db
         self.twitter = twit
 
-    @staticmethod
-    def get_top_5_tweets_from_zip_code(zipcode):
+    def get_top_5_tweets_from_zip_code(self, zipcode):
         # translate zipcode to geolocation argument
         # use the argument to pull tweets from Twitter API
             # pull from cache or database if data already cached recently
@@ -18,8 +17,7 @@ class AlgorithmsManager:
         # return the top 5
         return None
 
-    @staticmethod
-    def get_top_5_trends_from_zip_code(zipcode):
+    def get_top_5_trends_from_zip_code(self, zipcode):
         # translate zipcode to geolocation argument
         # use the argument to pull trends from twitter API
             # pull from cache or database if data already cached recently
@@ -27,8 +25,7 @@ class AlgorithmsManager:
         # return the top 5
         return None
 
-    @staticmethod
-    def get_tweets_with_keywords(tweet_sample=None, *keywords):
+    def get_tweets_with_keywords(self, tweet_sample=None, *keywords):
         # maybe reference Aho–Corasick algorithm
         # if tweet_sample is None
             # use Cache/Database/Twitter API to retrieve a set of tweets

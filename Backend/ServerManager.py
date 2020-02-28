@@ -23,7 +23,7 @@ db = DatabaseRequester( host="twittertrends.cmxd9oibzmhi.us-east-2.rds.amazonaws
 twitter = TwitterAPIManager()
 
 # SETUP AlgorithmsManager
-algo = AlgorithmsManager()
+algo = AlgorithmsManager(cache, db, twitter)
 
 
 ######################
