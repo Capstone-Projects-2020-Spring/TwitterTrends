@@ -69,6 +69,18 @@ def api_ttweets():
         return cache.retrieve("tweets")
 
 
+@app.route('/toptrends', methods=['GET'])
+def api_toptrends():
+    if cache.should_update("toptrends", 1):
+        result = algo.get_top_5_trends_from_zip_code("19148")  # db.query("SELECT * FROM test_tweets;")
+        json = jsonify(result)
+        cache.add("toptrends", json, 1)
+        return json
+    else:
+        print("Returning TOP 5 TRENDS results from cache")
+        return cache.retrieve("toptrends")
+
+
 @app.route('/test', methods=['GET'])
 def api_test():
     return jsonify(["Test", "Test2"])

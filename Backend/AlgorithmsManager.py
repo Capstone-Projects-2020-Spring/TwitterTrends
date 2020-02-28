@@ -15,7 +15,9 @@ class AlgorithmsManager:
             # pull from cache or database if data already cached recently
         # sort the list of tweets based on likes and retweets
         # return the top 5
-        return None
+        tweets = ["tweet 1 hahahahhaha", "tweet 2 dasdoadkoafkw", "tweet 3  d123@!321321wd",
+                  "tweet 4 dad2182138123123123", "tweet 5 d21332132!##!!#@@!#@!#"]
+        return tweets
 
     def get_top_5_trends_from_zip_code(self, zipcode):
         # translate zipcode to geolocation argument
@@ -23,7 +25,8 @@ class AlgorithmsManager:
             # pull from cache or database if data already cached recently
         # sort the list of trends based on frequency
         # return the top 5
-        return None
+        tweets = ["#trends1", "#trends2", "#trends3", "#trends4", "#trends5"]
+        return tweets
 
     def get_tweets_with_keywords(self, tweet_sample=None, *keywords):
         # maybe reference Aho–Corasick algorithm
@@ -33,4 +36,7 @@ class AlgorithmsManager:
         # else
             # Filter the tweets from tweet_sample to only retain the ones with keywords
         # return filtered list of tweets
-        return None
+        tweets = ["tweet 1 keyword 1 1", "tweet 2 keyword 2 2", "tweet 3 keyword 3 3",
+                  "tweet 4 keyword 4 4", "tweet 5 keyword 5 5", "tweet 6 keyword 6 6",
+                  "tweet 7 keyword 7 7", "tweet 8 keyword 8 8", "tweet 9 keyword 9 9"]
+        return tweets
