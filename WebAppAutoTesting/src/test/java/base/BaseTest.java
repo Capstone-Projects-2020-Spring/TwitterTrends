@@ -60,6 +60,7 @@ public static void startTestSuite( ) throws IOException
 	{
 		try
 		{
+			this.startPage = null;
 			//do other cleanup stuff
 			driver.quit();
 		}
