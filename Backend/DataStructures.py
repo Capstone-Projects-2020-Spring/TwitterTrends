@@ -6,10 +6,9 @@
 # [User class]
 class User:
 
-    def __init__(self, uid, uname, uemail):
+    def __init__(self, uid, uname):
         self.userId = uid
         self.userName = uname
-        self.userEmail = uemail
 
     def get_id(self):
         return self.userId
@@ -26,8 +25,6 @@ class User:
     def get_email(self):
         return self.userEmail
 
-    def set_email(self, uemail):
-        self.userEmail = uemail
 # end User class
 
 
