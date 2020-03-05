@@ -18,7 +18,7 @@ class DataCacheResult:
 class DataCache:
 
     # TODO: Constructor takes a cache_max argument but is not yet implemented
-    def __init__(self, cache_max=10):
+    def __init__(self, cache_max=5):
         self.cache = {}
         self.cache_max = cache_max
 
@@ -46,6 +46,21 @@ class DataCache:
                 print("Query [", query_string, "] called less than ", mins, " minute(s) ago.")
                 return False
         else:
+            # if the cache is at maximum, remove the oldest query from cache
+            # 1. loop through cache dictionary
+            # 2. find the key with the lowest time (oldest)
+            # 3. remove that key from the dictionary
+            if len(self.cache) >= self.cache_max:
+                keytodel = None
+                mintime = datetime.now()
+                for entry in self.cache.keys():
+                    temptime = self.cache[entry].get_timestamp()
+                    if temptime < mintime:
+                        mintime = temptime
+                        keytodel = entry
+
+                del self.cache[keytodel]
+
             print("Query [", query_string, "] does not exist. Ready to be locally cached.")
             return True
 
