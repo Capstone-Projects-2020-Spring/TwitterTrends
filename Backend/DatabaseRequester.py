@@ -55,6 +55,7 @@ class DatabaseRequester:
 
 
 # data class containing column names and all the rows returned by query
+# contain a string representing the type and status of the query
 class QueryTuples:
 
     def __init__(self, colnames, rows, status):

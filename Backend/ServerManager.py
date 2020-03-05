@@ -32,6 +32,9 @@ algo = AlgorithmsManager(cache, db, twitter)
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+################
+# TODO: add proper end points. Most endpoints are currently broken
+################
 
 @app.route('/', methods=['GET'])
 def home():
