@@ -17,8 +17,10 @@ class DataCacheResult:
 
 class DataCache:
 
-    def __init__(self):
+    # TODO: Constructor takes a cache_max argument but is not yet implemented
+    def __init__(self, cache_max=10):
         self.cache = {}
+        self.cache_max = cache_max
 
     # Check if its a valid time to update the query in the cache
     # Add new query and results and return true if valid time
@@ -65,11 +67,13 @@ class DataCache:
             del self.cache[query_string]
         return ret
 
+    # Get the number of queries currently in cache
     def get_count(self):
         return len(self.cache)
 
-    def get_length(self):
-        return len(self.cache)
+    # Get the maximum number of queries that cache can store
+    def get_max_length(self):
+        return self.cache_max
 
     def has_key(self, key):
         return key in self.cache.keys()
