@@ -13,6 +13,11 @@ class DatabaseRequester:
         self.user = user
         self.password = password
 
+    # query to the database using the query string then Return a QueryTuples object
+    # The QueryTuples object will always contain a status message:
+    #       Status message string can be SELECT, INSERT, UPDATE, or DELETE,
+    #       along with the numbers of rows affected
+    # colnames and rows attributes are empty arrays if query is anything else other than SELECT
     def query(self, query_string, *argv):
         data = None
         try:
@@ -30,11 +35,13 @@ class DatabaseRequester:
             status = cur.statusmessage
 
             if cur is not None:
-                # create return object data if query is SELECT
+
                 if "SELECT" in status:
                     colnames = [desc[0] for desc in cur.description] # name of each column
                     rows = cur.fetchall()  # all the rows returned
-                    data = QueryTuples(colnames, rows)
+                    data = QueryTuples(colnames, rows, status)
+                else:
+                    data = QueryTuples([], [], status)
 
             cur.close()
             conn.close()
@@ -50,9 +57,13 @@ class DatabaseRequester:
 # data class containing column names and all the rows returned by query
 class QueryTuples:
 
-    def __init__(self, colnames, rows):
+    def __init__(self, colnames, rows, status):
+        self.status = status
         self.colnames = colnames
         self.rows = rows
+
+    def get_status_message(self):
+        return self.status
 
     def rows_count(self):
         return len(self.rows)
