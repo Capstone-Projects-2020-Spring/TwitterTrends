@@ -22,9 +22,6 @@ class User:
     def set_username(self, uname):
         self.userName = uname
 
-    def get_email(self):
-        return self.userEmail
-
 # end User class
 
 
