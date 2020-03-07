@@ -7,15 +7,17 @@
 # [Tweet class]
 class Tweet:
 
-    def __init__(self, uid, userid, cont, loc, likes, rtweet, clicks, views, date):
-        self.tweet_id = uid
-        self.user_id = userid
+    def __init__(self, id, ids, uid, cont, lat, lon, locid, likes, quotes, rtweets, repl, date):
+        self.tweet_PK = id
+        self.tweet_id_str = ids
         self.content = cont
-        self.location = loc
+        self.latitude = lat
+        self.longitude = lon
+        self.location_id = locid
         self.likes = likes
-        self.retweets = rtweet
-        self.clicks = clicks
-        self.views = views
+        self.quotes = quotes
+        self.retweets = rtweets
+        self.replies = repl
         self.tweet_date = date
 
 # end Tweet class
@@ -24,73 +26,105 @@ class Tweet:
 # [User class]
 class User:
 
-    def __init__(self, uid, uname, signdate):
-        self.user_id = uid
-        self.user_name = uname
-        self.signup_date = signdate
+    def __init__(self, id, ids, uname, signup, loc, protected, folcount, fricount):
+        self.user_PK = id
+        self.user_id = ids
+        self.username = uname
+        self.signup_date = signup
+        self.location_id = loc
+        self.protected = protected
+        self.followers_count = folcount
+        self.friends_count = fricount
 
 # end User class
 
 
-# [Followers class]
-class Followers:
+# [Follower class]
+class Follower:
 
-    def __init__(self, uid1, uid2, folDate):
+    def __init__(self, uid1, uid2):
         self.user1_id = uid1
         self.user2_id = uid2
-        self.follow_date = folDate
 
-# end Followers class
-
-
-# [TweetsWithTags class]
-class TweetsWithTag:
-
-    def __init__(self, tagid, tweetid, tagname):
-        self.hashtag_id = tagid
-        self.tweet_id = tweetid
-        self.hashtag_name = tagname
-
-# end class TweetsWithTag
+# end Follower class
 
 
-# [Hashtag class]
-class Hashtag:
+# [Trend class]
+class Trend:
 
-    def _init_(self, tagid, tagname, freq):
-        self.hashtag_id = tagid
-        self.hashtag_name = tagname
-        self.frequency = freq
+    def __init__(self, id, cont, istag):
+        self.trend_PK = id
+        self.trend_content = cont
+        self.is_hashtag = istag
 
-# end class Hashtag
-
-
-# [LocationMap class]
-class LocationMap:
-
-    def __init__(self, locid, city, state):
-        self.location_id = locid
-        self.city = city
-        self.state = state
-
-# end class LocationMap
+# end Trend
 
 
-# [TweetsByLocation class]
-class TweetsByLocation:
+# [TrendTweetsSnapshot class]
+class TrendTweetsSnapshot:
 
-    def __init__(self, loc, tweetid):
-        self.location = loc
-        self.tweet_id = tweetid
+    def __init__(self, id, trpk, twpk, locpk, date):
+        self.trend_tweets_snapshot_PK = id
+        self.trend_PK = trpk
+        self.tweet_PK = twpk
+        self.location_PK = locpk
+        self.timestamp = date
 
-# end class TweetsByLocation
+# end TrendTweetsSnapshot
 
 
-# [TrendsByLocation class]
-class TrendsByLocation:
+# [Location class]
+class Location:
+    def __init__(self, id, ctid, stid, cnid, woeid, minlat, maxlat, minlon, maxlon):
+        self.location_PK = id
+        self.city_id = ctid
+        self.state_id = stid
+        self.country_id = cnid
+        self.woeid = woeid
+        self.min_latitude = minlat
+        self.max_latitude = maxlat
+        self.min_longitude = minlon
+        self.max_longitude = maxlon
 
-    def __init__(self, loc, tagname):
-        self.location = loc
-        self.tag_name = tagname
+# end Location
 
-# end class TrendsByLocation
+
+# [City class]
+class City:
+    def __init__(self, id, name):
+        self.city_PK = id
+        self.city_name = name
+
+# end City
+
+
+# [State class]
+class State:
+    def __init__(self, id, name):
+        self.state_PK = id
+        self.state_name = name
+
+# end State
+
+
+# [Country class]
+class Country:
+    def __init__(self, id, name):
+        self.country_PK = id
+        self.country_name = name
+
+# end Country
+
+
+# [TrendSnapshot class]
+class TrendSnapshot:
+    def __init__(self, id, time, locfk, trendfk, rank, tvol24h):
+        self.trend_snapshot_PK = id
+        self.timestamp = time
+        self.location_PK = locfk
+        self.trend_FK = trendfk
+        self.rank = rank
+        self.tweet_volume_24h = tvol24h
+
+# end TrendSnapshot
+
