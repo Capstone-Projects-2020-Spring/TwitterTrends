@@ -4,6 +4,6 @@
 # backend/__pycache__/
 
 **/venv/
-**/idea/
+**/.idea/
 **/__pycache__/
 *.DS_Store
