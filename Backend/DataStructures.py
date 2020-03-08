@@ -52,10 +52,11 @@ class Follower:
 # [Trend class]
 class Trend:
 
-    def __init__(self, id, cont, istag):
+    def __init__(self, id, cont, istag, query):
         self.trend_PK = id
         self.trend_content = cont
         self.is_hashtag = istag
+        self.query_term = query
 
 # end Trend
 
