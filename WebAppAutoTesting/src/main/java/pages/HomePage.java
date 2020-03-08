@@ -14,7 +14,7 @@ import java.util.List;
 public class HomePage extends BasePage<HomePageNavBar>
 {
 
-final By mapContainerLoc = null;//todo!!!
+final By mapContainerLoc = By.tagName("svg");//todo make this less atrocious!!!
 final By statesList = By.className("states");
 final By stateShapeDescription = By.tagName("path");
 final By stateBorders = By.className("state-borders");

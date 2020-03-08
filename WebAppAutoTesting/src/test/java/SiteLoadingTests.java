@@ -27,4 +27,6 @@ public void mapLoadsTest( )
 	assertTrue(startPage.areStateBordersDisplayed());
 	assertEquals(expectedNumStates, startPage.visibleStateCount());
 }
+
+//todo test navigating between pages with the header bar
 }
