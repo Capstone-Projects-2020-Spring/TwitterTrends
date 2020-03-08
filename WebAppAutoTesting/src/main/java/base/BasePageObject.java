@@ -76,6 +76,19 @@ protected boolean checkForElement( final By loc )
 }
 
 /**
+ * overloads {@link #checkForElement(By)} to look for the element inside of a container element
+ */
+protected boolean checkForElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<Boolean> isPresent = webDriver ->
+	{
+		WebElement elem = container.findElement(loc);
+		return elem != null;
+	};
+	return checkForCond(isPresent);
+}
+
+/**
  * determines whether any element matching the given locator exists and is displayed or becomes so within a short time
  *
  * @param loc description of the element which should be loaded and displayed
@@ -94,6 +107,19 @@ protected boolean checkForDisplayedElement( final By loc )
 }
 
 /**
+ * overloads {@link #checkForDisplayedElement(By)} to look for the element inside of a container element
+ */
+protected boolean checkForDisplayedElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<Boolean> isDisplayed = webDriver ->
+	{
+		WebElement elem = container.findElement(loc);
+		return elem.isDisplayed();
+	};
+	return checkForCond(isDisplayed);
+}
+
+/**
  * determines whether any element matching the given locator exists and is enabled or becomes so within a short time
  *
  * @param loc description of the element which should be loaded and enabled
@@ -106,6 +132,19 @@ protected boolean checkForEnabledElement( final By loc )
 	{
 		assert webDriver != null;
 		WebElement elem = webDriver.findElement(loc);
+		return elem.isEnabled();
+	};
+	return checkForCond(isEnabled);
+}
+
+/**
+ * overloads {@link #checkForEnabledElement(By)} to look for the element inside of a container element
+ */
+protected boolean checkForEnabledElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<Boolean> isEnabled = webDriver ->
+	{
+		WebElement elem = container.findElement(loc);
 		return elem.isEnabled();
 	};
 	return checkForCond(isEnabled);
@@ -193,6 +232,20 @@ protected WebElement getElement( final By loc )
 }
 
 /**
+ * overloads {@link #getElement(By)} to look for the element inside of a container element
+ */
+protected WebElement getElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<WebElement> elementLoaded = webDriver ->
+	{
+		WebElement loadedElem = container.findElement(loc);
+		return loadedElem;
+	};
+	WebElement elem = waitForCond(elementLoaded);
+	return elem;
+}
+
+/**
  * waits for one or more elements matching the locator to be present and then fetches/returns them
  *
  * @param loc description of the desired elements
@@ -238,6 +291,21 @@ protected WebElement getDisplayedElement( final By loc )
 	{
 		assert webDriver != null;
 		WebElement displayedElem = webDriver.findElement(loc);
+		if ( !displayedElem.isDisplayed() ) {displayedElem = null;}
+		return displayedElem;
+	};
+	WebElement elem = waitForCond(elementDisplayed);
+	return elem;
+}
+
+/**
+ * overloads {@link #getDisplayedElement(By)} to look for the element inside of a container element
+ */
+protected WebElement getDisplayedElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<WebElement> elementDisplayed = webDriver ->
+	{
+		WebElement displayedElem = container.findElement(loc);
 		if ( !displayedElem.isDisplayed() ) {displayedElem = null;}
 		return displayedElem;
 	};
@@ -299,6 +367,21 @@ protected WebElement getEnabledElement( final By loc )
 	{
 		assert webDriver != null;
 		WebElement enabledElem = webDriver.findElement(loc);
+		if ( !(enabledElem.isDisplayed() && enabledElem.isEnabled()) ) {enabledElem = null;}
+		return enabledElem;
+	};
+	WebElement elem = waitForCond(elementEnabled);
+	return elem;
+}
+
+/**
+ * overloads {@link #getEnabledElement(By)} to look for the element inside of a container element
+ */
+protected WebElement getEnabledElement( final By loc, final WebElement container )
+{
+	ExpectedCondition<WebElement> elementEnabled = webDriver ->
+	{
+		WebElement enabledElem = container.findElement(loc);
 		if ( !(enabledElem.isDisplayed() && enabledElem.isEnabled()) ) {enabledElem = null;}
 		return enabledElem;
 	};

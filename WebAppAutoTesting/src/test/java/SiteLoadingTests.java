@@ -2,6 +2,7 @@ import base.BaseTest;
 import components.NavBar;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SiteLoadingTests extends BaseTest
 {
+protected final int expectedNumStates = 51;
 
 @Test
 public void siteLoadsTest( )
@@ -17,5 +19,12 @@ public void siteLoadsTest( )
 	NavBar navBar = startPage.getNavBar();
 	assertTrue(navBar.isSiteTitleDisplayed());
 	assertTrue(navBar.isDropdownEnabled());
+}
+
+@Test
+public void mapLoadsTest( )
+{
+	assertTrue(startPage.areStateBordersDisplayed());
+	assertEquals(expectedNumStates, startPage.visibleStateCount());
 }
 }
