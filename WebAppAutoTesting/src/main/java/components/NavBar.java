@@ -8,13 +8,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.base.BaseAnalysisPage;
 
+import java.util.List;
+
 /**
  * POM representation of the navigation bar at the top of each page on the website
  */
 public class NavBar extends BaseComponent
 {
-protected By siteTitleLoc = null;//todo
-protected By analysisPageDropdownLoc = null;//todo
+protected By siteTitleLoc = By.className("navbar-brand");//todo make this better
+protected By analysisPageDropdownButtonLoc = By.id("drop-btn");//todo make this better
+protected By analysisPageDropdownOptionsContainerLoc = By.id("dropdown-menu");//todo make this better
+protected By analysisPageDropdownOption = By.tagName("a");
 
 public NavBar( final WebDriver driver )
 {
@@ -23,7 +27,7 @@ public NavBar( final WebDriver driver )
 
 public boolean isSiteTitleDisplayed( ) { return checkForDisplayedElement(siteTitleLoc); }
 
-public boolean isDropdownEnabled( ) { return checkForEnabledElement(analysisPageDropdownLoc); }
+public boolean isDropdownEnabled( ) { return checkForEnabledElement(analysisPageDropdownButtonLoc); }
 //todo check whether dropdown can be expanded and whether the expected options are all there (see enum)
 
 //todo click title to go to homepage?
@@ -40,10 +44,22 @@ public <T extends BaseAnalysisPage<? extends BaseAnalysisControlBar>> T openAnal
 {
 	T analysisPage = null;
 	
-	WebElement navDropdown = getEnabledElement(analysisPageDropdownLoc);
-	//todo cast to Select?
-	//todo expand element
-	//todo find correct option element & click it
+	WebElement navDropdown = getEnabledElement(analysisPageDropdownButtonLoc);
+	clickElem(navDropdown);
+	
+	WebElement dropdownOptionsContainer = getElement(analysisPageDropdownOptionsContainerLoc);
+	List<WebElement> dropdownOptions = getEnabledElements(analysisPageDropdownOption, dropdownOptionsContainer);
+	
+	String targetText = pageDesc.getDropdownOptionText();
+	WebElement targetDropdownOption = null;
+	for ( int i = 0 ; i < dropdownOptions.size() && targetDropdownOption == null ; i++ )
+	{
+		WebElement currOption = dropdownOptions.get(i);
+		String optionText = getText(currOption);
+		if ( targetText.equals(optionText) ) { targetDropdownOption = currOption; }
+	}
+	
+	clickElem(targetDropdownOption);
 	
 	analysisPage = pageDesc.getPageInstance(driver);
 	

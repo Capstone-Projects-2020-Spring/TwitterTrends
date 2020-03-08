@@ -5,6 +5,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 /**
  * this contains utility functions needed by most or all classes which represent entities on the website (based on the
  * Page Object Model (POM))
@@ -191,6 +193,39 @@ protected WebElement getElement( final By loc )
 }
 
 /**
+ * waits for one or more elements matching the locator to be present and then fetches/returns them
+ *
+ * @param loc description of the desired elements
+ *
+ * @return the elements
+ */
+protected List<WebElement> getElements( final By loc )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		assert webDriver != null;
+		List<WebElement> loadedElems = webDriver.findElements(loc);
+		return loadedElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
+}
+
+/**
+ * overloads {@link #getElements(By)} to look for the elements inside of a container element
+ */
+protected List<WebElement> getElements( final By loc, final WebElement container )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		List<WebElement> loadedElems = container.findElements(loc);
+		return loadedElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
+}
+
+/**
  * waits for an element matching the locator to be present & displayed and then fetches/returns it
  *
  * @param loc description of the desired element
@@ -211,6 +246,45 @@ protected WebElement getDisplayedElement( final By loc )
 }
 
 /**
+ * waits for one or more elements matching the locator to be present & displayed and then fetches/returns them
+ *
+ * @param loc description of the desired elements
+ *
+ * @return the elements
+ */
+protected List<WebElement> getDisplayedElements( final By loc )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		assert webDriver != null;
+		List<WebElement> displayedElems = webDriver.findElements(loc);
+		boolean isAnyDisplayed = displayedElems.stream()
+											   .anyMatch(WebElement::isDisplayed);
+		if ( !isAnyDisplayed ) { displayedElems = null; }
+		return displayedElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
+}
+
+/**
+ * overloads {@link #getDisplayedElements(By)} to look for the elements inside of a container element
+ */
+protected List<WebElement> getDisplayedElements( final By loc, final WebElement container )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		List<WebElement> displayedElems = container.findElements(loc);
+		boolean isAnyDisplayed = displayedElems.stream()
+											   .anyMatch(WebElement::isDisplayed);
+		if ( !isAnyDisplayed ) { displayedElems = null; }
+		return displayedElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
+}
+
+/**
  * waits for an element matching the locator to be present, displayed, and enabled* and then fetches/returns it
  *
  * *if an element's 'enabled' then it can probably be clicked on or otherwise interacted with
@@ -225,11 +299,53 @@ protected WebElement getEnabledElement( final By loc )
 	{
 		assert webDriver != null;
 		WebElement enabledElem = webDriver.findElement(loc);
-		if ( !enabledElem.isEnabled() ) {enabledElem = null;}
+		if ( !(enabledElem.isDisplayed() && enabledElem.isEnabled()) ) {enabledElem = null;}
 		return enabledElem;
 	};
 	WebElement elem = waitForCond(elementEnabled);
 	return elem;
+}
+
+/**
+ * waits for one or more elements matching the locator to be present, displayed, and enabled* and then fetches/returns
+ * them
+ *
+ * *if an element's 'enabled' then it can probably be clicked on or otherwise interacted with
+ *
+ * @param loc description of the desired elements
+ *
+ * @return the elements
+ */
+protected List<WebElement> getEnabledElements( final By loc )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		assert webDriver != null;
+		List<WebElement> enabledElems = webDriver.findElements(loc);
+		boolean isAnyEnabled = enabledElems.stream()
+										   .anyMatch(elem -> elem.isDisplayed() && elem.isEnabled());
+		if ( !isAnyEnabled ) { enabledElems = null; }
+		return enabledElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
+}
+
+/**
+ * overloads {@link #getEnabledElements(By)} to look for the elements inside of a container element
+ */
+protected List<WebElement> getEnabledElements( final By loc, final WebElement container )
+{
+	ExpectedCondition<List<WebElement>> elementsLoaded = webDriver ->
+	{
+		List<WebElement> enabledElems = container.findElements(loc);
+		boolean isAnyEnabled = enabledElems.stream()
+										   .anyMatch(elem -> elem.isDisplayed() && elem.isEnabled());
+		if ( !isAnyEnabled ) { enabledElems = null; }
+		return enabledElems;
+	};
+	List<WebElement> elems = waitForCond(elementsLoaded);
+	return elems;
 }
 
 //todo add functions which take webelement and wait for it to be displayed or displayed/enabled with variable timeout?
@@ -257,7 +373,7 @@ protected void waitForElementEnabled( final WebElement elem )
 {
 	ExpectedCondition<Boolean> elementEnabled = webDriver ->
 	{
-		return elem.isEnabled();
+		return elem.isDisplayed() && elem.isEnabled();
 	};
 	waitForCond(elementEnabled);
 }
