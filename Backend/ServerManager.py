@@ -119,7 +119,7 @@ def api_test():
         api.verify_credentials()
         print("Valid credentials")
 
-        woeid = 2379574
+        woeid = 638242
         query = api.trends_place(woeid)
         print(query)
 
