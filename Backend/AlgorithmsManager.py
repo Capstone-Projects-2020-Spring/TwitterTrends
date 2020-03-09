@@ -9,22 +9,21 @@ class AlgorithmsManager:
         self.database = db
         self.twitter = twit
 
-    def get_top_5_tweets_from_zip_code(self, zipcode):
-        # translate zipcode to geolocation argument
-        # use the argument to pull tweets from Twitter API
+    def get_top_5_tweets_from_location(self, woeid):
+        # use the woeid argument to pull tweets from Twitter API
             # pull from cache or database if data already cached recently
-        # sort the list of tweets based on likes and retweets
-        # return the top 5
+        # sort the list of tweets based on tweet volume
+        # return the top 5 as json
+
         tweets = ["tweet 1 hahahahhaha", "tweet 2 dasdoadkoafkw", "tweet 3  d123@!321321wd",
                   "tweet 4 dad2182138123123123", "tweet 5 d21332132!##!!#@@!#@!#"]
         return tweets
 
-    def get_top_5_trends_from_zip_code(self, zipcode):
-        # translate zipcode to geolocation argument
-        # use the argument to pull trends from twitter API
+    def get_top_5_trends_from_location(self, woeid):
+        # use the woeid argument to pull tweets from Twitter API
             # pull from cache or database if data already cached recently
-        # sort the list of trends based on frequency
-        # return the top 5
+        # sort the list of tweets based on tweet volume
+        # return the top 5 as json
         tweets = ["#trends1", "#trends2", "#trends3", "#trends4", "#trends5"]
         return tweets
 
