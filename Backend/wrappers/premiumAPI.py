@@ -26,10 +26,10 @@ class premiumAPI:
     def getTweets(self, keyword, num):
         rule = st.gen_rule_payload(keyword, from_date="2020-03-01")
         tweets = self.st.collect_results(rule, max_results=num, result_stream_args= self.monthSearchArgs)
-        tweets_text = []
-        for tweet in tweets:
-            tweets_text.append(tweet.all_text)
-        return tweets_text
+        #tweets_text = []
+        #for tweet in tweets:
+        #    tweets_text.append(tweet.all_text)
+        return tweets#tweets_text
 
     def getSampleTweet(self, keyword):
         rule = st.gen_rule_payload(keyword)

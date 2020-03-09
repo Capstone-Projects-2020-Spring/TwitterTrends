@@ -11,11 +11,11 @@ class standardAPI:
 
     def retrieve_trends(self, woeid, num):
         query = self.api.trends_place(woeid)
-        top_trends  = self.query_transform(query, woeid, num)
-        return top_trends
+        # top_trends  = self.query_transform(query, woeid, num)
+        return query
 
 
-    def getTrendsClose(self, lat, long, num):
+    def getTrendsClose(self, lat, long):
         query = self.api.trends_closest(lat, long)
         return query
     

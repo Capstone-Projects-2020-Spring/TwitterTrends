@@ -10,20 +10,23 @@ import json
 
 class TwitterAPIManager:
 
-
     def __init__(self):
         self.standardAPI = standardAPI()
         self.premiumAPI = premiumAPI()
 
-
+    # Arguments are
+    #   location woeid
+    #   top num trends
     def top_trends(self, woeid, num):
         top_trends = self.standardAPI.retrieve_trends(woeid, num)
-        return top_trends
+        return top_trends[0]
 
-
-    def trends_close(self, lat, long, num):
-        nearbyLocations = self.standardAPI.getTrendsClose(lat, long, num)
-        return nearbyLocations
+    # Arguments are
+    #   location latitude and longitude
+    #   return a json containing the closest location to specified lat lon
+    def get_closest_location(self, lat, long):
+        nearbyLocations = self.standardAPI.getTrendsClose(lat, long)
+        return nearbyLocations[0]
 
 
     def num_tweets(self, trend):
@@ -52,18 +55,21 @@ if __name__=='__main__':
     # Test: Retrieve top trends
     woeid = 2379574
     result = twitter.top_trends(woeid, 5)
-    print('Top 5 Trends in ' + result['location'])
-    for i in result['trends']:
-        print(i)
+    print(result)
+    #print('Top 5 Trends in ' + result['location'])
+    #for i in result['trends']:
+    #    print(i)
     
     print('\n')
 
     # Test: Get tweets
-    trend = result['trends'][0]
+    #trend = result['trends'][0]
+    trend = "#temple"
     print('Tweets for ' + trend + "\n-------------")
-    tweets = twitter.top_tweets(trend, 5)
+    tweets = twitter.top_tweets(trend, 20)
+    print(tweets)
     for i in tweets:
-        print(i + "\n-------------")
+        print(i)
 
     print('\n')
 
@@ -78,12 +84,14 @@ if __name__=='__main__':
     address = "1800 Liacouras Walk, Philadelphia, PA 19122"
     lat, long = geocoding(address)
     print("Latitude: " + str(lat) + ", longitude: " + str(long))
-    trendsClose = twitter.trends_close(lat, long, 5)
+    trendsClose = twitter.get_closest_location(lat, long)
     print("Trends in Nearby Locations:")
-    
-    for place in trendsClose:
-        print(place["name"] + ":", end= " ")
-        output = twitter.top_trends(place['woeid'], 5)
-        print(output['trends'])
+
+    print(trendsClose)
+
+    #for place in trendsClose:
+    #    print(place["name"] + ":", end= " ")
+    #    output = twitter.top_trends(place['woeid'], 5)
+    #    print(output['trends'])
 
     print('\n')
