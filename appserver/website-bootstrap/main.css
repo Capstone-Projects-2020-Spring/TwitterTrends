@@ -57,9 +57,18 @@ body {
 	height: 60px;
 }
 
+#title {
+	position: absolute;
+	left: 37%;
+	top: 30%;
+	color: #ffffff;
+	font-size: 30px;
+	font-family: 'Titillium Web', sans-serif;
+}
+
 /*search bar */
 
-#search-box{
+#trend-search-box{
 	position: absolute;
 	left: 45%;
 	top: 50%;
@@ -70,13 +79,13 @@ body {
 	padding: 10px;
 }
 
-#search-box:hover > #search-txt{
+#trend-search-box:hover > #trend-search-txt{
 	width: 240px;
 	padding: 0 6px;
 	
 }
 
-#search-btn{
+#trend-search-btn{
 	color: #33f6ff
 	float: right;
 	width: 20px;
@@ -89,7 +98,7 @@ body {
 	
 }
 
-#search-txt{
+#trend-search-txt{
 	border: none;
 	background: none;
 	outline: none;
@@ -105,7 +114,7 @@ body {
 /*drop-down button*/
 
 
-#drop-btn{
+#pages-drop-btn{
 	background-color: 696969;
 	padding: 10px;
 	font-size: 15px;
@@ -114,14 +123,14 @@ body {
 	cursor: pointer;
 }
 
-#drop-box{
+#pages-drop-box{
 	position: relative;
 	left: 70%;
 	display: inline-block;
 	float: right;
 }
 
-#dropdown-menu{
+#pages-dropdown-menu{
 	display: none;
 	position: absolute;
 	background-color: #3d3838;
@@ -134,24 +143,20 @@ body {
 	
 }
 
-#dropdown-menu a{
+#pages-dropdown-menu a{
 	color: white;
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
 }
 
-#dropdown-menu a:hover{
+#pages-dropdown-menu a:hover{
 	background-color: #000000;
 	color: #ffffff;
 }
 
-#drop-box:hover > #dropdown-menu{
+#pages-drop-box:hover > #pages-dropdown-menu{
 	display: block;
-}
-
-#drop-box:hover > #menu-button{
-	background-color: transparent;
 }
 
 
@@ -204,7 +209,7 @@ body {
     position: relative;
 }
 
-#feature-title {
+.feature-title {
     color: #333;
     font-size: 1.3rem;
     font-weight: 700;
