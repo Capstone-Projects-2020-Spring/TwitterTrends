@@ -7,6 +7,7 @@ import json
 
 # Contain TwitterAPI wrapper Functions
 
+# TERRA woeid : 23424775
 
 class TwitterAPIManager:
 
