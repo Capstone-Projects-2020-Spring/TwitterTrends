@@ -8,9 +8,6 @@ from TwitterAPIManager import TwitterAPIManager
 from AlgorithmsManager import AlgorithmsManager
 import DataStructures
 
-import os
-import tweepy
-
 # SETUP DataCache
 cache = DataCache()
 
@@ -41,8 +38,8 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
-    return "<h1>HELLO MIKE</h1><p>I am saying hi to mike</p>" \
-           "<br>Endpoints:<br>[/test]<br>[/users]<br>[/tweets]"
+    return "<h1>HELLO</h1>" \
+           "<br>Endpoints:<br>[/test]<br>[/toptrends]"
 
 
 @app.route('/users', methods=['GET'])
@@ -75,14 +72,32 @@ def api_ttweets():
         return cache.retrieve("tweets")
 
 
-@app.route('/trends', methods=['GET'])
-def api_trends():
-    result = db.query("SELECT * FROM Trend;")
-    return jsonify(result)
-
-
 @app.route('/toptrends', methods=['GET'])
 def api_toptrends():
+    woeid = request.args.get('woeid')
+    latitude = request.args.get('latitude') or request.args.get('lat')
+    longitude = request.args.get('longitude') or request.args.get('lon')
+    num = request.args.get('num')
+
+    try:
+        if woeid is not None:
+            numint = 5
+            if num is not None and int(num) > 0:
+                numint = int(num)
+
+            print("\n/toptrends args: ", woeid, latitude, longitude, numint, "\n")
+
+            result = algo.get_top_num_trends_from_location(int(woeid), numint, querystr="/toptrends"+woeid)
+            return result # result is in json format
+        else:
+            argstr = AlgorithmsManager.get_args_as_html_str(["woeid"], ["num"])
+            return "Error! arguments:<br><br>" + argstr
+    except:
+        print("ERROR ENDPOINT /toptrends")
+        return "ERROR ENDPOINT"
+
+@app.route('/toptrends2', methods=['GET'])
+def api_toptrends2():
     if cache.should_update("toptrends", 1):
         result = algo.get_top_5_trends_from_zip_code("19148")  # db.query("SELECT * FROM test_tweets;")
         json = jsonify(result)

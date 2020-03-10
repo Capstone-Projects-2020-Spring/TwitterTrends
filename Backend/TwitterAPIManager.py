@@ -17,26 +17,30 @@ class TwitterAPIManager:
     # Arguments are
     #   location woeid
     #   top num trends
-    def top_trends(self, woeid, num):
-        top_trends = self.standardAPI.retrieve_trends(woeid, num)
+    def top_trends(self, woeid):
+        top_trends = self.standardAPI.retrieve_trends(woeid)
         return top_trends[0]
 
     # Arguments are
     #   location latitude and longitude
     #   return a json containing the closest location to specified lat lon
     def get_closest_location(self, lat, long):
-        nearbyLocations = self.standardAPI.getTrendsClose(lat, long)
+        nearbyLocations = self.standardAPI.get_nearby_location(lat, long)
         return nearbyLocations[0]
-
 
     def num_tweets(self, trend):
         ()
 
-
-    def top_tweets(self, trend, num):
-        top_tweets = self.premiumAPI.getTweets(trend, num)
+    # get an array of tweets jsons given a trend, datetime, and amount returned
+    # args:
+    #   trend: query search terms
+    #   datetime: starting date time of the search
+    #   num: the number of tweets returned
+    def top_tweets(self, trend, timefrom, timeto, num):
+        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, num)
         return top_tweets
 
+    # sample tweet function that returns a tweet based on a given search query
     def sample_tweet(self, trend):
         sample_tweet = self.premiumAPI.getSampleTweet(trend)
         return sample_tweet
@@ -54,7 +58,7 @@ if __name__=='__main__':
 
     # Test: Retrieve top trends
     woeid = 2379574
-    result = twitter.top_trends(woeid, 5)
+    result = twitter.top_trends(woeid)
     print(result)
     #print('Top 5 Trends in ' + result['location'])
     #for i in result['trends']:
@@ -66,7 +70,7 @@ if __name__=='__main__':
     #trend = result['trends'][0]
     trend = "#temple"
     print('Tweets for ' + trend + "\n-------------")
-    tweets = twitter.top_tweets(trend, 20)
+    tweets = twitter.top_tweets(trend, "2020-02-20", "2020-02-25", 1)
     print(tweets)
     for i in tweets:
         print(i)
@@ -93,5 +97,6 @@ if __name__=='__main__':
     #    print(place["name"] + ":", end= " ")
     #    output = twitter.top_trends(place['woeid'], 5)
     #    print(output['trends'])
+
 
     print('\n')

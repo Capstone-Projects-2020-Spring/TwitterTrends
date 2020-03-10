@@ -22,9 +22,13 @@ class premiumAPI:
         self.monthSearchArgs = creds.getPremiumEndpointCreds(PREMIUM_30_DAY_ENDPOINT)
         self.st = st
 
-
-    def getTweets(self, keyword, num):
-        rule = st.gen_rule_payload(keyword, from_date="2020-03-01")
+    # Retrieve tweets using the Twitter premium API endpoint
+    # Args:
+    #   keyword: query string
+    #   time: the date time of where to start searching tweets
+    #   num: number of tweets to return
+    def getTweets(self, keyword, timefrom, timeto, num):
+        rule = self.st.gen_rule_payload(keyword, from_date=st.convert_utc_time(timefrom), to_date=st.convert_utc_time(timeto))
         tweets = self.st.collect_results(rule, max_results=num, result_stream_args= self.monthSearchArgs)
         #tweets_text = []
         #for tweet in tweets:

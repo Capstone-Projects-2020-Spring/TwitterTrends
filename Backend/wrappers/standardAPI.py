@@ -8,17 +8,14 @@ class standardAPI:
     def __init__(self):
         self.api = creds.create()
 
-
-    def retrieve_trends(self, woeid, num):
+    def retrieve_trends(self, woeid):
         query = self.api.trends_place(woeid)
         # top_trends  = self.query_transform(query, woeid, num)
         return query
 
-
-    def getTrendsClose(self, lat, long):
+    def get_nearby_location(self, lat, long):
         query = self.api.trends_closest(lat, long)
         return query
-    
 
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
