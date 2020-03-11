@@ -19,11 +19,15 @@ class AlgorithmsManager:
     # return top [num] trends
     # querystr argument is used for cache checking
     #       querystr must not be None
-    def get_top_num_trends_from_location(self, woeid, num, querystr):
+    def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None):
+
+        if querystr is None:
+            querystr = "/toptrends"+woeid
 
         cachetime = 2  # 2 minutes cache time check
 
-        if self.cache.should_update(querystr, cachetime):
+        if self.cache.should_update(querystr, cachetime) or querystr is None:
+
 
             query = self.twitter.top_trends(woeid)  # api.trends_place(woeid)
 
@@ -33,11 +37,11 @@ class AlgorithmsManager:
             loc_name = query['locations'][0]['name']
             loc_woeid = query['locations'][0]['woeid']
 
-            trends = []
+            trends = []   # List of Trend objects
             i = 0
             for trend in query['trends']:
                 vol = trend['tweet_volume']
-                tempTrend = DataStructures.Trend(0,
+                tempTrend = DataStructures.Trend(i,
                                                  trend['name'],
                                                  True if trend['name'][0] == '#' else False,
                                                  trend['query'],
@@ -48,50 +52,114 @@ class AlgorithmsManager:
 
             # SORT the trends returned by the tweet volume
             # Sorting will ruin the true "local" trends.
-            #       it will sort by OVERALL tweet volume of any trends
-            # UNCOMMENT to sort
-            # AlgorithmsManager.insertion_sort_trends(trends)
+            if sort == 1:
+                print("SORTING TRENDS")
+                AlgorithmsManager.sort_trends(trends)
 
             trends_n = []
 
             for k in range(0, min(num, len(trends))):
                 trends_n.append(trends[k].__dict__)
 
-            json = jsonify(trends_n)
-            self.cache.add(querystr, json, 2)
-            return jsonify(trends_n)
+            self.cache.add(querystr, trends, cachetime)
+            return trends_n
         else:
-            print("\nReturning", querystr , "from cache\n")
-            return self.cache.retrieve(querystr)
+            print("\nReturning [", querystr , "] from cache\n")
+            trends = self.cache.retrieve(querystr)
+            trends_n = []
+            for k in range(0, min(num, len(trends))):
+                trends_n.append(trends[k].__dict__)
+            return trends_n
+    # end get top trends from location
 
+    # get a list of tweets from given query
+    # return from cache if recently called
+    # tweets time will be between timefrom->timeto
+    # sort the list of tweets by retweet_count if sort == 1
+    # return the number specified by num
+    # querystr is used for caching
+    def get_top_tweets_from_query(self, query, num,
+                                timefrom=datetime.now() - timedelta(days=5),
+                                timeto=datetime.now(),
+                                sort=1, querystr=None):
+        # Call a function from the TwitterAPIManager to return a list of tweets
+        if querystr is None:
+            querystr = "/toptweets" + query
 
-    def get_tweets_with_keywords(self, tweet_sample=None, *keywords):
-        # maybe reference Aho–Corasick algorithm
-        # if tweet_sample is None
-            # use Cache/Database/Twitter API to retrieve a set of tweets
-            # Filter the tweets to only retain the ones with keywords
-        # else
-            # Filter the tweets from tweet_sample to only retain the ones with keywords
-        # return filtered list of tweets
-        tweets = ["tweet 1 keyword 1 1", "tweet 2 keyword 2 2", "tweet 3 keyword 3 3",
-                  "tweet 4 keyword 4 4", "tweet 5 keyword 5 5", "tweet 6 keyword 6 6",
-                  "tweet 7 keyword 7 7", "tweet 8 keyword 8 8", "tweet 9 keyword 9 9"]
-        return tweets
+        cachetime = 2  # 2 minutes cache time check
+
+        if self.cache.should_update(querystr, cachetime):
+
+            res = self.twitter.get_tweets(query, timefrom.strftime("%Y-%m-%d"),
+                                                 timeto.strftime("%Y-%m-%d"))
+
+            # def __init__(self, id, ids, uid, cont, lat, lon, locid, likes, quotes, rtweets, repl, date)
+            tweets = []  # list of Tweet object
+            i = 0
+            for tweet in res:
+                temptweet = DataStructures.Tweet(id=i,
+                                                 ids=tweet['id'],
+                                                 uid=tweet['user']['id'],
+                                                 cont=tweet['text'],
+                                                 lat=tweet['geo'], lon=tweet['geo'], locid=tweet['geo'], # location isfound in tweet['geo']
+                                                 likes=tweet['favorite_count'],
+                                                 quotes=tweet['quote_count'],
+                                                 rtweets=tweet['retweet_count'],
+                                                 repl=tweet['reply_count'],
+                                                 date=tweet['created_at'])
+                tweets.append(temptweet)
+                i += 1
+
+            # SORT the tweets returned by the retweet_count
+            # Sorting will ruin the true "local" trends.
+            if sort == 1:
+                print("SORTING TWEETS")
+                AlgorithmsManager.sort_tweets(tweets)
+
+            tweets_n = []
+            for k in range(0, min(num, len(tweets))):
+                tweets_n.append(tweets[k].__dict__)
+
+            self.cache.add(querystr, tweets, cachetime)
+            return tweets_n
+
+        else:
+            print("\nReturning [", querystr, "] from cache\n")
+            tweets = self.cache.retrieve(querystr)
+            tweets_n = []
+            for k in range(0, min(num, len(tweets))):
+                tweets_n.append(tweets[k].__dict__)
+            return tweets_n
+    # end get_top_tweets_from_query
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
-    def insertion_sort_trends(trends):
-        length = len(trends)
+    def sort_trends(arr):
+        length = len(arr)
         for l in range(1, length):
-            temp = trends[l]
-            tempvol = temp.tweet_volume
+            temp = arr[l]
+            tempval = temp.tweet_volume
             k = l-1
-            while k >= 0 and    (tempvol if tempvol is not None else 0) >= \
-                                (trends[k].tweet_volume if trends[k].tweet_volume is not None else 0):
-                trends[k+1] = trends[k]
+            while k >= 0 and    (tempval if tempval is not None else 0) >= \
+                                (arr[k].tweet_volume if arr[k].tweet_volume is not None else 0):
+                arr[k+1] = arr[k]
                 k -= 1
-            trends[k+1] = temp
+            arr[k+1] = temp
 
+
+    # pass in array of Tweet object and this will sort it using insertion sort
+    @staticmethod
+    def sort_tweets(arr):
+        length = len(arr)
+        for l in range(1, length):
+            temp = arr[l]
+            tempval = temp.retweets
+            k = l - 1
+            while k >= 0 and (tempval if tempval is not None else 0) >= \
+                    (arr[k].retweets if arr[k].retweets is not None else 0):
+                arr[k + 1] = arr[k]
+                k -= 1
+            arr[k + 1] = temp
 
     # function that takes two strings and return an HTML text in a format like:
     #       REQUIRED
@@ -114,3 +182,5 @@ class AlgorithmsManager:
             for arg in optional:
                 htmlstr += "["+arg+"]<br>"
         return htmlstr
+
+

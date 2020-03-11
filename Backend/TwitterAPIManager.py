@@ -35,10 +35,12 @@ class TwitterAPIManager:
     # get an array of tweets jsons given a trend, datetime, and amount returned
     # args:
     #   trend: query search terms
-    #   datetime: starting date time of the search
+    #   timefrom: starting date time of the search
+    #   timeto: ending date time of the search
     #   num: the number of tweets returned
-    def top_tweets(self, trend, timefrom, timeto, num):
-        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, num)
+    def get_tweets(self, trend, timefrom, timeto):
+        # num arg maybe not needed?
+        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, 500)
         return top_tweets
 
     # sample tweet function that returns a tweet based on a given search query
@@ -51,6 +53,9 @@ def geocode(address):
     ()
     return woeid        
 
+
+# # # # # # # # # # # # # # # # #
+# BELOW ARE TEST CODE FOR TwitterAPI
 
 if __name__=='__main__':
     print("\nHello from TwitterAPIManager!!\n")
