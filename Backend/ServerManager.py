@@ -106,15 +106,20 @@ def api_toptrends():
     sort = request.args.get('sort')
 
     try:
+        # TODO fix error here
+        if woeid is None and (latitude is not None and longitude is not None):
+            woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude))['woeid'])
+
         if woeid is not None:
             querystr = "/toptrends"+woeid
+
             numint = 5  # default val
             issort = 1  # default to yes sort
 
             # attempt to update value
             if num is not None and int(num) > 0:
                 numint = int(num)
-            if sort is not None and int(sort) == 0 or int(sort) == 1:
+            if sort is not None and (int(sort) == 0 or int(sort) == 1):
                 issort = int(sort)
 
             print("\n/toptrends args: ", woeid, latitude, longitude, numint, issort, "\n")

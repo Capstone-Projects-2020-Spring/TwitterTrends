@@ -27,10 +27,9 @@ class AlgorithmsManager:
         cachetime = 2  # 2 minutes cache time check
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
-
-
+            print("yo1")
             query = self.twitter.top_trends(woeid)  # api.trends_place(woeid)
-
+            print("yo2")
             # Variables storing other info about the trends
             as_of = query['as_of']
             created_at = query['created_at']
@@ -165,7 +164,7 @@ class AlgorithmsManager:
         woeid = loc['woeid']
         countryCode = loc['countryCode']
 
-        location = DataStructures.Location(0, name, None, country, woeid, lat, lat, lon, lon)
+        location = DataStructures.Location(0, name, None, parentid, woeid, lat, lat, lon, lon)
         return location
 
     # pass in array of Trend object and this will sort it using insertion sort
