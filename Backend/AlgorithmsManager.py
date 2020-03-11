@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
+from wrappers.geocode import geocoding
 
-
-from flask import jsonify
+# from flask import jsonify # pronbably not needed
 import DataStructures
 
 # In charge of all algorithms needed by the backend server
@@ -131,6 +131,42 @@ class AlgorithmsManager:
                 tweets_n.append(tweets[k].__dict__)
             return tweets_n
     # end get_top_tweets_from_query
+
+    # return a Location object
+    # pass in an address string
+    # Example addrstr: "1801 N Broad St, Philadelphia, PA 19122"
+    def get_location_by_address(self, address):
+        # TODO: possibly access database to check for existing location
+        lat, lon = geocoding(address)
+        res = self.twitter.get_closest_location(lat, lon)
+        return self.parse_location_json(res, lat, lon).__dict__
+
+    # return a Location object
+    # pass in latitude and longitude values
+    # lat lon must be numeric strings or floats
+    def get_location_by_latlon(self, lat, lon):
+        # TODO: possibly access database to check for existing location
+        res = self.twitter.get_closest_location(float(lat), float(lon))
+        return self.parse_location_json(res, float(lat), float(lon)).__dict__
+
+    # take in a woeid and return a locations object
+    def get_location_by_woeid(self, woeid):
+        # TODO: possibly access the database here
+        return {}
+
+    # parse the location json returned by twitter.get_closest_location
+    # args:
+    #   the json object
+    #   the latitude and longitude of the location as floats
+    def parse_location_json(self, loc, lat, lon):
+        name = loc['name']
+        parentid = loc['parentid']
+        country = loc['country']
+        woeid = loc['woeid']
+        countryCode = loc['countryCode']
+
+        location = DataStructures.Location(0, name, None, country, woeid, lat, lat, lon, lon)
+        return location
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod

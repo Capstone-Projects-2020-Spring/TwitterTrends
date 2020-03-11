@@ -76,22 +76,24 @@ if __name__=='__main__':
     #trend = result['trends'][0]
     trend = "#temple"
     print('Tweets for ' + trend + "\n-------------")
-    tweets = twitter.top_tweets(trend, "2020-02-20", "2020-02-25", 1)
-    print(tweets)
-    for i in tweets:
-        print(i)
+    ##tweets = twitter.top_tweets(trend, "2020-02-20", "2020-02-25", 1)
+    #print(tweets)
+    #for i in tweets:
+    #    print(i)
 
-    print('\n')
+    #print('\n')
 
+
+    ### commented out because broken
     # Test: Sample tweet
-    sampleTweet = twitter.sample_tweet("coronavirus")
+    #sampleTweet = twitter.sample_tweet("coronavirus")
     print("Sample Tweet:")
-    print(json.dumps(sampleTweet, indent=5))
+    #print(json.dumps(sampleTweet, indent=5))
 
     print('\n')
 
     # Test: Get WOEID from an address input by user and top trends
-    address = "1800 Liacouras Walk, Philadelphia, PA 19122"
+    address = "1801 N Broad St, Philadelphia, PA 19122"  # Temple's address
     lat, long = geocoding(address)
     print("Latitude: " + str(lat) + ", longitude: " + str(long))
     trendsClose = twitter.get_closest_location(lat, long)

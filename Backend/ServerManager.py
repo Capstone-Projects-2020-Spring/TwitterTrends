@@ -39,7 +39,7 @@ app.config["DEBUG"] = True
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>HELLO</h1>" \
-           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]"
+           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]"
 
 
 @app.route('/toptweets', methods=['GET'])
@@ -129,6 +129,35 @@ def api_toptrends():
             return 'Error! arguments:<br><br>' + argstr
     except:
         print('ERROR ENDPOINT /toptrends')
+        return 'ERROR ENDPOINT'
+
+@app.route('/getlocation', methods=['GET'])
+def api_getlocation():
+    address = request.args.get('address')
+    latitude = request.args.get('latitude') or request.args.get('lat')
+    longitude = request.args.get('longitude') or request.args.get('lon')
+    woeid = request.args.get('woeid')
+
+    try:
+        print("\n/getlocation args: ", address, latitude, longitude, woeid, "\n")
+
+        if address is not None:
+            return jsonify(algo.get_location_by_address(address))
+
+        if latitude is not None and longitude is not None:
+            lat = float(latitude)
+            lon = float(longitude)
+            return jsonify(algo.get_location_by_latlon(lat, lon))
+
+        if woeid is not None:
+            return jsonify(algo.get_location_by_woeid(woeid))
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have at least 1 of the three arguments</b>',
+                                                        'address', 'latitude and longitude', 'woeid'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+    except:
+        print('ERROR ENDPOINT /getlocation')
         return 'ERROR ENDPOINT'
 
 
