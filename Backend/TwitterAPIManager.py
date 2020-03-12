@@ -3,6 +3,8 @@
 from wrappers.premiumAPI import premiumAPI
 from wrappers.standardAPI import standardAPI
 from wrappers.geocode import geocoding
+
+from datetime import datetime, timedelta
 import json
 
 # Contain TwitterAPI wrapper Functions
@@ -35,15 +37,19 @@ class TwitterAPIManager:
     # get an array of tweets jsons given a trend, datetime, and amount returned
     # args:
     #   trend: query search terms
-    #   timefrom: starting date time of the search
-    #   timeto: ending date time of the search
+    #   timefrom: date string. From when to search. YYYY-MM-DD
+    #   timeto: date string. To when the search end. YYYY-MM-DD
     #   num: optional value. max amount of tweets returned. default to 10
     #   location: optional and is set to none by default.
     #               Location will greatly decrease returned tweets volume
-    def get_tweets(self, trend, timefrom, timeto, num=10, location=None):
+    def get_tweets(self, trend, timefrom, timeto, num=10, location=None, apitype=0):
         # num arg maybe not needed?
-        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, num, location)
-        return top_tweets
+        if apitype == 0:
+            print("USING STANDARD TWEET")
+            return self.standardAPI.getTweets(trend, timefrom, timeto, num, location)
+        else:
+            print("USING PREMIUM TWEET")
+            return self.premiumAPI.getTweets(trend, timefrom, timeto, num, location)
 
     # sample tweet function that returns a tweet based on a given search query
     def sample_tweet(self, trend):

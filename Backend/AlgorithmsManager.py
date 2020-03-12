@@ -27,9 +27,9 @@ class AlgorithmsManager:
         cachetime = 5 # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
-            print("yo1")
+
             query = self.twitter.top_trends(woeid)  # api.trends_place(woeid)
-            print("yo2")
+
             # Variables storing other info about the trends
             as_of = query['as_of']
             created_at = query['created_at']
@@ -86,26 +86,47 @@ class AlgorithmsManager:
         if querystr is None:
             querystr = "/toptweets{}{}-{}".format(query, location.min_latitude, location.min_longitude)
 
-        cachetime = 5  # n minutes cache time check
+        cachetime = 15 # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime):
 
+            # apitype 0 = standard 7 days
+            # apitype 1 = premium 30 days
+            apitype = 0 if timeto > datetime.now() - timedelta(days=7) else 1
+
             res = self.twitter.get_tweets(query, timefrom.strftime("%Y-%m-%d"),
                                                  timeto.strftime("%Y-%m-%d"),
-                                          num, location)
+                                          num, location, apitype=apitype)
 
             tweets = []  # list of Tweet object
             i = 0
             for tweet in res:
+                # location object storing location data from the tweet json
+                loc = DataStructures.Location(None, None, None, None, None, None, None, None, None)
+                qcount = 0   # number of quotes
+                rcount = 0   # number of replies
+
+                if tweet['geo'] is not None:
+                    # TODO: make a new Location object and store it in loc
+                    ()
+
+                if 'quote_count' in tweet:
+                    # TODO: store tweet['quote_count'] in qcount
+                    ()
+
+                if 'reply_count' in tweet:
+                    # TODO: store tweet['reply_count'] in rcount
+                    ()
+
                 temptweet = DataStructures.Tweet(id=i,
                                                  ids=tweet['id'],
                                                  uid=tweet['user']['id'],
                                                  cont=tweet['text'],
-                                                 lat=tweet['geo'], lon=tweet['geo'], locid=tweet['geo'], # location isfound in tweet['geo']
+                                                 lat=loc.min_latitude, lon=loc.min_longitude, locid=loc.woeid, # location isfound in tweet['geo']
                                                  likes=tweet['favorite_count'],
-                                                 quotes=0, #tweet['quote_count']
+                                                 quotes=qcount,
                                                  rtweets=tweet['retweet_count'],
-                                                 repl=0, #tweet['reply_count'],
+                                                 repl=rcount,
                                                  date=tweet['created_at'])
                 tweets.append(temptweet)
                 i += 1
