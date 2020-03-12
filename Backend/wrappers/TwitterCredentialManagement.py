@@ -25,4 +25,9 @@ def fetchApiCredentials():
     accessTokenSecret = os.environ.get(ACCESS_TOKEN_SECRET_ENV_VAR_NAME)
     assert accessTokenSecret != None, missingEnvVarErrorStr.format("API Access Token Secret")
 
+    print(apiKey)
+    print(apiSecretKey)
+    print(accessToken)
+    print(accessTokenSecret)
+
     return apiKey, apiSecretKey, accessToken, accessTokenSecret

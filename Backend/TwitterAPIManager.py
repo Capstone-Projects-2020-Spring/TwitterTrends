@@ -37,10 +37,12 @@ class TwitterAPIManager:
     #   trend: query search terms
     #   timefrom: starting date time of the search
     #   timeto: ending date time of the search
-    #   num: the number of tweets returned
-    def get_tweets(self, trend, timefrom, timeto):
+    #   num: optional value. max amount of tweets returned. default to 10
+    #   location: optional and is set to none by default.
+    #               Location will greatly decrease returned tweets volume
+    def get_tweets(self, trend, timefrom, timeto, num=10, location=None):
         # num arg maybe not needed?
-        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, 500)
+        top_tweets = self.premiumAPI.getTweets(trend, timefrom, timeto, num, location)
         return top_tweets
 
     # sample tweet function that returns a tweet based on a given search query

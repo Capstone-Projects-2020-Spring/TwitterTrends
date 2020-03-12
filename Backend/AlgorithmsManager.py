@@ -22,9 +22,9 @@ class AlgorithmsManager:
     def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None):
 
         if querystr is None:
-            querystr = "/toptrends"+woeid
+            querystr = "/toptrends{}".format(woeid)
 
-        cachetime = 2  # 2 minutes cache time check
+        cachetime = 5 # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
             print("yo1")
@@ -75,24 +75,25 @@ class AlgorithmsManager:
     # return from cache if recently called
     # tweets time will be between timefrom->timeto
     # sort the list of tweets by retweet_count if sort == 1
-    # return the number specified by num
+    # return the number of tweets equal to specified num
+    # optional Location object can be passed in
     # querystr is used for caching
-    def get_top_tweets_from_query(self, query, num,
+    def get_top_tweets_from_query(self, query, num, location,
                                 timefrom=datetime.now() - timedelta(days=5),
                                 timeto=datetime.now(),
                                 sort=1, querystr=None):
         # Call a function from the TwitterAPIManager to return a list of tweets
         if querystr is None:
-            querystr = "/toptweets" + query
+            querystr = "/toptweets{}{}-{}".format(query, location.min_latitude, location.min_longitude)
 
-        cachetime = 2  # 2 minutes cache time check
+        cachetime = 5  # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime):
 
             res = self.twitter.get_tweets(query, timefrom.strftime("%Y-%m-%d"),
-                                                 timeto.strftime("%Y-%m-%d"))
+                                                 timeto.strftime("%Y-%m-%d"),
+                                          num, location)
 
-            # def __init__(self, id, ids, uid, cont, lat, lon, locid, likes, quotes, rtweets, repl, date)
             tweets = []  # list of Tweet object
             i = 0
             for tweet in res:
@@ -102,9 +103,9 @@ class AlgorithmsManager:
                                                  cont=tweet['text'],
                                                  lat=tweet['geo'], lon=tweet['geo'], locid=tweet['geo'], # location isfound in tweet['geo']
                                                  likes=tweet['favorite_count'],
-                                                 quotes=tweet['quote_count'],
+                                                 quotes=0, #tweet['quote_count']
                                                  rtweets=tweet['retweet_count'],
-                                                 repl=tweet['reply_count'],
+                                                 repl=0, #tweet['reply_count'],
                                                  date=tweet['created_at'])
                 tweets.append(temptweet)
                 i += 1
@@ -138,7 +139,7 @@ class AlgorithmsManager:
         # TODO: possibly access database to check for existing location
         lat, lon = geocoding(address)
         res = self.twitter.get_closest_location(lat, lon)
-        return self.parse_location_json(res, lat, lon).__dict__
+        return self.parse_location_json(res, lat, lon)
 
     # return a Location object
     # pass in latitude and longitude values
@@ -146,7 +147,7 @@ class AlgorithmsManager:
     def get_location_by_latlon(self, lat, lon):
         # TODO: possibly access database to check for existing location
         res = self.twitter.get_closest_location(float(lat), float(lon))
-        return self.parse_location_json(res, float(lat), float(lon)).__dict__
+        return self.parse_location_json(res, float(lat), float(lon))
 
     # take in a woeid and return a locations object
     def get_location_by_woeid(self, woeid):

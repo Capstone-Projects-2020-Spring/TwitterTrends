@@ -2,6 +2,10 @@ import os
 import searchtweets as st
 import tweepy
 
+
+import twitter  # package [python_twitter-3.5.dist-info] and [twitter]
+                # found on github.com/bear/python-twitter
+
 import wrappers.TwitterCredentialManagement as tcm
 
 
@@ -21,6 +25,11 @@ def getPremiumEndpointCreds(endpointType):
 
     return searchArgs
 
+def getPremiumPythonTwitterCreds():
+    apiKey, apiSecretKey, accessToken, accessTokenSecret = tcm.fetchApiCredentials()
+    api = twitter.Api(consumer_key=apiKey, consumer_secret=apiSecretKey,
+                      access_token_key=accessToken, access_token_secret=accessTokenSecret)
+    return api
 
 def create():
 

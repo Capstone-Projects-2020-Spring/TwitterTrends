@@ -49,40 +49,46 @@ def api_toptweets():
     tostr = request.args.get('to')
     num = request.args.get('num')
     sort = request.args.get('sort')
+    latitude = request.args.get('latitude') or request.args.get('lat')
+    longitude = request.args.get('longitude') or request.args.get('lon')
 
     try:
         if query is not None:
-            querystr = "/toptweets" + query
+            querystr = "/toptweets{}{}-{}".format(query, latitude, longitude)
             # default optional args values
             numint = 10
             fromdate = datetime.now() - timedelta(days=5)
             todate = datetime.now()
             issort = 1
+            location = None
 
             # attempt to get optional args values
             if num is not None and int(num) > 0:
                 numint = int(num)
             if fromstr is not None:  # try parsing the fromdate argument
                 try:
-                    fromdate = datetime.strptime(fromstr, '%Y-%m-%dT%H:%M:%S')
+                    fromdate = datetime.strptime(fromstr, '%Y-%m-%d')
                 except ValueError as e:
                     print(type(e))
                     print(e.args)
                     print(e)
             if tostr is not None:   # try parsing the todate argument
                 try:
-                    todate = datetime.strptime(tostr, '%Y-%m-%dT%H:%M:%S')
+                    todate = datetime.strptime(tostr, '%Y-%m-%d')
                 except ValueError as e:
                     print(type(e))
                     print(e.args)
                     print(e)
-            if issort is not None and int(issort) == 0 or int(issort) == 1:
+            if sort is not None and (int(sort) == 0 or int(sort) == 1):
                 issort = int(sort)
+            if latitude is not None and longitude is not None:
+                location = algo.get_location_by_latlon(float(latitude), float(longitude))
 
-            print("\n/toptweets args: ", query, fromdate, todate, numint, issort, "\n")
+            print("\n/toptweets args: ", query, numint, latitude, longitude, fromdate, todate, issort, "\n")
 
             result = algo.get_top_tweets_from_query(query=query,
                                                     num=numint,
+                                                    location=location,
                                                     timefrom=fromdate,
                                                     timeto=todate,
                                                     sort=issort,
@@ -90,7 +96,8 @@ def api_toptweets():
 
             return jsonify(result)  # result for this endpoint is not json format
         else:
-            argstr = AlgorithmsManager.get_args_as_html_str(['query'], ['fromdate', 'todate', 'num', 'sort'])
+            argstr = AlgorithmsManager.get_args_as_html_str(['query'],
+                                            ['fromdate', 'todate', 'num', 'sort', 'latitude', 'longitude'])
             return "Error! arguments:<br><br>" + argstr
     except:
         print("ERROR ENDPOINT /toptweets")
@@ -111,7 +118,7 @@ def api_toptrends():
             woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude))['woeid'])
 
         if woeid is not None:
-            querystr = "/toptrends"+woeid
+            querystr = "/toptrends{}".format(woeid)
 
             numint = 5  # default val
             issort = 1  # default to yes sort
@@ -147,15 +154,15 @@ def api_getlocation():
         print("\n/getlocation args: ", address, latitude, longitude, woeid, "\n")
 
         if address is not None:
-            return jsonify(algo.get_location_by_address(address))
+            return jsonify(algo.get_location_by_address(address).__dict__)
 
         if latitude is not None and longitude is not None:
             lat = float(latitude)
             lon = float(longitude)
-            return jsonify(algo.get_location_by_latlon(lat, lon))
+            return jsonify(algo.get_location_by_latlon(lat, lon).__dict__)
 
         if woeid is not None:
-            return jsonify(algo.get_location_by_woeid(woeid))
+            return jsonify(algo.get_location_by_woeid(woeid).__dict__)
 
         argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have at least 1 of the three arguments</b>',
                                                         'address', 'latitude and longitude', 'woeid'], [])

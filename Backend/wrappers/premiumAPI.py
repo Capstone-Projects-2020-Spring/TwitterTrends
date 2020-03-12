@@ -21,19 +21,35 @@ class premiumAPI:
     def __init__(self):
         self.monthSearchArgs = creds.getPremiumEndpointCreds(PREMIUM_30_DAY_ENDPOINT)
         self.st = st
+        self.pytwit = creds.getPremiumPythonTwitterCreds()
 
     # Retrieve tweets using the Twitter premium API endpoint
     # Args:
     #   keyword: query string
     #   time: the date time of where to start searching tweets
     #   num: number of tweets to return
-    def getTweets(self, keyword, timefrom, timeto, num):
-        rule = self.st.gen_rule_payload(keyword, from_date=st.convert_utc_time(timefrom), to_date=st.convert_utc_time(timeto))
-        tweets = self.st.collect_results(rule, max_results=num, result_stream_args= self.monthSearchArgs)
-        #tweets_text = []
-        #for tweet in tweets:
-        #    tweets_text.append(tweet.all_text)
-        return tweets#tweets_text
+    def getTweets(self, keyword, timefrom, timeto, num, location=None):
+
+        # TODO: add search tweets by location and keyword using bear/python-twitter
+        if location is not None:
+            radius = "100mi"
+            geocode = "{},{},{}".format(location.min_latitude, location.min_longitude, radius)
+            print(geocode)
+            tweets = self.pytwit.GetSearch(term=keyword,
+                                           geocode=geocode,
+                                           since=timefrom, until=timeto,
+                                           result_type='top', count=num)
+            return tweets
+        else:
+            #rule = self.st.gen_rule_payload(keyword, from_date=st.convert_utc_time(timefrom),
+            #                                to_date=st.convert_utc_time(timeto))
+            #tweets = self.st.collect_results(rule, max_results=num, result_stream_args=self.monthSearchArgs)
+
+            # retrieving tweets using python-twitter instead
+            tweets = self.pytwit.GetSearch(term=keyword, since=timefrom, until=timeto,
+                                           result_type='mixed', count=10)
+
+            return tweets
 
     def getSampleTweet(self, keyword):
         rule = st.gen_rule_payload(keyword)
