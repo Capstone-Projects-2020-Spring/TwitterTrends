@@ -1,3 +1,8 @@
+{% block styles %}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='main.css')}}">
+{% endblock %}
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -9,8 +14,8 @@
 	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
 	
 	
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="static/main.css">
 
   </head>
 <body>
@@ -120,7 +125,7 @@
 		
 		<br>
 		<h3 class="side-title">Top Tweets</h3> 
-		<img src="images/tweets-1.jpeg" class="img-fluid">
+		<img src="static/images/tweets-1.jpeg" class="img-fluid">
 		
 		<br>
 		<br>
@@ -128,7 +133,7 @@
 		<br>
 		
 		<h3 class="side-title">Top News</h3>
-		<img src="images/tweets-2.png" class="img-fluid">
+		<img src="static/images/tweets-2.png" class="img-fluid">
 		
 		
 		
@@ -144,7 +149,7 @@
 		  <br>
 		  <br>
           <h3 class="feature-title">Stuff</h3>
-          <img src="images/icon-1.png" class="img-fluid">
+          <img src="static/images/icon-1.png" class="img-fluid">
 			<p>Bla Bla Bla</p>
         </div>
 		
@@ -153,7 +158,7 @@
 		  <br>
 		  <br>
           <h3 class="feature-title">Stuff</h3>
-          <img src="images/icon-2.png" class="img-fluid">
+          <img src="static/images/icon-2.png" class="img-fluid">
 			<p>Bla Bla Bla</p>
         </div>
 		
@@ -173,8 +178,8 @@
       </div> 
     </div>
 
-<script src="jquery-3.3.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
+<script src="static/jquery-3.3.1.min.js"></script>
+<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/main.js"></script>
 </body>
 </html>

@@ -165,7 +165,7 @@ body {
 /*--- header ---*/
 
 .header {
-	background-image: url('../website-bootstrap/images/header-background.jpg');
+	background-image: url('../static/images/header-background.jpg');
 	background-size: cover;
 	background-position: center;
 	position: align;
