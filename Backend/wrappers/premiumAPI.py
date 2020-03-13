@@ -39,8 +39,6 @@ class premiumAPI:
                                             to_date=st.convert_utc_time(timeto))
 
             tweets = self.st.collect_results(rule, max_results=num, result_stream_args=self.monthSearchArgs)
-
-            print(tweets[0])
             return tweets
 
             ##r = self.twitapi.request('tweets/search/premium/', {'query': keyword})

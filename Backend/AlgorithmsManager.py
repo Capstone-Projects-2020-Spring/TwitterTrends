@@ -107,16 +107,18 @@ class AlgorithmsManager:
                 rcount = 0   # number of replies
 
                 if tweet['geo'] is not None:
-                    # TODO: make a new Location object and store it in loc
-                    ()
+                    print(tweet['geo'])
+                    if ('coordinates' in tweet['geo']) and tweet['geo']['coordinates']:
+                        coord = tweet['geo']['coordinates']
+                        loc = self.get_location_by_latlon(float(coord[0]), float(coord[1]))
 
                 if 'quote_count' in tweet:
-                    # TODO: store tweet['quote_count'] in qcount
-                    ()
+                    # store tweet['quote_count'] in qcount
+                    qcount = tweet['quote_count']
 
                 if 'reply_count' in tweet:
-                    # TODO: store tweet['reply_count'] in rcount
-                    ()
+                    # store tweet['reply_count'] in rcount
+                    rcount = tweet['reply_count']
 
                 temptweet = DataStructures.Tweet(id=i,
                                                  ids=tweet['id'],

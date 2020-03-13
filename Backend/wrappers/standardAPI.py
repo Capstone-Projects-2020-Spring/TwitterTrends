@@ -27,7 +27,6 @@ class standardAPI:
         if location is not None:
             radius = "100mi"
             geocode = "{},{},{}".format(location.min_latitude, location.min_longitude, radius)
-            print(geocode)
             tweets = self.pytwit.GetSearch(term=keyword,
                                            geocode=geocode,
                                            since=since, until=until,
