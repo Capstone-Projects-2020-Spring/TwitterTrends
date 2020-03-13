@@ -86,7 +86,7 @@ body {
 }
 
 #trend-search-btn{
-	color: #33f6ff
+	color: #33f6ff;
 	float: right;
 	width: 20px;
 	height: 20px;
@@ -237,7 +237,7 @@ body {
 }
 
 
-//*
+/*
 .features img {
     -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
