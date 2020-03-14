@@ -106,6 +106,7 @@ class AlgorithmsManager:
                 qcount = 0   # number of quotes
                 rcount = 0   # number of replies
 
+                # TODO: need changes to all the locations values. probably isn't accurate right now
                 if tweet['geo'] is not None:
                     if ('coordinates' in tweet['geo']) and tweet['geo']['coordinates']:
                         coord = tweet['geo']['coordinates']
@@ -119,6 +120,7 @@ class AlgorithmsManager:
                     # store tweet['reply_count'] in rcount
                     rcount = tweet['reply_count']
 
+                # TODO: need changes to all the locations values. probably isn't accurate right now
                 temptweet = DataStructures.Tweet(id=i,
                                                  ids=tweet['id'],
                                                  uid=tweet['user']['id'],
