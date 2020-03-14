@@ -107,7 +107,6 @@ class AlgorithmsManager:
                 rcount = 0   # number of replies
 
                 if tweet['geo'] is not None:
-                    print(tweet['geo'])
                     if ('coordinates' in tweet['geo']) and tweet['geo']['coordinates']:
                         coord = tweet['geo']['coordinates']
                         loc = self.get_location_by_latlon(float(coord[0]), float(coord[1]))
