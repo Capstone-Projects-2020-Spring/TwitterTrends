@@ -172,6 +172,9 @@ def api_getlocation():
         print('ERROR ENDPOINT /getlocation')
         return 'ERROR ENDPOINT'
 
+@app.route('/locations', methods=['GET'])
+def api_get_all_locations():
+    return jsonify(algo.get_all_locations())
 
 @app.route('/test', methods=['GET'])
 def api_test():
