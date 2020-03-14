@@ -28,17 +28,17 @@ class AlgorithmsManager:
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
 
-            query = self.twitter.top_trends(woeid)  # api.trends_place(woeid)
+            queryres = self.twitter.top_trends(woeid)  # api.trends_place(woeid)
 
             # Variables storing other info about the trends
-            as_of = query['as_of']
-            created_at = query['created_at']
-            loc_name = query['locations'][0]['name']
-            loc_woeid = query['locations'][0]['woeid']
+            as_of = queryres['as_of']
+            created_at = queryres['created_at']
+            loc_name = queryres['locations'][0]['name']
+            loc_woeid = queryres['locations'][0]['woeid']
 
             trends = []   # List of Trend objects
             i = 0
-            for trend in query['trends']:
+            for trend in queryres['trends']:
                 vol = trend['tweet_volume']
                 tempTrend = DataStructures.Trend(i,
                                                  trend['name'],
