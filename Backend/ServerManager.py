@@ -39,7 +39,7 @@ app.config["DEBUG"] = True
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>HELLO</h1>" \
-           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]"
+           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]"
 
 
 @app.route('/toptweets', methods=['GET'])
