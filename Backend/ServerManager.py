@@ -115,7 +115,7 @@ def api_toptrends():
     try:
         # TODO fix error here
         if woeid is None and (latitude is not None and longitude is not None):
-            woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude))['woeid'])
+            woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude)).woeid)
 
         if woeid is not None:
             querystr = "/toptrends{}".format(woeid)
