@@ -6,13 +6,13 @@ class standardAPI:
         self.tweepy = creds.getStandardTweepyTwitterCreds()
 
     def retrieve_trends(self, woeid):
-        query = self.tweepy.trends_place(woeid)
+        trends = self.tweepy.trends_place(woeid)
         # top_trends  = self.query_transform(query, woeid, num)
-        return query
+        return trends
 
     def get_nearby_location(self, lat, long):
-        query = self.tweepy.trends_closest(lat, long)
-        return query
+        location = self.tweepy.trends_closest(lat, long)
+        return location
 
     # Retrieve tweets using the Twitter 7 Days STANDARD API endpoint
     # Args:
@@ -25,7 +25,7 @@ class standardAPI:
 
         if location is not None:
             radius = "100mi"
-            geocode = "{},{},{}".format(location.min_latitude, location.min_longitude, radius)
+            geocode = "{},{},{}".format(location.latitude, location.longitude, radius)
 
             # # # old version with python-twitter
             #tweets = self.pytwit.GetSearch(term=keyword,

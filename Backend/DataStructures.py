@@ -77,16 +77,14 @@ class TrendTweetsSnapshot:
 
 # [Location class]
 class Location:
-    def __init__(self, id, ctid, stid, cnid, woeid, minlat, maxlat, minlon, maxlon):
+    def __init__(self, id, ctid, stid, cnid, woeid, lat, lon):
         self.location_PK = id
         self.city_id = ctid
         self.state_id = stid
         self.country_id = cnid
         self.woeid = woeid
-        self.min_latitude = minlat
-        self.max_latitude = maxlat
-        self.min_longitude = minlon
-        self.max_longitude = maxlon
+        self.latitude = lat
+        self.longitude = lon
 
 # end Location
 

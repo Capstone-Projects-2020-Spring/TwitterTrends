@@ -84,7 +84,7 @@ class AlgorithmsManager:
                                 sort=1, querystr=None):
         # Call a function from the TwitterAPIManager to return a list of tweets
         if querystr is None:
-            querystr = "/toptweets{}{}-{}".format(query, location.min_latitude, location.min_longitude)
+            querystr = "/toptweets{}{}-{}".format(query, location.latitude, location.longitude)
 
         cachetime = 15 # n minutes cache time check
 
@@ -102,7 +102,7 @@ class AlgorithmsManager:
             i = 0
             for tweet in res:
                 # location object storing location data from the tweet json
-                loc = DataStructures.Location(None, None, None, None, None, None, None, None, None)
+                loc = DataStructures.Location(None, None, None, None, None, None, None)
                 qcount = 0   # number of quotes
                 rcount = 0   # number of replies
 
@@ -123,7 +123,7 @@ class AlgorithmsManager:
                                                  ids=tweet['id'],
                                                  uid=tweet['user']['id'],
                                                  cont=tweet['text'],
-                                                 lat=loc.min_latitude, lon=loc.min_longitude, locid=loc.woeid, # location isfound in tweet['geo']
+                                                 lat=loc.latitude, lon=loc.longitude, locid=loc.woeid, # location isfound in tweet['geo']
                                                  likes=tweet['favorite_count'],
                                                  quotes=qcount,
                                                  rtweets=tweet['retweet_count'],
@@ -183,7 +183,7 @@ class AlgorithmsManager:
         resrows = queryres.get_rows()
         resarr = []
         for row in resrows:
-            resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[3], row[4], row[4]).__dict__)
+            resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[4]).__dict__)
         return resarr
 
 
@@ -200,7 +200,7 @@ class AlgorithmsManager:
         woeid = loc['woeid']
         countryCode = loc['countryCode']
 
-        location = DataStructures.Location(0, name, None, parentid, woeid, lat, lat, lon, lon)
+        location = DataStructures.Location(0, name, None, parentid, woeid, lat, lon)
         return location
 
     # pass in array of Trend object and this will sort it using insertion sort
