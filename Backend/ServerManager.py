@@ -97,7 +97,7 @@ def api_toptweets():
             return jsonify(result)  # result for this endpoint is not json format
         else:
             argstr = AlgorithmsManager.get_args_as_html_str(['query'],
-                                            ['fromdate', 'todate', 'num', 'sort', 'latitude', 'longitude'])
+                                            ['from', 'to', 'num', 'lat/latitude', 'lon/longitude', 'sort'])
             return "Error! arguments:<br><br>" + argstr
     except:
         print("ERROR ENDPOINT /toptweets")
@@ -139,7 +139,7 @@ def api_toptrends():
                                                            querystr=querystr)
             return jsonify(result)   # result for this endpoint is not json format
         else:
-            argstr = AlgorithmsManager.get_args_as_html_str(['woeid'], ['num', 'sort'])
+            argstr = AlgorithmsManager.get_args_as_html_str(['[woeid]  <b>OR</b>   [lat <b>AND</b> lon]'], ['num', 'sort'])
             return 'Error! arguments:<br><br>' + argstr
     except:
         print('ERROR ENDPOINT /toptrends')
@@ -183,6 +183,7 @@ def api_test():
     return jsonify(["Test", "Test2"])
 
 
+# dont use this endpoint too outdated. kept for reference.
 @app.route('/testadd', methods=['GET'])
 def api_testadd():
     db.query("DELETE FROM test_users WHERE id = 13;")
