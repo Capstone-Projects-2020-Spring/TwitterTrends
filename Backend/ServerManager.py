@@ -115,7 +115,6 @@ def api_toptrends():
     try:
         # TODO fix error here
         if woeid is None and (latitude is not None and longitude is not None):
-            print(latitude, longitude)
             woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude)).woeid)
 
         print(woeid)
@@ -175,6 +174,9 @@ def api_getlocation():
         print('ERROR ENDPOINT /getlocation')
         return 'ERROR ENDPOINT'
 
+@app.route('/locations', methods=['GET'])
+def api_get_all_locations():
+    return jsonify(algo.get_all_locations())
 
 @app.route('/test', methods=['GET'])
 def api_test():

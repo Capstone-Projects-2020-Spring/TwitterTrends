@@ -4,7 +4,6 @@ class standardAPI:
 
     def __init__(self):
         self.tweepy = creds.getStandardTweepyTwitterCreds()
-        self.pytwit = creds.getStandardPythonTwitterCreds()
 
     def retrieve_trends(self, woeid):
         query = self.tweepy.trends_place(woeid)
@@ -27,17 +26,33 @@ class standardAPI:
         if location is not None:
             radius = "100mi"
             geocode = "{},{},{}".format(location.min_latitude, location.min_longitude, radius)
-            tweets = self.pytwit.GetSearch(term=keyword,
-                                           geocode=geocode,
-                                           since=since, until=until,
-                                           result_type='top', count=num)
 
-            return tweets
+            # # # old version with python-twitter
+            #tweets = self.pytwit.GetSearch(term=keyword,
+            #                               geocode=geocode,
+            #                               since=since, until=until,
+            #                               result_type='top', count=num)
+
+            tweets = self.tweepy.search(q=keyword, geocode=geocode, since=since, until=until, result_type='top', count=num)
+
+            # # # Parsing tweepy output to our standardized format
+            #  tweepy returns array of Status objects
+            tweetsparsed = []
+            for status in tweets:
+                tweetsparsed.append(status._json)
+
+            return tweetsparsed
         else:
-            tweets = self.pytwit.GetSearch(term=keyword, since=since, until=until,
+            tweets = self.tweepy.search(q=keyword, since=since, until=until,
                                            result_type='top', count=num)
 
-            return tweets
+            # # # Parsing tweepy output to our standardized format
+            #  tweepy returns array of Status objects
+            tweetsparsed = []
+            for status in tweets:
+                tweetsparsed.append(status._json)
+
+            return tweetsparsed
 
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
