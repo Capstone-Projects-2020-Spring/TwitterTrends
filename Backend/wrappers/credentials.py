@@ -21,8 +21,7 @@ def getPremiumEndpointCreds(endpointType):
 
     return searchArgs
 
-
-def create():
+def getStandardTweepyTwitterCreds():
 
     apiKey, apiSecretKey, accessToken, accessTokenSecret = tcm.fetchApiCredentials()
 

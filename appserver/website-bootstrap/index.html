@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+
+    <title>Twitter Trends</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	
+	
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+
+  </head>
+<body>
+
+	<!-- Navigation bar -->
+	
+	<!-- Logo -->
+	<nav class="navbar navbar-expand-md">
+		<a class="navbar-brand" href="#">Logo</a>  
+
+		<!-- Search Bar -->
+		<div id="trend-search-box">
+			<input id="trend-search-txt" type="text" placeholder="Search . . ." name="">
+			<a id="trend-search-btn">
+				<i class="fas fa-search"></i>
+			</a>
+		</div>
+		
+		<!-- Drop down menu -->
+		<div id="pages-drop-box">
+			<button id="pages-drop-btn" type="reset">ANALYZE
+			<i class="fas fa-caret-down"></i>
+			</button>
+			
+			<div id="pages-dropdown-menu">
+				<a href="time.html">Time</a>
+				<a href="location.html">Location</a>
+				<a href="network.html">Network</a>
+			</div> 
+		</div>	
+		
+	</nav>
+
+
+     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+	<div class="row">
+        
+		<!-- First column -->
+		<div class="col-12 col-md-10">
+	<header class="page-header header container-fluid">
+		<!--<div id="overlay"></div> <!-- Temple Logo(delete after d3.js done*maybe*) -->
+			<!-- d3js map stuff -->
+			<svg width="1000" height="600"></svg>
+			<script src="http://d3js.org/d3.v3.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+			<script>
+
+				var width = 1000, height = 600;
+				
+				var Tooltip = d3.select(".row")
+					.append("div")
+					.attr("class", "tooltip")
+					
+				var mouseover = function(d){
+					Tooltip.style("opacity", 1)
+				}
+				var mousemove = function(d){
+					Tooltip
+						.html(d.name + "<br>" + "long: " + d.longitude + "<br>" + "lat: " + d.latitude)
+						.style("left", (d3.mouse(this)[0]+50) + "px")
+						.style("top", (d3.mouse(this)[1]) + "px")
+				}
+				var mouseout = function(d){
+					Tooltip.style("opacity", 0)
+				}
+				
+				var svg = d3.select("svg")
+				
+				var usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
+					citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';
+
+				var markers = [
+					{name: 'Philadelphia', longitude: -75.165222, latitude: 39.952583}, <!-- Philadelphia -->
+					{name: 'Chicago', longitude: -87.632401, latitude: 41.883228}, <!-- Chicago -->
+					{name: 'Detroit', longitude: -83.045753, latitude: 42.331429}, <!-- Detroit -->
+					{name: 'Orlando', longitude: -81.378883, latitude: 28.538330}, <!-- Orlando -->
+					{name: 'Charlotte', longitude: -80.843124, latitude: 35.227085}, <!-- Charlotte -->
+					{name: 'Los Angeles', longitude: -118.4108, latitude: 34.0194}, <!-- Los Angeles -->
+					{name: 'San Diego', longitude: -117.135, latitude: 32.8153}, <!-- San Diego -->
+					{name: 'Seattle', longitude: -122.3509, latitude: 47.6205},  <!-- Seattle -->
+					{name: 'Houston', longitude: -95.3863, latitude: 29.7805}, <!-- Houston -->
+					{name: 'Vegas', longitude: -115.264, latitude: 36.2277}, <!-- Vegas -->
+					{name: 'Oklahoma City', longitude: -97.5137, latitude: 35.4671}  <!-- Oklahoma City -->
+				];
+
+				queue()
+					.defer(d3.json, usDataUrl)
+					.defer(d3.csv, citiesDataUrl)
+					.await(function (error, states, cities) {
+						var path = d3.geo.path();
+						var projection = d3.geo.albersUsa()
+							.translate([width / 2, height / 2])
+							.scale([1200]);
+						path.projection(projection);
+
+						svg.append("g")
+							.attr("class", "states")
+							.selectAll('path')
+							.data(states.features)
+							.enter()
+							.append('path')
+							.attr('d', path);
+
+						svg.append("g")
+							.attr("class", "marker")
+							.selectAll('myCircles')
+							.data(markers)
+							.enter()
+							.append('circle')
+							.each(function (d) {
+								var location = projection([d.longitude, d.latitude]);
+								d3.select(this).attr({
+									cx: location[0], cy: location[1],
+									r: 10
+								});
+							})
+							.on('mouseover', mouseover)
+							.on('mousemove', mousemove)
+							.on('mouseout', mouseout)	  
+					});
+			</script>
+		</div>
+	</header>
+	
+		<!-- Second column -->
+		<div class="col" style="background-color: #470a0a"> <!-- Second column background color -->
+		
+		<br>
+		<h3 class="side-title">Top Tweets</h3> 
+		<img src="images/tweets-1.jpeg" class="img-fluid">
+		
+		<br>
+		<br>
+		<br>
+		<br>
+		
+		<h3 class="side-title">Top News</h3>
+		<img src="images/tweets-2.png" class="img-fluid">
+		
+		
+		
+		</div>
+	</div>
+
+	
+	<!-- Second grid view -->
+	<div class="container features">
+      <div class="row">
+	  <!-- First column -->
+        <div class="col-lg-4 col-md-4 col-sm-12">
+		  <br>
+		  <br>
+          <h3 class="feature-title">Stuff</h3>
+          <img src="images/icon-1.png" class="img-fluid">
+			<p>Bla Bla Bla</p>
+        </div>
+		
+		<!-- Second column -->
+        <div class="col-lg-4 col-md-4 col-sm-12">
+		  <br>
+		  <br>
+          <h3 class="feature-title">Stuff</h3>
+          <img src="images/icon-2.png" class="img-fluid">
+			<p>Bla Bla Bla</p>
+        </div>
+		
+		<!-- Third column -->
+          <div class="col-lg-4 col-md-4 col-sm-12">  
+		  <br>
+		  <br>
+		  <h3 class="feature-title">Team Members</h3>
+			<p>Jennifer Chao</p>
+			<p>Conor Kennedy</p>
+			<p>Mike Lauw</p>
+			<p>Chris Nelson</p>
+			<p>Scott Salisbury</p>
+			<p>Dan Tran</p>
+			<p>Thanh Tran</p>
+        </div>
+      </div> 
+    </div>
+
+<script src="jquery-3.3.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
