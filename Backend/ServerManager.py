@@ -1,5 +1,6 @@
 import flask
 from flask import request, jsonify
+from flask_cors import CORS
 from datetime import datetime, timedelta
 
 from DataCache import DataCache
@@ -31,6 +32,7 @@ algo = AlgorithmsManager(cache, db, twitter)
 # Below are FLASK Endpoints
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app)
 
 ################
 # TODO: add proper end points. Most endpoints are currently broken
