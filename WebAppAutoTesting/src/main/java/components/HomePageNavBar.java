@@ -10,7 +10,9 @@ import org.openqa.selenium.WebElement;
 public class HomePageNavBar extends NavBar
 {
 
-protected By searchFieldLoc = null;//todo
+protected By searchContainerLoc = By.id("trend-search-box");
+protected By searchFieldLoc = By.id("trend-search-txt");
+protected By searchButtonLoc = By.id("trend-search-btn");
 
 public HomePageNavBar( final WebDriver driver )
 {
@@ -28,4 +30,6 @@ public void searchWorld( final String searchText )
 	enterText(searchField, searchText);
 	//todo?
 }
+
+public boolean isSearchBarEnabled( ) { return checkForEnabledElement(searchContainerLoc); }
 }

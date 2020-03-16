@@ -36,6 +36,8 @@ protected BasePageObject( final WebDriver driver )
 /**
  * retrieves the text of a displayed element
  *
+ * Note- this trims whitespace off the ends of the retrieved string
+ *
  * @param elem an element which is or soon will be displayed
  *
  * @return the human-visible text of that element

@@ -12,7 +12,7 @@ public class LocationAnalysisPage extends BaseAnalysisPage<LocationAnalysisContr
 
 	public LocationAnalysisPage( final WebDriver driver )
 	{
-		super(driver);
+		super(driver, "Analyze Location");
 		this.controlBar = new LocationAnalysisControlBar(driver);
 	}
 }

@@ -16,9 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 public enum AnalysisPages
 {
 	//todo
-	TIME(null, TimeAnalysisPage.class),
-	LOCATION(null, LocationAnalysisPage.class),
-	NETWORK(null, NetworkAnalysisPage.class);
+	TIME("Time", TimeAnalysisPage.class),
+	LOCATION("Location", LocationAnalysisPage.class),
+	NETWORK("Network", NetworkAnalysisPage.class);
 
 private String dropdownOptionText;
 private Class<? extends BaseAnalysisPage<? extends BaseAnalysisControlBar>> pageClass;

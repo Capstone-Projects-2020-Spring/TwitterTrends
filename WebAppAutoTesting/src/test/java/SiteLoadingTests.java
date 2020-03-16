@@ -1,6 +1,12 @@
 import base.BaseTest;
+import components.HomePageNavBar;
 import components.NavBar;
+import components.base.BaseAnalysisControlBar;
+import enums.AnalysisPages;
 import org.junit.jupiter.api.Test;
+import pages.HomePage;
+import pages.base.BaseAnalysisPage;
+import pages.base.BasePage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,16 +23,43 @@ protected final int expectedNumStates = 51;
 public void siteLoadsTest( )
 {
 	NavBar navBar = startPage.getNavBar();
-	assertTrue(navBar.isSiteTitleDisplayed());
+	assertTrue(navBar.isSiteLogoDisplayed());
 	assertTrue(navBar.isDropdownEnabled());
 }
 
 @Test
 public void mapLoadsTest( )
 {
-	assertTrue(startPage.areStateBordersDisplayed());
 	assertEquals(expectedNumStates, startPage.visibleStateCount());
+	//todo also check for existence of some location markers
 }
 
-//todo test navigating between pages with the header bar
+@Test
+public void pagesNavigableTest( )
+{
+	HomePageNavBar navBar = startPage.getNavBar();
+	assertTrue(navBar.isDropdownEnabled());
+	assertTrue(navBar.isSiteLogoDisplayed());
+	assertTrue(navBar.isSearchBarEnabled());
+	assertTrue(startPage.isCurrentPage());
+	
+	BasePage<HomePageNavBar> currPage = startPage;
+	for ( AnalysisPages pageDesc : AnalysisPages.values() )
+	{
+		BaseAnalysisPage<? extends BaseAnalysisControlBar> analysisPage = currPage.getNavBar()
+																				  .openAnalysisPage(pageDesc);
+		NavBar analysisNavBar = analysisPage.getNavBar();
+		assertTrue(analysisNavBar.isDropdownEnabled());
+		assertTrue(analysisNavBar.isSiteLogoDisplayed());
+		assertTrue(analysisPage.isCurrentPage());
+	}
+	
+	HomePage homePage = currPage.getNavBar()
+								.openHomePage();
+	HomePageNavBar homeNavBar = homePage.getNavBar();
+	assertTrue(homeNavBar.isDropdownEnabled());
+	assertTrue(homeNavBar.isSiteLogoDisplayed());
+	assertTrue(homeNavBar.isSearchBarEnabled());
+	assertTrue(homePage.isCurrentPage());
+}
 }

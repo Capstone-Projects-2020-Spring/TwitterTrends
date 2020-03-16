@@ -17,7 +17,6 @@ public class HomePage extends BasePage<HomePageNavBar>
 final By mapContainerLoc = By.tagName("svg");//todo make this less atrocious!!!
 final By statesList = By.className("states");
 final By stateShapeDescription = By.tagName("path");
-final By stateBorders = By.className("state-borders");
 
 final By trendDetailsContainerLoc = null;//todo!!
 //todo add locators for tweets section & news section of trend details
@@ -42,11 +41,6 @@ public int visibleStateCount( )
 	return stateCount;
 }
 
-public boolean areStateBordersDisplayed( )
-{
-	boolean areBordersDisplayed = false;
-	WebElement mapContainerElem = getDisplayedElement(mapContainerLoc);
-	areBordersDisplayed = checkForElement(stateBorders, mapContainerElem);
-	return areBordersDisplayed;
-}
+@Override
+public boolean isCurrentPage( ) { return navBar.isSearchBarEnabled(); }
 }

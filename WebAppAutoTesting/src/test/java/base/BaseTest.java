@@ -51,7 +51,9 @@ public static void startTestSuite( ) throws IOException
 	@BeforeEach
 	public void setUpTestCase( )
 	{
-		driver = new RemoteWebDriver(service.getUrl(), new ChromeOptions());
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("start-maximized");
+		driver = new RemoteWebDriver(service.getUrl(), options);
 		this.startPage = loadWebsite();
 	}
 

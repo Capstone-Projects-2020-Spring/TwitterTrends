@@ -16,7 +16,14 @@ protected BasePage( final WebDriver driver )
 	super(driver);
 }
 
-//	TODO public abstract boolean isCurrentPage();
-
 public U getNavBar( ) { return navBar; }
+
+/**
+ * checks whether the page which is currently loaded in the browser is the same one which is described by this
+ * POM class
+ *
+ * @return whether the page which is currently loaded in the browser is the same one which is described by this
+ * POM class
+ */
+public abstract boolean isCurrentPage( );
 }

@@ -12,7 +12,7 @@ public class TimeAnalysisPage extends BaseAnalysisPage<TimeAnalysisControlBar>
 
 	public TimeAnalysisPage( final WebDriver driver )
 	{
-		super(driver);
+		super(driver, "Analyze Time");
 		this.controlBar = new TimeAnalysisControlBar(driver);
 	}
 }

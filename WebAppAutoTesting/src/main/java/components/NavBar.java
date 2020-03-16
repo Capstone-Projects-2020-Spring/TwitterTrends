@@ -6,6 +6,7 @@ import enums.AnalysisPages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import pages.HomePage;
 import pages.base.BaseAnalysisPage;
 
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.List;
  */
 public class NavBar extends BaseComponent
 {
-protected By siteTitleLoc = By.className("navbar-brand");//todo make this better
-protected By analysisPageDropdownButtonLoc = By.id("drop-btn");//todo make this better
-protected By analysisPageDropdownOptionsContainerLoc = By.id("dropdown-menu");//todo make this better
+protected By siteLogoLoc = By.className("navbar-brand");
+protected By analysisPageDropdownButtonLoc = By.id("pages-drop-btn");
+protected By analysisPageDropdownOptionsContainerLoc = By.id("pages-dropdown-menu");
 protected By analysisPageDropdownOption = By.tagName("a");
 
 public NavBar( final WebDriver driver )
@@ -25,12 +26,9 @@ public NavBar( final WebDriver driver )
 	super(driver);
 }
 
-public boolean isSiteTitleDisplayed( ) { return checkForDisplayedElement(siteTitleLoc); }
+public boolean isSiteLogoDisplayed( ) { return checkForDisplayedElement(siteLogoLoc); }
 
 public boolean isDropdownEnabled( ) { return checkForEnabledElement(analysisPageDropdownButtonLoc); }
-//todo check whether dropdown can be expanded and whether the expected options are all there (see enum)
-
-//todo click title to go to homepage?
 
 /**
  * opens one of the analysis pages
@@ -61,8 +59,23 @@ public <T extends BaseAnalysisPage<? extends BaseAnalysisControlBar>> T openAnal
 	
 	clickElem(targetDropdownOption);
 	
+	waitForPageLoad(targetDropdownOption);
 	analysisPage = pageDesc.getPageInstance(driver);
 	
 	return analysisPage;
+}
+
+/**
+ * clicks on the site logo to navigate back to the site's home page
+ *
+ * @return a POM representation of the site's home page
+ */
+public HomePage openHomePage( )
+{
+	WebElement logoElem = getElement(siteLogoLoc);
+	clickElem(logoElem);
+	waitForPageLoad(logoElem);
+	HomePage homePage = new HomePage(driver);
+	return homePage;
 }
 }

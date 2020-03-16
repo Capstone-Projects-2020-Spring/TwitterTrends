@@ -12,7 +12,7 @@ public class NetworkAnalysisPage extends BaseAnalysisPage<NetworkAnalysisControl
 
 	public NetworkAnalysisPage( final WebDriver driver )
 	{
-		super(driver);
+		super(driver, "Analyze Network");
 		this.controlBar = new NetworkAnalysisControlBar(driver);
 	}
 }
