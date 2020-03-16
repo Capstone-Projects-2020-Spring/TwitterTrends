@@ -83,7 +83,7 @@
                     */
                     let markers;
                     var trend_data;
-                    $.getJSON("http://18.214.197.203:5000/locations", function(data){
+                    $.getJSON("https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/locations", function(data){
                         markers = data;
                     });
 
@@ -110,7 +110,7 @@
                     var handleClick = function(d) {  // Add interactivity
                         document.querySelector('#bg-modal').style.display = 'flex';
                         document.querySelector('.top-trends-title').innerHTML = "Top Trends for " + d.city_id;
-                        var trendUrl = "http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
+                        var trendUrl = "https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
                         trend_data = retrieveTrends(trendUrl);
                     }
 

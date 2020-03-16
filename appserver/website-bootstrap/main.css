@@ -301,10 +301,6 @@ body {
 	font-size: 24px;
 }
 
-.top-trends-ul li:hover {
-	color: #005cbf;
-}
-
 .trend-1 {
 	font-weight: bold;
 	margin: .75em;
