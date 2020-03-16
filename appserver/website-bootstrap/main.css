@@ -299,15 +299,16 @@ body {
 
 .top-trends-ul {
 	font-size: 24px;
-	;
 }
 
-.t1 {
+.trend-1 {
 	font-weight: bold;
 	margin: .75em;
+	cursor: pointer;
 }
 
-.t2, .t3, .t4, .t5 {
+.trend-2, .trend-3, .trend-4, .trend-5 {
 	font-weight: lighter;
 	margin: .75em;
+	cursor: pointer;
 }
