@@ -55,7 +55,7 @@
 	<header class="page-header header container-fluid">
 		<!--<div id="overlay"></div> <!-- Temple Logo(delete after d3.js done*maybe*) -->
 			<!-- d3js map stuff -->
-			<svg width="960" height="600"></svg>
+			<svg width="1000" height="600"></svg>
 			<script src="http://d3js.org/d3.v3.min.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
 			<script>
@@ -73,8 +73,9 @@
                         markers = data;
                     });
 
-                    var width = 1000, height = 600;
 
+                    var width = 1000, height = 600;
+				
                     var Tooltip = d3.select(".row")
                         .append("div")
                         .attr("class", "tooltip")
@@ -97,7 +98,7 @@
                     var usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
                         citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';
 
-                    /* Test markers data
+                    /* Test Location Data
                     var markers = [
                         {name: 'Philadelphia', longitude: -75.165222, latitude: 39.952583}, <!-- Philadelphia -->
                         {name: 'Chicago', longitude: -87.632401, latitude: 41.883228}, <!-- Chicago -->
@@ -130,61 +131,6 @@
                                 .append('path')
                                 .attr('d', path);
 
-
-				var width = 1000, height = 600;
-				var svg = d3.select("svg")
-
-				var usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
-					citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';
-
-				var markers = [
-					{longitude: -75.165222, latitude: 39.952583}, <!-- Philadelphia -->
-					{longitude: -87.632401, latitude: 41.883228}, <!-- Chicago -->
-					{longitude: -83.045753, latitude: 42.331429}, <!-- Detroit -->
-					{longitude: -81.378883, latitude: 28.538330}, <!-- Orlando -->
-					{longitude: -80.843124, latitude: 35.227085}, <!-- Charlotte -->
-					{longitude: -118.4108, latitude: 34.0194}, <!-- Los Angeles -->
-					{longitude: -117.135, latitude: 32.8153}, <!-- San Diego -->
-					{longitude: -122.3509, latitude: 47.6205},  <!-- Seattle -->
-					{longitude: -95.3863, latitude: 29.7805}, <!-- Houston -->
-					{longitude: -115.264, latitude: 36.2277}, <!-- Vegas -->
-					{longitude: -97.5137, latitude: 35.4671}  <!-- Oklahoma City -->
-				];
-
-				queue()
-					.defer(d3.json, usDataUrl)
-					.defer(d3.csv, citiesDataUrl)
-					.await(function (error, states, cities) {
-						var path = d3.geo.path();
-						var projection = d3.geo.albersUsa()
-							.translate([width / 2, height / 2])
-							.scale([1200]);
-						path.projection(projection);
-
-						svg.append("g")
-							.attr("class", "states")
-							.selectAll('path')
-							.data(states.features)
-							.enter()
-							.append('path')
-							.attr('d', path);
-
-						svg.append("g")
-							.attr("class", "marker")
-							.selectAll('myCircles')
-							.data(markers)
-							.enter()
-							.append('circle')
-							.each(function (d) {
-								var location = projection([d.longitude, d.latitude]);
-								d3.select(this).attr({
-									cx: location[0], cy: location[1],
-									r: 10
-								});
-							})
-								  
-					});
-
                             svg.append("g")
                                 .attr("class", "marker")
                                 .selectAll('myCircles')
@@ -195,13 +141,14 @@
                                     var location = projection([d.longitude, d.latitude]);
                                     d3.select(this).attr({
                                         cx: location[0], cy: location[1],
-                                        r: 3
+                                        r: 4
                                     });
                                 })
                                 .on('mouseover', mouseover)
                                 .on('mousemove', mousemove)
                                 .on('mouseout', mouseout)
                         });
+
 				});
 
 			</script>

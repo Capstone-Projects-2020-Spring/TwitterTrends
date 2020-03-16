@@ -3,37 +3,55 @@
 from wrappers.premiumAPI import premiumAPI
 from wrappers.standardAPI import standardAPI
 from wrappers.geocode import geocoding
+
+from datetime import datetime, timedelta
 import json
 
 # Contain TwitterAPI wrapper Functions
 
+# TERRA woeid : 23424775
 
 class TwitterAPIManager:
-
 
     def __init__(self):
         self.standardAPI = standardAPI()
         self.premiumAPI = premiumAPI()
 
+    # Arguments are
+    #   location woeid
+    #   top num trends
+    def top_trends(self, woeid):
+        top_trends = self.standardAPI.retrieve_trends(woeid)
+        return top_trends[0]
 
-    def top_trends(self, woeid, num):
-        top_trends = self.standardAPI.retrieve_trends(woeid, num)
-        return top_trends
-
-
-    def trends_close(self, lat, long, num):
-        nearbyLocations = self.standardAPI.getTrendsClose(lat, long, num)
-        return nearbyLocations
-
+    # Arguments are
+    #   location latitude and longitude
+    #   return a json containing the closest location to specified lat lon
+    def get_closest_location(self, lat, long):
+        nearbyLocations = self.standardAPI.get_nearby_location(lat, long)
+        return nearbyLocations[0]
 
     def num_tweets(self, trend):
         ()
 
+    # get an array of tweets jsons given a trend, datetime, and amount returned
+    # args:
+    #   trend: query search terms
+    #   timefrom: date string. From when to search. YYYY-MM-DD
+    #   timeto: date string. To when the search end. YYYY-MM-DD
+    #   num: optional value. max amount of tweets returned. default to 10
+    #   location: optional and is set to none by default.
+    #               Location will greatly decrease returned tweets volume
+    def get_tweets(self, trend, timefrom, timeto, num=10, location=None, apitype=0):
+        # num arg maybe not needed?
+        if apitype == 0:
+            print("USING STANDARD TWEET")
+            return self.standardAPI.getTweets(trend, timefrom, timeto, num, location)
+        else:
+            print("USING PREMIUM TWEET")
+            return self.premiumAPI.getTweets(trend, timefrom, timeto, num, location)
 
-    def top_tweets(self, trend, num):
-        top_tweets = self.premiumAPI.getTweets(trend, num)
-        return top_tweets
-
+    # sample tweet function that returns a tweet based on a given search query
     def sample_tweet(self, trend):
         sample_tweet = self.premiumAPI.getSampleTweet(trend)
         return sample_tweet
@@ -44,6 +62,9 @@ def geocode(address):
     return woeid        
 
 
+# # # # # # # # # # # # # # # # #
+# BELOW ARE TEST CODE FOR TwitterAPI
+
 if __name__=='__main__':
     print("\nHello from TwitterAPIManager!!\n")
     twitter = TwitterAPIManager()
@@ -51,39 +72,47 @@ if __name__=='__main__':
 
     # Test: Retrieve top trends
     woeid = 2379574
-    result = twitter.top_trends(woeid, 5)
-    print('Top 5 Trends in ' + result['location'])
-    for i in result['trends']:
-        print(i)
+    result = twitter.top_trends(woeid)
+    print(result)
+    #print('Top 5 Trends in ' + result['location'])
+    #for i in result['trends']:
+    #    print(i)
     
     print('\n')
 
     # Test: Get tweets
-    trend = result['trends'][0]
+    #trend = result['trends'][0]
+    trend = "#temple"
     print('Tweets for ' + trend + "\n-------------")
-    tweets = twitter.top_tweets(trend, 5)
-    for i in tweets:
-        print(i + "\n-------------")
+    ##tweets = twitter.top_tweets(trend, "2020-02-20", "2020-02-25", 1)
+    #print(tweets)
+    #for i in tweets:
+    #    print(i)
 
-    print('\n')
+    #print('\n')
 
+
+    ### commented out because broken
     # Test: Sample tweet
-    sampleTweet = twitter.sample_tweet("coronavirus")
+    #sampleTweet = twitter.sample_tweet("coronavirus")
     print("Sample Tweet:")
-    print(json.dumps(sampleTweet, indent=5))
+    #print(json.dumps(sampleTweet, indent=5))
 
     print('\n')
 
     # Test: Get WOEID from an address input by user and top trends
-    address = "1800 Liacouras Walk, Philadelphia, PA 19122"
+    address = "1801 N Broad St, Philadelphia, PA 19122"  # Temple's address
     lat, long = geocoding(address)
     print("Latitude: " + str(lat) + ", longitude: " + str(long))
-    trendsClose = twitter.trends_close(lat, long, 5)
+    trendsClose = twitter.get_closest_location(lat, long)
     print("Trends in Nearby Locations:")
-    
-    for place in trendsClose:
-        print(place["name"] + ":", end= " ")
-        output = twitter.top_trends(place['woeid'], 5)
-        print(output['trends'])
+
+    print(trendsClose)
+
+    #for place in trendsClose:
+    #    print(place["name"] + ":", end= " ")
+    #    output = twitter.top_trends(place['woeid'], 5)
+    #    print(output['trends'])
+
 
     print('\n')
