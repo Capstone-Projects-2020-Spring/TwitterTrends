@@ -302,12 +302,12 @@ body {
 	;
 }
 
-.trend-1 {
+.t1 {
 	font-weight: bold;
 	margin: .75em;
 }
 
-.trend-2, .trend-3, .trend-4, .trend-5 {
+.t2, .t3, .t4, .t5 {
 	font-weight: lighter;
 	margin: .75em;
 }
