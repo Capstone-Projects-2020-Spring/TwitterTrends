@@ -178,6 +178,7 @@ def api_getlocation():
 
 @app.route('/locations', methods=['GET'])
 def api_get_all_locations():
+    print("/locations")
     return jsonify(algo.get_all_locations())
 
 @app.route('/test', methods=['GET'])
