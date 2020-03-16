@@ -86,7 +86,7 @@ body {
 }
 
 #trend-search-btn{
-	color: #33f6ff
+	color: #33f6ff;
 	float: right;
 	width: 20px;
 	height: 20px;
@@ -115,7 +115,7 @@ body {
 
 
 #pages-drop-btn{
-	background-color: 696969;
+	background-color: #696969;
 	padding: 10px;
 	font-size: 15px;
 	border-radius: 4px;
@@ -165,7 +165,7 @@ body {
 /*--- header ---*/
 
 .header {
-	background-image: url('images/header-background.jpg');
+	background-image: url('../static/images/header-background.jpg');
 	background-size: cover;
 	background-position: center;
 	position: align;
@@ -215,8 +215,8 @@ body {
 .tooltip .tooltiptext {
 	background-color: black;
 	text-align : center;
-	padding: 5 px 0;
-	border-radius: 6 px;
+	padding: 5px 0;
+	border-radius: 6px;
 }
 
 .features {
@@ -252,7 +252,7 @@ body {
 }
 
 
-//*
+/*
 .features img {
     -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
