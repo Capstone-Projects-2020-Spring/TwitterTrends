@@ -53,6 +53,19 @@
 		<!-- First column -->
 		<div class="col-12 col-md-10">
 	<header class="page-header header container-fluid">
+        <div id="bg-modal">
+            <div class="modal-content">
+                <div id="close">+</div>
+                <h1 class="top-trends-title">Top Trends</h1>
+                <ul class="top-trends-ul">
+                    <li class="trend-1">1. <a href=""></a></li>
+                    <li class="trend-2">2. <a href=""></a></li>
+                    <li class="trend-3">3. <a href=""></a></li>
+                    <li class="trend-4">4. <a href=""></a></li>
+                    <li class="trend-5">5. <a href=""></a></li>
+                </ul>
+            </div>
+        </div>
 		<!--<div id="overlay"></div> <!-- Temple Logo(delete after d3.js done*maybe*) -->
 			<!-- d3js map stuff -->
 			<svg width="1000" height="600"></svg>
@@ -69,6 +82,7 @@
                     ** https://cors-anywhere.herokuapp.com/
                     */
                     var markers;
+                    var trend_data;
                     $.getJSON("http://18.214.197.203:5000/locations", function(data){
                         markers = data;
                     });
@@ -91,6 +105,13 @@
                     }
                     var mouseout = function(d){
                         Tooltip.style("opacity", 0)
+                    }
+
+                    var handleClick = function(d) {  // Add interactivity
+                        document.querySelector('#bg-modal').style.display = 'flex';
+                        document.querySelector('.top-trends-title').innerHTML = "Top Trends for " + d.city_id;
+                        var trendUrl = "http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
+                        trend_data = setTrends(trendUrl);
                     }
 
                     var svg = d3.select("svg")
@@ -147,9 +168,28 @@
                                 .on('mouseover', mouseover)
                                 .on('mousemove', mousemove)
                                 .on('mouseout', mouseout)
+                                .on('click', handleClick)
                         });
 
-				});
+                    /*$(document).getElementsByClassName('marker')
+                        .addEventListener('click', function() {
+                            document.getElementById('bg-modal')
+                                .css("display", "block");
+                    });*/
+
+                    document.querySelector('#close').addEventListener('click', function() {
+                            document.querySelector('#bg-modal').style.display = "none";
+                    });
+                });
+
+
+            /*$('.marker').click(function () {
+                $('.bg-modal').css("display", "block");
+            });
+
+            $('.close').click(function () {
+                $('.bg-modal').css("display", "none");
+            });*/
 
 			</script>
 		</div>
