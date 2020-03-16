@@ -58,11 +58,11 @@
                 <div id="close">+</div>
                 <h1 class="top-trends-title">Top Trends</h1>
                 <ul class="top-trends-ul">
-                    <li class="t1">1. <a href="" class="trend-1"></a></li>
-                    <li class="t2">2. <a href="" class="trend-2"></a></li>
-                    <li class="t3">3. <a href="" class="trend-3"></a></li>
-                    <li class="t4">4. <a href="" class="trend-4"></a></li>
-                    <li class="t5">5. <a href="" class="trend-5"></a></li>
+                    <li class="trend-1">1. <a href=""></a></li>
+                    <li class="trend-2">2. <a href=""></a></li>
+                    <li class="trend-3">3. <a href=""></a></li>
+                    <li class="trend-4">4. <a href=""></a></li>
+                    <li class="trend-5">5. <a href=""></a></li>
                 </ul>
             </div>
         </div>
@@ -81,7 +81,7 @@
                     ** CORS proxy:
                     ** https://cors-anywhere.herokuapp.com/
                     */
-                    var markers;
+                    let markers;
                     var trend_data;
                     $.getJSON("http://18.214.197.203:5000/locations", function(data){
                         markers = data;
@@ -171,25 +171,17 @@
                                 .on('click', handleClick)
                         });
 
-                    /*$(document).getElementsByClassName('marker')
-                        .addEventListener('click', function() {
-                            document.getElementById('bg-modal')
-                                .css("display", "block");
-                    });*/
-
                     document.querySelector('#close').addEventListener('click', function() {
                             document.querySelector('#bg-modal').style.display = "none";
                     });
+
+                    //document.querySelector('.trend-1').addEventListener('click', getMoreInfo());
+                    //document.querySelector('.trend-2').addEventListener('click', getMoreInfo());
+                    //document.querySelector('.trend-3').addEventListener('click', getMoreInfo());
+                    //document.querySelector('.trend-4').addEventListener('click', getMoreInfo());
+                    //document.querySelector('.trend-5').addEventListener('click', getMoreInfo());
+
                 });
-
-
-            /*$('.marker').click(function () {
-                $('.bg-modal').css("display", "block");
-            });
-
-            $('.close').click(function () {
-                $('.bg-modal').css("display", "none");
-            });*/
 
 			</script>
 		</div>
