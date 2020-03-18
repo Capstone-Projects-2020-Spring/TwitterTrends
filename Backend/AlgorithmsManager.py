@@ -188,7 +188,6 @@ class AlgorithmsManager:
         return {}
 
     def get_all_locations(self):
-        """
         # queryres row entry format:
         #     woe_id, city, states, lat, long
         queryres = self.database.query('SELECT * FROM locations;')
@@ -197,9 +196,6 @@ class AlgorithmsManager:
         for row in resrows:
             resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[4]).__dict__)
         return resarr
-        """
-
-        return self.locations
 
     # parse the location json returned by twitter.get_closest_location
     # args:
