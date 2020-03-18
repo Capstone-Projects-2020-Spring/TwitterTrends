@@ -42,7 +42,13 @@ $(document).ready(function(){
                                 trend_data = retrieveTrends(trendUrl);
                             };
 
-                            let svg = d3.select("svg");
+                            let svg = d3.select("svg")
+								.attr("id", "svg")
+								//.attr("width", 1000)
+								//.attr("height", 600)
+								//.attr("preserveAspectRatio", "xMinYMin")
+								.attr("viewBox", "0 0 1000 600")
+								.classed("svg-content-responsive", true)
 
                             const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
                                 citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';

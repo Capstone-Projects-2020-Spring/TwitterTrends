@@ -25,6 +25,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
+	font-family: "Comic Sans MS", cursive, sans-serif;
 }
 ol, ul {
     list-style: none;
@@ -73,7 +74,7 @@ body {
 	left: 45%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	background: #696969;
+	background: #575757;
 	height: 35px;
 	border-radius: 40px;
 	padding: 10px;
@@ -86,12 +87,12 @@ body {
 }
 
 #trend-search-btn{
-	color: #33f6ff;
+	color: #fff;
 	float: right;
-	width: 20px;
+	width: 15px;
 	height: 20px;
 	border-radius: 50%;
-	background: #696969;
+	background: #575757;
 	justify-content: center;
 	align-items: center;
 	transition: 0.4s;
@@ -103,8 +104,8 @@ body {
 	background: none;
 	outline: none;
 	float: left;
-	padding: 0;
-	color: white;
+	padding: 1px;
+	color: #fff;
 	font-size: 16px;
 	transition: 0.4s;
 	width: 0px;
@@ -115,7 +116,7 @@ body {
 
 
 #pages-drop-btn{
-	background-color: 696969;
+	background-color: #fff;
 	padding: 10px;
 	font-size: 15px;
 	border-radius: 4px;
@@ -133,7 +134,7 @@ body {
 #pages-dropdown-menu{
 	display: none;
 	position: absolute;
-	background-color: #3d3838;
+	background-color: #575757;
 	min-width: 160px;
 	z-index: 1;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -184,8 +185,13 @@ body {
 
 /* d3js style stuff */
 
+#svg {
+	width:100%;
+	height: auto;
+}
+
 .states {
-  fill: #e6eaf5;
+  fill: #fff;
   stroke: #000;
   stroke-width: 1px;
 }
