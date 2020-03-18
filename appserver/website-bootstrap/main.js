@@ -78,6 +78,7 @@ $(document).ready(function(){
                                         .data(states.features)
                                         .enter()
                                         .append('path')
+										.attr('stateName', function(d){return d.properties.name;})
                                         .attr('d', path);
 
                                     svg.append("g")
