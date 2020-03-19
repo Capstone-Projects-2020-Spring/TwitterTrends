@@ -44,13 +44,19 @@
         
 		<!-- First column -->
 		<div class="col-12 col-md-10">
-	<header class="page-header header container-fluid">
-			
+		<header class="page-header header container-fluid">
+			<script src="http://d3js.org/d3.v3.min.js"></script>
+			<svg></svg>
+			<script>
+				var svg = d3.select("svg")
+					.attr("width", 10)
+					.attr("height", 600);
+			</script>
 		</div>
 	</header>
 	
 		<!-- Second column -->
-		<div class="col" style="background-color: #470a0a"> <!-- Second column background color -->
+		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
 		
 
 		

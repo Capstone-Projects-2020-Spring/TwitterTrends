@@ -97,7 +97,7 @@ $(document).ready(function(){
                                             let location = projection([d.longitude, d.latitude]);
                                             d3.select(this).attr({
                                                 cx: location[0], cy: location[1],
-                                                r: 4
+                                                r: 5
                                             });
                                         })
                                         .on('mouseover', mouseover)
