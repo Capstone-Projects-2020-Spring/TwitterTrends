@@ -58,6 +58,10 @@ body {
 	height: 60px;
 }
 
+.col {
+	background: #515182;
+}
+
 #title {
 	position: absolute;
 	left: 37%;
@@ -275,6 +279,8 @@ body {
 }
 */
 
+/* trend notification pop-up styles */
+
 #bg-modal {
 	width: 100%;
 	height: 100%;
@@ -326,4 +332,45 @@ body {
 	font-weight: lighter;
 	margin: .75em;
 	cursor: pointer;
+}
+
+/* footer styles */
+
+.footer {
+	background: #515182;
+}
+
+.footer li {
+	background: #515182;
+	color: white;
+	text-align: center;
+}
+
+.team-members {
+	flex-direction: row;
+	display: flex;
+    align-items: stretch; /* Default */
+    justify-content: space-between;
+    width: 100%;
+	background:  #515182;
+	margin: 0;
+    padding: 10px 0 10px 0;
+}
+
+.team-members li {
+	background: #515182;
+	display: block;
+	flex: 0 1 auto; /* Default */
+	list-style-type: none;
+	float: left;
+	padding: 10px;
+}
+
+.team-members a {
+	color: inherit;
+}
+
+.team-members a:hover {
+	text-decoration: none;
+	color: #9191c4;
 }
