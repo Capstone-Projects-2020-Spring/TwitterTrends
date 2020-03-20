@@ -59,6 +59,22 @@ protected String getText( final By loc )
 	return getText(elem);
 }
 
+protected String getAttribute( final WebElement elem, final String attributeName )
+{
+	String elemAttrib = elem.getAttribute(attributeName);
+	elemAttrib = elemAttrib.trim();
+	return elemAttrib;
+}
+
+/**
+ * overloads {@link #getAttribute(WebElement, String)} to fetch the element based on a locator
+ */
+protected String getAttribute( final By loc, final String attributeName )
+{
+	WebElement elem = getElement(loc);
+	return getAttribute(elem, attributeName);
+}
+
 /**
  * determines whether any element matching the given locator is loaded or loads within a short time
  *
@@ -150,6 +166,19 @@ protected boolean checkForEnabledElement( final By loc, final WebElement contain
 		return elem.isEnabled();
 	};
 	return checkForCond(isEnabled);
+}
+
+/**
+ * checks whether an element is displayed or will become displayed soon
+ *
+ * @param elem the element which might be or become displayed
+ *
+ * @return whether an element is displayed or will become displayed soon
+ */
+protected boolean checkIfDisplayed( final WebElement elem )
+{
+	ExpectedCondition<Boolean> isDisplayed = webDriver -> elem.isDisplayed();
+	return checkForCond(isDisplayed);
 }
 
 //todo add functions which take a webelement and 'check' if it is displayed or enabled or else becomes so in a window of time
