@@ -7,6 +7,7 @@ from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
 from TwitterAPIManager import TwitterAPIManager
 from AlgorithmsManager import AlgorithmsManager
+from TemporalDataManager import TemporalDataManager
 import DataStructures
 
 # SETUP DataCache
@@ -26,6 +27,9 @@ twitter = TwitterAPIManager()
 # SETUP AlgorithmsManager
 algo = AlgorithmsManager(cache, db, twitter)
 
+# SETUP TemporalDataManager
+# pass in algorithmsManager object and array of Location objects
+timedata = TemporalDataManager(algo, algo.locations)
 
 ######################
 # SETUP FLASK

@@ -28,12 +28,12 @@ class AlgorithmsManager:
     # return top [num] trends
     # querystr argument is used for cache checking
     #       querystr must not be None
-    def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None):
+    def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None, c_time = 5):
 
         if querystr is None:
             querystr = "/toptrends{}".format(woeid)
 
-        cachetime = 5 # n minutes cache time check
+        cachetime = c_time # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
 
@@ -90,12 +90,12 @@ class AlgorithmsManager:
     def get_top_tweets_from_query(self, query, num, location,
                                 timefrom=datetime.now() - timedelta(days=5),
                                 timeto=datetime.now(),
-                                sort=1, querystr=None):
+                                sort=1, querystr=None, c_time = 15):
         # Call a function from the TwitterAPIManager to return a list of tweets
         if querystr is None:
             querystr = "/toptweets{}{}-{}".format(query, location.latitude, location.longitude)
 
-        cachetime = 15 # n minutes cache time check
+        cachetime = c_time # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime):
 
