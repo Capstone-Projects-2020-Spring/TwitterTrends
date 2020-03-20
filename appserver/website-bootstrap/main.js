@@ -93,6 +93,8 @@ $(document).ready(function(){
                                         .data(markers)
                                         .enter()
                                         .append('circle')
+                                        .attr('cityName', function(d){return d.city_id;})
+                                        .attr('woeid', function(d){return d.woeid;})
                                         .each(function (d) {
                                             let location = projection([d.longitude, d.latitude]);
                                             d3.select(this).attr({
