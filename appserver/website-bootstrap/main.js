@@ -42,11 +42,7 @@ $(document).ready(function(){
                                 trend_data = retrieveTrends(trendUrl);
                             };
 
-                            let svg = d3.select("svg")
-								.attr("id", "svg")
-								//.attr("width", 1000)
-								//.attr("height", 600)
-								//.attr("preserveAspectRatio", "xMinYMin")
+                            let mapsvg = d3.select("#mapsvg")
 								.attr("viewBox", "0 0 1000 600")
 								.classed("svg-content-responsive", true)
 
@@ -78,7 +74,7 @@ $(document).ready(function(){
                                         .scale([1200]);
                                     path.projection(projection);
 
-                                    svg.append("g")
+                                    mapsvg.append("g")
                                         .attr("class", "states")
                                         .selectAll('path')
                                         .data(states.features)
@@ -87,7 +83,7 @@ $(document).ready(function(){
 										.attr('stateName', function(d){return d.properties.name;})
                                         .attr('d', path);
 
-                                    svg.append("g")
+                                    mapsvg.append("g")
                                         .attr("class", "marker")
                                         .selectAll('myCircles')
                                         .data(markers)
