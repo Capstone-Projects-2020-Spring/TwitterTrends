@@ -1,5 +1,8 @@
 package enums;
 
+/**
+ * list of locations supported by the map visualization
+ */
 public enum Locations
 {
 	NEW_YORK("New York", States.NEW_YORK, "2459115"),

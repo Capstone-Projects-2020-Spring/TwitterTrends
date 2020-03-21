@@ -39,6 +39,11 @@ public HomePage( final WebDriver driver )
 	this.trendsDialog = new TrendsDialog(driver);
 }
 
+/**
+ * counts how many distinct states are displayed in the map
+ *
+ * @return how many distinct states are displayed in the map
+ */
 public int visibleStateCount( )
 {
 	int stateCount = -1;
@@ -53,6 +58,11 @@ public int visibleStateCount( )
 	return stateCount;
 }
 
+/**
+ * determines whether a state is or shortly becomes visible
+ * @param state the state which should be/become visible
+ * @return whether a state is or shortly becomes visible
+ */
 public boolean isStateVisible( final States state )
 {
 	boolean stateVisible = false;
@@ -61,12 +71,21 @@ public boolean isStateVisible( final States state )
 	return stateVisible;
 }
 
+/**
+ * clicks on a given state's element in the map
+ * @param state which state to click on
+ */
 public void clickState( final States state )
 {
 	WebElement stateElem = getState(state);
 	clickElem(stateElem);
 }
 
+/**
+ * clicks on a particular location's marker on the map
+ * @param loc which location to click on
+ * @return the top trends dialog for that location
+ */
 public TrendsDialog clickLocationMarker( final Locations loc )
 {
 	WebElement locElem = getLocationMarker(loc);
@@ -75,12 +94,22 @@ public TrendsDialog clickLocationMarker( final Locations loc )
 	return this.trendsDialog;
 }
 
+/**
+ * determines whether a location's marker is or shortly becomes visible
+ * @param loc the location which should be/become visible
+ * @return whether a location's marker is or shortly becomes visible
+ */
 public boolean isLocationMarkerVisible( final Locations loc )
 {
 	WebElement locElem = getLocationMarker(loc);
 	return checkIfDisplayed(locElem);
 }
 
+/**
+ * finds the element for a given state
+ * @param state which state's element should be retrieved
+ * @return the element for a given state
+ */
 protected WebElement getState( final States state )
 {
 	WebElement stateElem = null;
@@ -101,6 +130,11 @@ protected WebElement getState( final States state )
 	return stateElem;
 }
 
+/**
+ * finds the marker for a given location
+ * @param loc which location's marker should be found
+ * @return the marker for a given location
+ */
 protected WebElement getLocationMarker( final Locations loc )
 {
 	WebElement locMarkerElem = null;

@@ -59,6 +59,14 @@ protected String getText( final By loc )
 	return getText(elem);
 }
 
+/**
+ * retrieves some attribute of an element after trimming whitespace off
+ *
+ * @param elem          the element with the attribute
+ * @param attributeName the name of the attribute
+ *
+ * @return some attribute of an element after trimming whitespace off
+ */
 protected String getAttribute( final WebElement elem, final String attributeName )
 {
 	String elemAttrib = elem.getAttribute(attributeName);

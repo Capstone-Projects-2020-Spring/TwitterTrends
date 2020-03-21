@@ -1,5 +1,8 @@
 package enums;
 
+/**
+ * list of distinct states displayed in the map visualization
+ */
 public enum States
 {
 	ALABAMA("Alabama"),
