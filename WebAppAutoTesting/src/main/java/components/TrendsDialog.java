@@ -30,7 +30,11 @@ public TrendsDialog( final WebDriver driver )
 /**
  * closes/hides the dialog
  */
-public void closeDialog( ) { clickElem(popupCloseButton);}
+public void closeDialog( )
+{
+	clickElem(popupCloseButton);
+	// todo? add logic to make sure the dialog disappears? wait til not displayed?
+}
 
 /**
  * Overloads {@link #waitForTrendsLoaded(int)} to wait for the standard maximum timeout
@@ -46,17 +50,20 @@ public void waitForTrendsLoaded( final int timeout )
 {
 	ExpectedCondition<Boolean> trendsLoaded = webdriver ->
 	{
-		boolean areTrendsLoaded = false;
+		boolean areTrendsLoaded = true;
 		
 		List<String> trendLineStrs = getTopTrends();
 		List<String> trends = cleanTrends(trendLineStrs);
-		if ( trends != null )
+		if ( trends == null )
+		{
+			areTrendsLoaded = false;
+		} else
 		{
 			for ( String trend : trends )
 			{
-				if ( !"".equals(trend) )
+				if ( "".equals(trend) )
 				{
-					areTrendsLoaded = true;
+					areTrendsLoaded = false;
 					break;
 				}
 			}
