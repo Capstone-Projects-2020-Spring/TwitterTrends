@@ -200,7 +200,7 @@ body {
 
 /* d3js style stuff */
 
-#svg {
+#mapsvg {
 	width:100%;
 	height: auto;
 	z-index: -1;
