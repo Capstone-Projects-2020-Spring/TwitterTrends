@@ -58,8 +58,29 @@ public int visibleStateCount( )
 }
 
 /**
+ * counts how many location markers are displayed in the map
+ *
+ * @return how many location markers are displayed in the map
+ */
+public int visibleLocationMarkerCount( )
+{
+	int locMarkerCount = -1;
+	WebElement mapContainerElem = getElement(mapContainerLoc);
+	if ( checkForElement(locationsList) )
+	{
+		WebElement locationsListElem = getElement(locationsList, mapContainerElem);
+		List<WebElement> locationMarkerElems = getDisplayedElements(locationEntry, locationsListElem);
+		locationMarkerElems.removeIf(elem -> !elem.isDisplayed());
+		locMarkerCount = locationMarkerElems.size();
+	}
+	return locMarkerCount;
+}
+
+/**
  * determines whether a state is or shortly becomes visible
+ *
  * @param state the state which should be/become visible
+ *
  * @return whether a state is or shortly becomes visible
  */
 public boolean isStateVisible( final States state )

@@ -31,7 +31,7 @@ public void siteLoadsTest( )
 public void mapLoadsTest( )
 {
 	assertEquals(expectedNumStates, startPage.visibleStateCount());
-	//todo also check for existence of some location markers
+	assertTrue(startPage.visibleLocationMarkerCount() > 0);
 }
 
 @Test
