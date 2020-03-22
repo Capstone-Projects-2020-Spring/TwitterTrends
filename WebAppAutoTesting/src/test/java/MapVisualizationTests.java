@@ -12,4 +12,6 @@ public class MapVisualizationTests extends BaseTest
 
 //todo try finding and clicking on a location, then finding the trends in that popup,
 // then clicking on a trend and verifying that tweets with that trend showed up in the panel on the right
+
+//todo open one location & check its trends then open another location & check that its trends are different?
 }

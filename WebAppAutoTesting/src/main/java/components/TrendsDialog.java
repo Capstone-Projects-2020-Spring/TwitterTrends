@@ -4,6 +4,7 @@ import components.base.BaseComponent;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,44 @@ public TrendsDialog( final WebDriver driver )
 public void closeDialog( ) { clickElem(popupCloseButton);}
 
 /**
- * retrieves the top trends and strips off the index at the beginning of each
+ * Overloads {@link #waitForTrendsLoaded(int)} to wait for the standard maximum timeout
+ */
+public void waitForTrendsLoaded( ) { waitForTrendsLoaded(MAX_TIMEOUT); }
+
+/**
+ * waits for up to some number of seconds for trends to load in the dialog
  *
- * @return the top trends without the popup's index numbers at the start of each
+ * @param timeout the maximum number of seconds to wait before timing out
+ */
+public void waitForTrendsLoaded( final int timeout )
+{
+	ExpectedCondition<Boolean> trendsLoaded = webdriver ->
+	{
+		boolean areTrendsLoaded = false;
+		
+		List<String> trendLineStrs = getTopTrends();
+		List<String> trends = cleanTrends(trendLineStrs);
+		if ( trends != null )
+		{
+			for ( String trend : trends )
+			{
+				if ( !"".equals(trend) )
+				{
+					areTrendsLoaded = true;
+					break;
+				}
+			}
+		}
+		
+		return areTrendsLoaded;
+	};
+	waitForCond(trendsLoaded, timeout);
+}
+
+/**
+ * retrieves the top trends
+ *
+ * @return the top trends with the popup's index numbers at the start of each
  */
 public List<String> getTopTrends( )
 {
@@ -49,13 +85,7 @@ public List<String> getTopTrends( )
 	for ( WebElement elem : trendElems )
 	{
 		String elemText = getText(elem);
-		if ( elemText.matches(trendEntryTemplate) )
-		{
-			//cut out the starting template with the entry index
-			elemText = elemText.substring(3);
-			trends.add(elemText);
-		}
-		else { trends.add(null); }
+		trends.add(elemText);
 	}
 	return trends;
 }
@@ -82,6 +112,35 @@ public void clickTrend( final int trendIndex )
 	By trendLoc = getPopupTrendEntryLoc(trendIndex);
 	WebElement trendElem = getDisplayedElement(trendLoc, popupContainer);
 	clickElem(trendElem);
+}
+
+/**
+ * strips the index off of the beginning of each trend in the given list of trends
+ *
+ * @param trendStrs a list of the texts for each line in the top trends dialog, including a trend index at the start
+ *
+ * @return a list of the trend strings themselves without the indexes at the beginning of each
+ * returns null if one or more strings didn't have indices at the beginning
+ */
+public List<String> cleanTrends( List<String> trendStrs )
+{
+	List<String> cleanedTrends = new ArrayList<>();
+	
+	for ( String trendStr : trendStrs )
+	{
+		if ( trendStr.matches(trendEntryTemplate) )
+		{
+			//cut out the starting template with the entry index
+			String trendText = trendStr.substring(3);
+			cleanedTrends.add(trendText);
+		} else
+		{
+			cleanedTrends = null;
+			break;
+		}
+	}
+	
+	return cleanedTrends;
 }
 
 /**

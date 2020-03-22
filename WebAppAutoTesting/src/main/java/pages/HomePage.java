@@ -9,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.base.BasePage;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -119,12 +118,14 @@ protected WebElement getState( final States state )
 	WebElement statesListContainer = getElement(statesList, mapContainerElem);
 	List<WebElement> statesList = getElements(stateEntry, statesListContainer);
 	
-	Iterator<WebElement> stateIter = statesList.iterator();
-	while ( stateIter.hasNext() && stateElem == null )
+	for ( WebElement currState : statesList )
 	{
-		WebElement currState = stateIter.next();
 		String currStateName = getAttribute(currState, stateNameAttribute);
-		if ( targetStateName.equals(currStateName) ) { stateElem = currState; }
+		if ( targetStateName.equals(currStateName) )
+		{
+			stateElem = currState;
+			break;
+		}
 	}
 	
 	return stateElem;
@@ -144,12 +145,14 @@ protected WebElement getLocationMarker( final Locations loc )
 	WebElement locationsListContainer = getElement(locationsList, mapContainerElem);
 	List<WebElement> locationMarkersList = getElements(locationEntry, locationsListContainer);
 	
-	Iterator<WebElement> locationIter = locationMarkersList.iterator();
-	while ( locationIter.hasNext() && locMarkerElem == null )
+	for ( WebElement currLocation : locationMarkersList )
 	{
-		WebElement currLocation = locationIter.next();
 		String currLocWoeid = getAttribute(currLocation, woeidAttribute);
-		if ( targetLocWoeid.equals(currLocWoeid) ) { locMarkerElem = currLocation; }
+		if ( targetLocWoeid.equals(currLocWoeid) )
+		{
+			locMarkerElem = currLocation;
+			break;
+		}
 	}
 	
 	return locMarkerElem;

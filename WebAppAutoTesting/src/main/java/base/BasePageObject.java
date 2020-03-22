@@ -507,7 +507,7 @@ protected void waitForElementEnabled( final WebElement elem )
  * @param condition the condition to wait for
  * @param timeout   how long to wait before timing out
  */
-private <T> T waitForCond( final ExpectedCondition<T> condition, final int timeout )
+protected <T> T waitForCond( final ExpectedCondition<T> condition, final int timeout )
 {
 	WebDriverWait waiter = new WebDriverWait(driver, timeout);
 	T result = waiter.until(condition);
@@ -518,7 +518,7 @@ private <T> T waitForCond( final ExpectedCondition<T> condition, final int timeo
 /**
  * overloads {@link #waitForCond(ExpectedCondition, int)} to always use the max timeout
  */
-private <T> T waitForCond( final ExpectedCondition<T> condition ) { return waitForCond(condition, MAX_TIMEOUT); }
+protected <T> T waitForCond( final ExpectedCondition<T> condition ) { return waitForCond(condition, MAX_TIMEOUT); }
 
 /**
  * checks whether some condition is true or becomes true within some amount of time
@@ -528,7 +528,7 @@ private <T> T waitForCond( final ExpectedCondition<T> condition ) { return waitF
  *
  * @return whether the condition is true or becomes true within the given amount of time
  */
-private boolean checkForCond( final ExpectedCondition<Boolean> condition, final int waitLen )
+protected boolean checkForCond( final ExpectedCondition<Boolean> condition, final int waitLen )
 {
 	boolean wasConditionSatisfied = true;
 	
@@ -536,8 +536,7 @@ private boolean checkForCond( final ExpectedCondition<Boolean> condition, final 
 	try
 	{
 		testWaiter.until(condition);
-	}
-	catch ( TimeoutException e )
+	} catch ( TimeoutException e )
 	{
 		wasConditionSatisfied = false;
 	}
@@ -547,7 +546,7 @@ private boolean checkForCond( final ExpectedCondition<Boolean> condition, final 
 /**
  * overloads {@link #checkForCond(ExpectedCondition, int)} to always use the standard testing wait length
  */
-private boolean checkForCond( final ExpectedCondition<Boolean> condition )
+protected boolean checkForCond( final ExpectedCondition<Boolean> condition )
 {
 	return checkForCond(condition, TEST_CHECK_TIMEOUT);
 }
