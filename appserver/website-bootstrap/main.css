@@ -57,27 +57,34 @@ body {
 	background: #515182;
 	height: 60px;
 }
-
-.col {
-	background: #515182;
+.top-nav-left {
+	float: left;
+	width: 49%;
 }
 
-#title {
-	position: absolute;
-	left: 37%;
-	top: 30%;
-	color: #ffffff;
-	font-size: 30px;
-	font-family: 'Titillium Web', sans-serif;
+.top-nav-right {
+	float: right;
+	width: 49%;
+}
+
+.logo img{
+	height: 60px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.site-title{
+	font-size: 60px;
+	color: white;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 /*search bar */
 
 #trend-search-box{
 	position: absolute;
-	left: 45%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	float: right;
 	background: #9191c4;
 	height: 35px;
 	border-radius: 40px;
@@ -96,13 +103,10 @@ body {
 
 #trend-search-btn{
 	color: #fff;
-	float: right;
 	width: 15px;
 	height: 20px;
 	border-radius: 50%;
 	background: #9191c4;
-	justify-content: center;
-	align-items: center;
 	transition: 0.4s;
 	
 }
@@ -122,13 +126,9 @@ body {
 
 /*drop-down button*/
 
-
 #pages-drop-btn{
 	background-color: #fff;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 8px 20px;
 	font-size: 18px;
 	font-weight: 600;
 	font-color: #2e2e4d;
@@ -137,10 +137,10 @@ body {
 }
 
 #pages-drop-box{
-	position: relative;
-	left: 80%;
-	display: inline-block;
 	float: right;
+	position: relative;
+	display: inline-block;
+
 }
 
 #pages-dropdown-menu{
@@ -173,8 +173,18 @@ body {
 	display: block;
 }
 
+.col {
+	background: #515182;
+}
 
-
+#title {
+	position: absolute;
+	left: 37%;
+	top: 30%;
+	color: #ffffff;
+	font-size: 30px;
+	font-family: 'Titillium Web', sans-serif;
+}
 
 /*--- header ---*/
 
@@ -182,7 +192,6 @@ body {
 	background-color: #dfdfed; /*url('images/header-background.jpg');*/
 	background-size: cover;
 	background-position: center;
-	position: align;
 	width: 102%;
 	
 }
@@ -219,6 +228,7 @@ body {
 
 .marker :hover {
 	fill: #599680;
+	cursor: pointer;
 }
 
 .tooltip {
@@ -234,8 +244,8 @@ body {
 .tooltip .tooltiptext {
 	background-color: black;
 	text-align : center;
-	padding: 5 px 0;
-	border-radius: 6 px;
+	padding: 5px 0;
+	border-radius: 6px;
 }
 
 .features {
