@@ -278,7 +278,9 @@ body {
     position: relative;
 }
 
-
+.dots {
+	fill: #224cb5;
+}
 
 
 /*
