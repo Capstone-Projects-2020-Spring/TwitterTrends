@@ -59,7 +59,7 @@
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 					//temp data, ordered date (year-month-day), value
-					d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+					d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/connectedscatter.csv",
 
 					//format variables for future data use
 					function(d){
@@ -75,8 +75,9 @@
 							.call(d3.axisBottom(x));
 
 						var y = d3.scaleLinear()
-							.domain([0, d3.max(data, function(d) { return +d.value; })])
+							.domain([d3.min(data, function(d) { return +d.value; }) - 100, d3.max(data, function(d) { return +d.value; }) + 100])
 							.range([ height, 0 ]);
+						
 						timesvg.append("g")
 							.call(d3.axisLeft(y));
 
@@ -89,6 +90,16 @@
 							.x(function(d) { return x(d.date) })
 							.y(function(d) { return y(d.value) })
 							)
+							
+						timesvg.append("g")
+							.attr("class", "dots")
+							.selectAll("dot")
+							.data(data)
+							.enter()
+							.append("circle")
+								.attr("cx", function(d) {return x(d.date)})
+								.attr("cy", function(d) {return y(d.value)})
+								.attr("r", 5)
 					})
 			</script>
 		</div>
