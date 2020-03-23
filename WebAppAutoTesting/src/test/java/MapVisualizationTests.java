@@ -1,6 +1,7 @@
 import base.BaseTest;
 import components.TrendsDialog;
 import enums.Locations;
+import enums.States;
 import org.junit.jupiter.api.Test;
 import pages.HomePage;
 
@@ -20,9 +21,70 @@ public class MapVisualizationTests extends BaseTest
 //todo try putting invalid location into search bar and assert that error message pops up
 
 //todo try clicking on state then opening a location's trends inside that state
-// e.g. rhode island, delaware, oregon, colorado, hawaii, alaska, michigan, louisiana, florida, california, texas
+// e.g. colorado, michigan,
+
+@Test
+public void texasZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.TEXAS);
+	cityTrendsLoadTester(startPage, Locations.DALLAS);
+}
+
+@Test
+public void rhodeIslandZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.RHODE_ISLAND);
+	cityTrendsLoadTester(startPage, Locations.PROVIDENCE);
+}
+
+@Test
+public void floridaZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.FLORIDA);
+	cityTrendsLoadTester(startPage, Locations.ORLANDO);
+}
+
+@Test
+public void californiaZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.CALIFORNIA);
+	cityTrendsLoadTester(startPage, Locations.SAN_DIEGO);
+}
+
+@Test
+public void oregonZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.OREGON);
+	cityTrendsLoadTester(startPage, Locations.PORTLAND);
+}
+
+@Test
+public void louisianaZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.LOUISIANA);
+	cityTrendsLoadTester(startPage, Locations.NEW_ORLEANS);
+}
+
+@Test
+public void coloradoZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.COLORADO);
+	cityTrendsLoadTester(startPage, Locations.DENVER);
+}
+
+@Test
+public void michiganZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.MICHIGAN);
+	cityTrendsLoadTester(startPage, Locations.DETROIT);
+}
+
+//hawaii zoom?
 
 //todo try clicking on state, then clicking on state again, then investigating location far from that state
+
+//todo verify that zoom excludes some of map by clicking on a state then investigating location far from that state
+// how check whether something is cut off screen?
 
 @Test
 public void houstonTrendsLoadTest( )
