@@ -56,8 +56,6 @@ body {
 .navbar {
 	background: #515182;
 	height: 60px;
-	position: relative;
-	z-index: 3;
 }
 .top-nav-left {
 	float: left;
@@ -209,11 +207,9 @@ body {
 
 /* d3js style stuff */
 
-#mapsvg {
+#svg {
 	width:100%;
 	height: auto;
-	z-index: -1;
-	position: relative;
 }
 
 .states {
@@ -223,10 +219,6 @@ body {
 }
 
 .states :hover {
-  fill: #bebeeb;
-}
-
-.states .active {
   fill: #bebeeb;
 }
 
@@ -287,9 +279,6 @@ body {
     padding: 0px;
     position: relative;
 }
-
-
-
 
 /*
 .features img {
@@ -359,8 +348,6 @@ body {
 
 .footer {
 	background: #515182;
-	position: relative;
-	z-index: 3
 }
 
 .footer li {
