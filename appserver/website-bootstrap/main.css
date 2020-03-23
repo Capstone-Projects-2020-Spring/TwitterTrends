@@ -278,10 +278,13 @@ body {
     position: relative;
 }
 
-.dots {
+.dot {
 	fill: #224cb5;
 }
 
+.dot:hover {
+	fill: #599680;
+}
 
 /*
 .features img {
