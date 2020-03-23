@@ -56,10 +56,8 @@ body {
 .navbar {
 	background: #515182;
 	height: 60px;
-}
-.top-nav-left {
-	float: left;
-	width: 49%;
+	position: relative;
+	z-index: 3;
 }
 
 .top-nav-right {
@@ -208,9 +206,11 @@ body {
 
 /* d3js style stuff */
 
-#svg {
+#mapsvg {
 	width:100%;
 	height: auto;
+	z-index: -1;
+	position: relative;
 }
 
 .states {
@@ -220,6 +220,10 @@ body {
 }
 
 .states :hover {
+  fill: #bebeeb;
+}
+
+.states .active {
   fill: #bebeeb;
 }
 
@@ -280,6 +284,11 @@ body {
     padding: 0px;
     position: relative;
 }
+
+.dots {
+	fill: #224cb5;
+}
+
 
 /*
 .features img {
@@ -343,6 +352,8 @@ body {
 
 .footer {
 	background: #515182;
+	position: relative;
+	z-index: 3
 }
 
 .footer li {
