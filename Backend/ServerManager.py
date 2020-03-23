@@ -181,6 +181,19 @@ def api_get_all_locations():
     print("/locations")
     return jsonify(algo.get_all_locations())
 
+@app.route('/trend_news', methods=['GET'])
+def api_get_trend_news():
+    trend = request.args.get("trend")
+    num_stories = request.args.get("num_stories")
+
+    print("/trend_news args: ", trend, num_stories)
+    if num_stories is None:
+        result = algo.get_trend_news(trend=trend)
+    else:
+        result = algo.get_trend_news(trend=trend, num_stories=num_stories)
+    result_json = jsonify(result)
+    return result_json
+
 @app.route('/test', methods=['GET'])
 def api_test():
     return jsonify(["Test", "Test2"])

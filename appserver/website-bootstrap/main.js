@@ -8,13 +8,16 @@ $(document).ready(function(){
                         ** CORS proxy:
                         ** https://cors-anywhere.herokuapp.com/
                         */
+							var width = 1000,
+								height = 600,
+								centered;
+								
                             let markers;
                             let trend_data;
                             $.getJSON("https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/locations", function(data){
                                 markers = data;
                             });
 
-                            const width = 1000, height = 600;
 
                             const Tooltip = d3.select(".row")
                                 .append("div")
@@ -42,13 +45,10 @@ $(document).ready(function(){
                                 trend_data = retrieveTrends(trendUrl);
                             };
 
-                            let svg = d3.select("svg")
-								.attr("id", "svg")
-								//.attr("width", 1000)
-								//.attr("height", 600)
-								//.attr("preserveAspectRatio", "xMinYMin")
-								.attr("viewBox", "0 0 1000 600")
-								.classed("svg-content-responsive", true)
+                            let mapsvg = d3.select("#mapsvg")
+								.attr("width", width)
+								.attr("height", height);
+
 
                             const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
                                 citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';
@@ -78,16 +78,45 @@ $(document).ready(function(){
                                         .scale([1200]);
                                     path.projection(projection);
 
-                                    svg.append("g")
+                                    mapsvg.append("g")
                                         .attr("class", "states")
                                         .selectAll('path')
                                         .data(states.features)
                                         .enter()
                                         .append('path')
 										.attr('stateName', function(d){return d.properties.name;})
-                                        .attr('d', path);
+                                        .attr('d', path)
+										.attr('cursor', 'pointer')
+										.on('click', function clicked(d) 
+										{
+											var x;
+											var y;
+											var zoomLevel;
 
-                                    svg.append("g")
+											if (d && centered !== d) {
+											var centroid = path.centroid(d);
+											x = centroid[0];
+											y = centroid[1];
+											zoomLevel = 4;
+											centered = d;
+											} else {
+											x = width / 2;
+											y = height / 2;
+											zoomLevel = 1;
+											centered = null;
+											}
+
+											mapsvg.selectAll("path")
+												.classed("active", centered && function(d) { return d === centered; });
+		
+											mapsvg.transition()
+												.duration(1000)
+												.style("stroke-width", 1.5 / zoomLevel + "px")
+												.attr("transform", 
+													  "translate(" + width / 2  + "," + height / 2 + ")scale(" + zoomLevel + ")translate(" + -x + "," + -y + ")");
+										});
+
+                                    mapsvg.append("g")
                                         .attr("class", "marker")
                                         .selectAll('myCircles')
                                         .data(markers)
@@ -132,6 +161,7 @@ function retrieveTrends(trendUrl) {
 	    document.querySelector('.trend-5').innerHTML = "5. " + trends[4].trend_content;
 	});
 }
+
 
 function getMoreInfo() {
 
