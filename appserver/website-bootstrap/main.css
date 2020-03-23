@@ -74,7 +74,8 @@ body {
 }
 
 .site-title{
-	font-size: 60px;
+	font-size: 48px;
+	margin-left: -15px;
 	color: white;
 	display: inline-block;
 	vertical-align: middle;
@@ -332,13 +333,7 @@ body {
 	font-size: 24px;
 }
 
-.trend-1 {
-	font-weight: bold;
-	margin: .75em;
-	cursor: pointer;
-}
-
-.trend-2, .trend-3, .trend-4, .trend-5 {
+.top-trends-ul li {
 	font-weight: lighter;
 	margin: .75em;
 	cursor: pointer;
@@ -364,7 +359,7 @@ body {
     width: 100%;
 	background:  #515182;
 	margin: 0;
-    padding: 10px 0 10px 0;
+    padding: 10px 0;
 }
 
 .team-members li {
@@ -374,13 +369,4 @@ body {
 	list-style-type: none;
 	float: left;
 	padding: 10px;
-}
-
-.team-members a {
-	color: inherit;
-}
-
-.team-members a:hover {
-	text-decoration: none;
-	color: #9191c4;
 }

@@ -8,12 +8,7 @@ $(document).ready(function(){
                         ** CORS proxy:
                         ** https://cors-anywhere.herokuapp.com/
                         */
-                            let markers;
                             let trend_data;
-                            $.getJSON("https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/locations", function(data){
-                                markers = data;
-                            });
-
                             const width = 1000, height = 600;
 
                             const Tooltip = d3.select(".row")
@@ -48,10 +43,11 @@ $(document).ready(function(){
 								//.attr("height", 600)
 								//.attr("preserveAspectRatio", "xMinYMin")
 								.attr("viewBox", "0 0 1000 600")
-								.classed("svg-content-responsive", true)
+								.classed("svg-content-responsive", true);
 
                             const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
-                                citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv';
+                                citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv',
+                                locationsUrl = 'https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/locations';
 
                             /* Test Location Data
                             var markers = [
@@ -71,7 +67,8 @@ $(document).ready(function(){
                             queue()
                                 .defer(d3.json, usDataUrl)
                                 .defer(d3.csv, citiesDataUrl)
-                                .await(function (error, states, cities) {
+                                .defer(d3.json, locationsUrl)
+                                .await(function (error, states, cities, locations) {
                                     let path = d3.geo.path();
                                     let projection = d3.geo.albersUsa()
                                         .translate([width / 2, height / 2])
@@ -90,7 +87,7 @@ $(document).ready(function(){
                                     svg.append("g")
                                         .attr("class", "marker")
                                         .selectAll('myCircles')
-                                        .data(markers)
+                                        .data(locations)
                                         .enter()
                                         .append('circle')
                                         .attr('cityName', function(d){return d.city_id;})
@@ -110,13 +107,13 @@ $(document).ready(function(){
 
                             document.querySelector('#close').addEventListener('click', function() {
                                 document.querySelector('#bg-modal').style.display = "none";
+                                document.getElementById('trend-1').innerText = '';
+                                document.getElementById('trend-2').innerText = '';
+                                document.getElementById('trend-3').innerText = '';
+                                document.getElementById('trend-4').innerText = '';
+                                document.getElementById('trend-5').innerText = '';
                             });
 
-                            //document.querySelector('.trend-1').addEventListener('click', getMoreInfo());
-                            //document.querySelector('.trend-2').addEventListener('click', getMoreInfo());
-                            //document.querySelector('.trend-3').addEventListener('click', getMoreInfo());
-                            //document.querySelector('.trend-4').addEventListener('click', getMoreInfo());
-                            //document.querySelector('.trend-5').addEventListener('click', getMoreInfo());
 
 });
 
@@ -125,14 +122,24 @@ function retrieveTrends(trendUrl) {
 	$.getJSON(trendUrl, function(data){
 		trends = data;
 	}).then(function() {
-	    document.querySelector('.trend-1').innerHTML = "1. " + trends[0].trend_content;
-	    document.querySelector('.trend-2').innerHTML = "2. " + trends[1].trend_content;
-	    document.querySelector('.trend-3').innerHTML = "3. " + trends[2].trend_content;
-	    document.querySelector('.trend-4').innerHTML = "4. " + trends[3].trend_content;
-	    document.querySelector('.trend-5').innerHTML = "5. " + trends[4].trend_content;
+	    document.querySelector('#trend-1').innerHTML = trends[0].trend_content;
+        document.getElementById('trend-1').addEventListener('click', getMoreInfo);
+	    document.querySelector('#trend-2').innerHTML = trends[1].trend_content;
+	    document.getElementById('trend-2').addEventListener('click', getMoreInfo);
+	    document.querySelector('#trend-3').innerHTML = trends[2].trend_content;
+	    document.getElementById('trend-3').addEventListener('click', getMoreInfo);
+	    document.querySelector('#trend-4').innerHTML = trends[3].trend_content;
+	    document.getElementById('trend-4').addEventListener('click', getMoreInfo);
+	    document.querySelector('#trend-5').innerHTML = trends[4].trend_content;
+	    document.getElementById('trend-5').addEventListener('click', getMoreInfo);
+
 	});
 }
 
 function getMoreInfo() {
-
+    let trend = document.getElementById('trend-1').innerHTML;
+    let newsURL = "https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/trend_news?trend=" + trend;
+    $.getJSON(newsURL, function (news) {
+        alert(JSON.stringify(news));
+    })
 }
