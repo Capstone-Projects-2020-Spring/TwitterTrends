@@ -18,7 +18,7 @@ class AlgorithmsManager:
         self.database = db
         self.twitter = twit
 
-        newsApiKeyVal = os.environ.get(NEWS_API_KEY_ENV_VAR)
+        newsApiKeyVal = '59656cbf88a342beaaeb007622d726ef' # os.environ.get(NEWS_API_KEY_ENV_VAR)
         assert newsApiKeyVal != None, "News API Key environment variable not defined"
         self.news_api = NewsApiClient(api_key=newsApiKeyVal)
 
@@ -286,6 +286,13 @@ class AlgorithmsManager:
                 arr[k + 1] = arr[k]
                 k -= 1
             arr[k + 1] = temp
+
+    # create a trendsnapshot object
+    @staticmethod
+    def create_trends_snapshot(snapid, trends, loc, timestamp):
+        snap = DataStructures.TrendsSnapshot(snapid, trends, int(loc['woeid']), timestamp)
+        return snap
+
 
     # function that takes two strings and return an HTML text in a format like:
     #       REQUIRED

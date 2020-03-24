@@ -62,6 +62,17 @@ class Trend:
 # end Trend
 
 
+# [TrendsSnapshot class]
+class TrendsSnapshot:
+    # trends is an array of Trend objects in dictionary format
+    # loc is a Location object in dictionary format
+    def __init__(self, snapid, trends, woeid, timestamp):
+        self.snapid = snapid
+        self.trends = trends
+        self.woeid = woeid
+        self.timestamp = timestamp
+
+
 # [TrendTweetsSnapshot class]
 class TrendTweetsSnapshot:
 
@@ -114,17 +125,3 @@ class Country:
         self.country_name = name
 
 # end Country
-
-
-# [TrendSnapshot class]
-class TrendSnapshot:
-    def __init__(self, id, time, locfk, trendfk, rank, tvol24h):
-        self.trend_snapshot_PK = id
-        self.timestamp = time
-        self.location_PK = locfk
-        self.trend_FK = trendfk
-        self.rank = rank
-        self.tweet_volume_24h = tvol24h
-
-# end TrendSnapshot
-

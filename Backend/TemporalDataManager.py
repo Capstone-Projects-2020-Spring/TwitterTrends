@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import threading
 import time
 
@@ -21,12 +21,16 @@ class TemporalDataManager:
     def periodic_trends_retrieval(self, *loc):
         while self.periodic_trends_on is True:
             #self.algo.get_num_trends_from_database()
+            timestamp = datetime.now()
+            snapid = 0
             locations = self.algo.get_all_locations()
             for loc in locations:
                 restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
                 print('TEMPORAL GET ', loc['woeid'])
-                print(len(restrends))
-                time.sleep(24) # sleep for
+                snap = self.algo.create_trends_snapshot(snapid, restrends, loc, timestamp)
+                print(snap.__dict__)
+                snapid += 1
+                time.sleep(24)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
 
     # TODO: periodically pull tweets at different dates
     # TODO: this method template is an oversight and it might not be necessary

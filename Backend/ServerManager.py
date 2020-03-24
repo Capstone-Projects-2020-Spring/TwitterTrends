@@ -29,7 +29,7 @@ algo = AlgorithmsManager(cache, db, twitter)
 
 # SETUP TemporalDataManager
 # pass in algorithmsManager object and array of Location objects
-timedata = TemporalDataManager(algo, algo.locations)
+timedata = TemporalDataManager(algo, algo.get_all_locations())
 
 ######################
 # SETUP FLASK
