@@ -24,33 +24,38 @@
         <!-- Navigation bar -->
         <!-- Logo -->
         <nav class="navbar navbar-expand-md">
-            <a class="navbar-brand" href="#">Logo</a>
-
-            <!-- Search Bar -->
-            <div id="trend-search-box">
-                <input id="trend-search-txt" type="text" placeholder="Search . . ." name="">
-                <a id="trend-search-btn">
-                    <i class="fas fa-search"></i>
-                </a>
+            <div class="top-nav-left">
+                <a class="logo" href="#"><img src="images/logo2.png"></a>
+                <a href="#"><h1 class="site-title">TwitterTrends</h1></a>
             </div>
 
-            <!-- Drop down menu -->
-            <div id="pages-drop-box">
-                <button id="pages-drop-btn" type="reset">ANALYZE
-                <i class="fas fa-caret-down"></i>
-                </button>
+            <div class="top-nav-right">
+                <!-- Search Bar -->
+                <div id="trend-search-box">
+                    <input id="trend-search-txt" type="text" placeholder="Search . . ." name="">
+                    <a id="trend-search-btn">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
 
-                <div id="pages-dropdown-menu">
-                    <a href="time.html">Time</a>
-                    <a href="location.html">Location</a>
-                    <a href="network.html">Network</a>
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                    <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div id="pages-dropdown-menu">
+                        <a href="time.html">Time</a>
+                        <a href="location.html">Location</a>
+                        <a href="network.html">Network</a>
+                    </div>
                 </div>
             </div>
         </nav>
 
         <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-        <div class="row" >
-		
+        <div class="row">
+
 		    <!-- First column -->
 		    <div class="col-12 col-md-10">
 	            <header class="page-header header container-fluid">
@@ -59,21 +64,21 @@
                             <div id="close">+</div>
                             <h1 class="top-trends-title">Top Trends</h1>
                             <ul class="top-trends-ul">
-                                <li class="trend-1">1. <a href=""></a></li>
-                                <li class="trend-2">2. <a href=""></a></li>
-                                <li class="trend-3">3. <a href=""></a></li>
-                                <li class="trend-4">4. <a href=""></a></li>
-                                <li class="trend-5">5. <a href=""></a></li>
+                                <li>1. <span id="trend-1"></span></li>
+                                <li>2. <span id="trend-2"></span></li>
+                                <li>3. <span id="trend-3"></span></li>
+                                <li>4. <span id="trend-4"></span></li>
+                                <li>5. <span id="trend-5"></span></li>
                             </ul>
                         </div>
                     </div>
 		            <!-- <div id="overlay"></div> -->
                     <!-- Temple Logo(delete after d3.js done*maybe*) -->
 			        <!-- d3js map stuff -->
-			<svg width="1600" height="1000">
+			<svg>
 				<svg id="mapsvg" ></svg>
-			</svg>	
-	
+			</svg>
+
                 </header>
 		    </div>
 
@@ -94,13 +99,13 @@
 	    </div>
         <footer class="page-footer footer container-fluid">
             <ul class="team-members">
-                <li><a href="">Jennifer Chao</a></li>
-                <li><a href="">Conor Kennedy</a></li>
-                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Mike Lauw</a></li>
-                <li><a href="https://www.youtube.com/watch?v=ndcDT1rXMvU&list=PLKtIunYVkv_SUyXj_6Fe53okfzM9yVq1F">Chris Nelson</a></li>
-                <li><a href="">Scott Salisbury</a></li>
-                <li><a href="">Dan Tran</a></li>
-                <li><a href="">Thanh Tran</a></li>
+                <li>Jennifer Chao</li>
+                <li>Conor Kennedy</li>
+                <li>Mike Lauw</li>
+                <li>Chris Nelson</li>
+                <li>Scott Salisbury</li>
+                <li>Dan Tran</li>
+                <li>Thanh Tran</li>
             </ul>
         </footer>
     </body>
