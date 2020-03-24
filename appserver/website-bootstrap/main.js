@@ -33,7 +33,7 @@ $(document).ready(function(){
                             const handleClick = function(d) {  // Add interactivity
                                 document.querySelector('#bg-modal').style.display = 'flex';
                                 document.querySelector('.top-trends-title').innerHTML = "Top Trends for " + d.city_id;
-                                var trendUrl = "https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
+                                var trendUrl = "http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
                                 trend_data = retrieveTrends(trendUrl);
                             };
 
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
                             const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
                                 citiesDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-cities.csv',
-                                locationsUrl = 'https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/locations';
+                                locationsUrl = 'http://18.214.197.203:5000/locations';
 
                             /* Test Location Data
                             var markers = [
@@ -164,7 +164,7 @@ function retrieveTrends(trendUrl) {
 
 function getMoreInfo() {
     let trend = document.getElementById('trend-1').innerHTML;
-    let newsURL = "https://cors-anywhere.herokuapp.com/http://18.214.197.203:5000/trend_news?trend=" + trend;
+    let newsURL = "http://18.214.197.203:5000/trend_news?trend=" + trend;
     $.getJSON(newsURL, function (news) {
         alert(JSON.stringify(news));
     })
