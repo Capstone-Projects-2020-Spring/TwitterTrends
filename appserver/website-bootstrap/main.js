@@ -169,3 +169,25 @@ function getMoreInfo() {
         alert(JSON.stringify(news));
     })
 }
+
+//slider function
+var rangeSlider = function(){
+  var slider = $('.rangeslider'),
+      range = $('.slider'),
+      value = $('.range-slider-value');
+
+  slider.each(function(){
+
+    value.each(function(){
+      var value = $(this).prev().attr('value');
+      $(this).html(value);
+    });
+
+    range.on('input', function(){
+      $(this).next(value).html(this.value + " Weeks");
+    });
+  });
+};
+
+rangeSlider();
+//
