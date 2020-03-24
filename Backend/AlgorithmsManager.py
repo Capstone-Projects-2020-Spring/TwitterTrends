@@ -165,6 +165,11 @@ class AlgorithmsManager:
             return tweets_n
     # end get_top_tweets_from_query
 
+    # method that find the length of the trends table from database
+    def get_num_trends_from_database(self):
+        dbqueryres = self.database.query("SELECT count(*) FROM trends;")
+        print(dbqueryres.get_rows()[0][0])
+
     # return a Location object
     # pass in an address string
     # Example addrstr: "1801 N Broad St, Philadelphia, PA 19122"
@@ -200,6 +205,9 @@ class AlgorithmsManager:
         """
 
         return self.locations
+
+    def test(self):
+        self.database.query("SELECT * FROM ")
 
     # parse the location json returned by twitter.get_closest_location
     # args:

@@ -10,16 +10,23 @@ class TemporalDataManager:
         self.algo = algomanager
         self.timer = t
         self.periodic_trends_on = True
+        self.timestamps = []
         self.main_thread = threading.Thread(target=self.periodic_trends_retrieval, args=loc)
         print("STARTING TEMPORAL THREAD")
+        self.testval = 0
         self.main_thread.start()
 
     # TODO: this method will be periodically called by a thread
     # TODO: tasked to retrieve trends data and store them somewhere
     def periodic_trends_retrieval(self, *loc):
         while self.periodic_trends_on is True:
-            print("Temporal: ", len(loc))
-            time.sleep(30)  # sleep for seconds
+            #self.algo.get_num_trends_from_database()
+            locations = self.algo.get_all_locations()
+            for loc in locations:
+                restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
+                print('TEMPORAL GET ', loc['woeid'])
+                print(len(restrends))
+                time.sleep(24) # sleep for
 
     # TODO: periodically pull tweets at different dates
     # TODO: this method template is an oversight and it might not be necessary
