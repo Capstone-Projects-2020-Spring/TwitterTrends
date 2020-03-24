@@ -108,7 +108,40 @@
 		<!-- Second column -->
 		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
 		
+		<!-- Search bar -->
+		<form class="temporal-search" style="margin:auto;max-width:300px">
+		<input type="text" placeholder="Search Tweets. ." name="search">
+		<button id="temporal-search-btn" type="button"><i class="fa fa-search"></i></button>
+		</form>
+		
 
+		<!-- Slider -->
+		<div class="rangeslider">
+				<div id="rangeslider-text">
+			<b> Time Span: </b>
+				</div>
+			<input autocomplete="off" type="range" min="1" max="10" value="1" class="slider" id="temporal-slider" >
+				<div class="rangeslider-value">
+					<b> 1 Weeks </b>
+				</div>
+		</div>
+		
+		<!-- "Add another trend button" -->
+		<div id="add-trend">
+
+			<button id="add-trend-btn">
+				<i class="fas fa-plus"></i>
+				Add another trends
+			</button>
+		</div>
+		
+		<!-- Update Graph button -->
+		<div id="update-graph">
+
+			<button id="update-graph-btn">
+				UPDATE GRAPH
+			</button>
+		</div>
 		
 		</div>
 	</div>
