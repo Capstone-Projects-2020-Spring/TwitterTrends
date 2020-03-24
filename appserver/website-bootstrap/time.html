@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	<script src="https://d3js.org/d3.v4.js"></script>
 	
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="main.css">
@@ -39,18 +40,67 @@
 	</nav>
 
 
-     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+    <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
 	<div class="row">
         
 		<!-- First column -->
 		<div class="col-12 col-md-10">
 		<header class="page-header header container-fluid">
-			<script src="http://d3js.org/d3.v3.min.js"></script>
-			<svg></svg>
+			<div id="linegraph"></div>
 			<script>
-				var svg = d3.select("svg")
-					.attr("width", 10)
-					.attr("height", 600);
+				var margin = {top: 60, right: 60, bottom: 60, left: 60};
+				var width = 900 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+
+				var timesvg = d3.select("#linegraph")
+					.append("svg")
+					.attr("viewBox", "0 0 900 500")
+					.classed("svg-content-responsive", true)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+					//temp data, ordered date (year-month-day), value
+					d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/connectedscatter.csv",
+
+					//format variables for future data use
+					function(d){
+						return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+					},
+
+					function(data) {
+						var x = d3.scaleTime()
+							.domain(d3.extent(data, function(d) { return d.date; }))
+							.range([ 0, width ]);
+						timesvg.append("g")
+							.attr("transform", "translate(0," + height + ")")
+							.call(d3.axisBottom(x));
+
+						var y = d3.scaleLinear()
+							.domain([d3.min(data, function(d) { return +d.value; }) - 100, d3.max(data, function(d) { return +d.value; }) + 100])
+							.range([ height, 0 ]);
+						
+						timesvg.append("g")
+							.call(d3.axisLeft(y));
+
+						timesvg.append("path")
+							.datum(data)
+							.attr("fill", "none")
+							.attr("stroke", "#224cb5")
+							.attr("stroke-width", 1.5)
+							.attr("d", d3.line()
+							.x(function(d) { return x(d.date) })
+							.y(function(d) { return y(d.value) })
+							)
+							
+						timesvg.append("g")
+							.attr("class", "dots")
+							.selectAll("dot")
+							.data(data)
+							.enter()
+							.append("circle")
+								.attr("cx", function(d) {return x(d.date)})
+								.attr("cy", function(d) {return y(d.value)})
+								.attr("r", 5)
+					})
 			</script>
 		</div>
 	</header>

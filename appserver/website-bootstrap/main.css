@@ -56,6 +56,12 @@ body {
 .navbar {
 	background: #515182;
 	height: 60px;
+	position: relative;
+	z-index: 3;
+}
+
+.col {
+	background: #515182;
 }
 
 #title {
@@ -134,7 +140,7 @@ body {
 
 #pages-drop-box{
 	position: relative;
-	left: 80%;
+	left: 50%;
 	display: inline-block;
 	float: right;
 }
@@ -144,7 +150,7 @@ body {
 	position: absolute;
 	background-color: #2e2e4d;
 	min-width: 160px;
-	z-index: 1;
+	z-index: 2;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	/*font-size: 25px;*/
 	line-height: 10px;
@@ -194,9 +200,11 @@ body {
 
 /* d3js style stuff */
 
-#svg {
+#mapsvg {
 	width:100%;
 	height: auto;
+	z-index: -1;
+	position: relative;
 }
 
 .states {
@@ -206,6 +214,10 @@ body {
 }
 
 .states :hover {
+  fill: #bebeeb;
+}
+
+.states .active {
   fill: #bebeeb;
 }
 
@@ -266,6 +278,11 @@ body {
     position: relative;
 }
 
+.dots {
+	fill: #224cb5;
+}
+
+
 /*
 .features img {
     -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
@@ -274,6 +291,8 @@ body {
     margin-bottom: 16px;
 }
 */
+
+/* trend notification pop-up styles */
 
 #bg-modal {
 	width: 100%;
@@ -326,4 +345,47 @@ body {
 	font-weight: lighter;
 	margin: .75em;
 	cursor: pointer;
+}
+
+/* footer styles */
+
+.footer {
+	background: #515182;
+	position: relative;
+	z-index: 3
+}
+
+.footer li {
+	background: #515182;
+	color: white;
+	text-align: center;
+}
+
+.team-members {
+	flex-direction: row;
+	display: flex;
+    align-items: stretch; /* Default */
+    justify-content: space-between;
+    width: 100%;
+	background:  #515182;
+	margin: 0;
+    padding: 10px 0 10px 0;
+}
+
+.team-members li {
+	background: #515182;
+	display: block;
+	flex: 0 1 auto; /* Default */
+	list-style-type: none;
+	float: left;
+	padding: 10px;
+}
+
+.team-members a {
+	color: inherit;
+}
+
+.team-members a:hover {
+	text-decoration: none;
+	color: #9191c4;
 }

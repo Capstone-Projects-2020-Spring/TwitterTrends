@@ -1,8 +1,12 @@
 from datetime import datetime, timedelta
 from wrappers.geocode import geocoding
+from newsapi import NewsApiClient
+import os
 
 # from flask import jsonify # pronbably not needed
 import DataStructures
+
+NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 
 # In charge of all algorithms needed by the backend server
 
@@ -14,14 +18,9 @@ class AlgorithmsManager:
         self.database = db
         self.twitter = twit
 
-        #TODO: temporary test
-        self.locations = None
-        queryres = self.database.query('SELECT * FROM locations;')
-        resrows = queryres.get_rows()
-        resarr = []
-        for row in resrows:
-            resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[4]).__dict__)
-        self.locations = resarr
+        newsApiKeyVal = os.environ.get(NEWS_API_KEY_ENV_VAR)
+        assert newsApiKeyVal != None, "News API Key environment variable not defined"
+        self.news_api = NewsApiClient(api_key=newsApiKeyVal)
 
     # use the woeid argument to pull trends from Twitter API
     # pull results from cache if query was called recently
@@ -193,7 +192,7 @@ class AlgorithmsManager:
         return {}
 
     def get_all_locations(self):
-        """
+
         # queryres row entry format:
         #     woe_id, city, states, lat, long
         queryres = self.database.query('SELECT * FROM locations;')
@@ -202,9 +201,6 @@ class AlgorithmsManager:
         for row in resrows:
             resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[4]).__dict__)
         return resarr
-        """
-
-        return self.locations
 
     def test(self):
         self.database.query("SELECT * FROM ")
@@ -222,6 +218,45 @@ class AlgorithmsManager:
 
         location = DataStructures.Location(0, name, None, parentid, woeid, lat, lon)
         return location
+
+
+    #retrieves news stories which reference the given trend
+    # args:
+    #   trend: the trend (keyword/phrase or hashtag) which should be searched for
+    #   num_stories: the maximum number of stories about that trend to return
+    def get_trend_news(self, trend, num_stories=3):
+        stories_per_page=100
+        if num_stories <= 0:
+            raise ValueError("num_stories must be a positive value")
+        elif num_stories <= 100:
+            stories_per_page = num_stories
+        else:
+            print("WARN- the /trend_news endpoint doesn't yet support fetching over 100 stories at once")
+
+        example_news_stories = []
+
+        all_stories = self.news_api.get_everything(q=trend, language="en", page_size=stories_per_page)
+        news_fetch_status = all_stories["status"]
+        if news_fetch_status == "ok":
+            stories_list = all_stories["articles"]
+            num_fetched_stories = all_stories["totalResults"]
+
+            for fetched_story in stories_list[:(min(num_stories, num_fetched_stories))]:
+                example_story= {}
+                example_story["title"] = fetched_story["title"]
+                example_story["author"] = fetched_story["author"]
+                example_story["source_name"] = fetched_story["source"]["name"]
+                example_story["link_url"] = fetched_story["url"]
+                example_story["date"] = fetched_story["publishedAt"]
+                example_story["description"] = fetched_story["description"]
+                example_story["content_start"] = fetched_story["content"]
+                example_news_stories.append(example_story)
+        else:
+            example_news_stories.append("news api failed with error code " + all_stories["status"])
+
+        #todo support fetching multiple pages of results for over 100 stories?
+        return example_news_stories
+
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
@@ -275,3 +310,6 @@ class AlgorithmsManager:
         return htmlstr
 
 
+if __name__ == "__main__":
+    algos = AlgorithmsManager(None, None, None)
+    print(algos.get_trend_news("tacos"))

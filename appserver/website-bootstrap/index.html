@@ -49,8 +49,8 @@
         </nav>
 
         <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-        <div class="row">
-
+        <div class="row" >
+		
 		    <!-- First column -->
 		    <div class="col-12 col-md-10">
 	            <header class="page-header header container-fluid">
@@ -70,12 +70,15 @@
 		            <!-- <div id="overlay"></div> -->
                     <!-- Temple Logo(delete after d3.js done*maybe*) -->
 			        <!-- d3js map stuff -->
-			        <svg></svg>
+			<svg width="1600" height="1000">
+				<svg id="mapsvg" ></svg>
+			</svg>	
+	
                 </header>
 		    </div>
 
             <!-- Second column -->
-		    <div class="col" style="background-color: #515182"> <!-- Second column background color -->
+		    <div class="col">
                 <br>
 				<br>
 				<br>
@@ -89,43 +92,16 @@
 		        <img src="images/tweets-2.png" class="img-fluid">
             </div>
 	    </div>
-
-	
-	    <!-- Second grid view -->
-	    <div class="container features">
-            <div class="row">
-	            <!-- First column -->
-                <div class="col-lg-4 col-md-4 col-sm-12">
-		            <br>
-		            <br>
-                    <h3 class="feature-title">Stuff</h3>
-                    <img src="images/icon-1.png" class="img-fluid">
-                    <p>Bla Bla Bla</p>
-                </div>
-		
-		        <!-- Second column -->
-                 <div class="col-lg-4 col-md-4 col-sm-12">
-                     <br>
-                     <br>
-                     <h3 class="feature-title">Stuff</h3>
-                     <img src="images/icon-2.png" class="img-fluid">
-                     <p>Bla Bla Bla</p>
-                 </div>
-		
-		         <!-- Third column -->
-                <div class="col-lg-4 col-md-4 col-sm-12">
-		            <br>
-		            <br>
-                    <h3 class="feature-title">Team Members</h3>
-                    <p>Jennifer Chao</p>
-                    <p>Conor Kennedy</p>
-                    <p>Mike Lauw</p>
-                    <p>Chris Nelson</p>
-                    <p>Scott Salisbury</p>
-                    <p>Dan Tran</p>
-                    <p>Thanh Tran</p>
-                </div>
-            </div>
-        </div>
+        <footer class="page-footer footer container-fluid">
+            <ul class="team-members">
+                <li><a href="">Jennifer Chao</a></li>
+                <li><a href="">Conor Kennedy</a></li>
+                <li><a href="">Mike Lauw</a></li>
+                <li><a href="https://www.youtube.com/watch?v=ndcDT1rXMvU&list=PLKtIunYVkv_SUyXj_6Fe53okfzM9yVq1F">Chris Nelson</a></li>
+                <li><a href="">Scott Salisbury</a></li>
+                <li><a href="">Dan Tran</a></li>
+                <li><a href="">Thanh Tran</a></li>
+            </ul>
+        </footer>
     </body>
 </html>
