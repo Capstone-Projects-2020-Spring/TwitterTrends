@@ -33,11 +33,11 @@ $(document).ready(function(){
                             const handleClick = function(d) {  // Add interactivity
                                 document.querySelector('#bg-modal').style.display = 'flex';
                                 document.querySelector('.top-trends-title').innerHTML = "Top Trends for " + d.city_id;
-                                var trendUrl = "http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
+                                let trendUrl = "http://18.214.197.203:5000/toptrends?woeid=" + d.woeid;
                                 trend_data = retrieveTrends(trendUrl);
                             };
 
-                            let mapsvg = d3.select("#mapsvg")
+                            const mapsvg = d3.select("#mapsvg")
 								.attr("width", width)
 								.attr("height", height);
 
@@ -83,21 +83,19 @@ $(document).ready(function(){
 										.attr('cursor', 'pointer')
 										.on('click', function clicked(d)
 										{
-											var x;
-											var y;
-											var zoomLevel;
+											let x, y, zoomLevel;
 
 											if (d && centered !== d) {
-											var centroid = path.centroid(d);
-											x = centroid[0];
-											y = centroid[1];
-											zoomLevel = 4;
-											centered = d;
+											    let centroid = path.centroid(d);
+											    x = centroid[0];
+											    y = centroid[1];
+											    zoomLevel = 4;
+											    centered = d;
 											} else {
-											x = width / 2;
-											y = height / 2;
-											zoomLevel = 1;
-											centered = null;
+											    x = width / 2;
+											    y = height / 2;
+											    zoomLevel = 1;
+											    centered = null;
 											}
 
 											mapsvg.selectAll("path")
@@ -163,11 +161,36 @@ function retrieveTrends(trendUrl) {
 }
 
 function getMoreInfo() {
-    let trend = document.getElementById('trend-1').innerHTML;
+    let trend = this.innerHTML;
+    let trend_news = null;
+    if (trend.startsWith('#')){
+        trend = trend.substring(1);
+    }
     let newsURL = "http://18.214.197.203:5000/trend_news?trend=" + trend;
     $.getJSON(newsURL, function (news) {
-        alert(JSON.stringify(news));
-    })
+        trend_news = news;
+
+        document.getElementById('article-title-1').innerHTML = trend_news[0].title;
+        let blurb = trend_news[0].description;
+        blurb = blurb.slice(0, 150) + '...';
+        document.getElementById('article-blurb-1').innerHTML = blurb;
+        document.getElementById('article-url-1').setAttribute("href", trend_news[0].link_url);
+        document.getElementById('article-url-1').innerText = 'Read More!';
+
+        document.getElementById('article-title-2').innerHTML = trend_news[1].title;
+        blurb = trend_news[1].description;
+        blurb = blurb.slice(0, 150) + '...';
+        document.getElementById('article-blurb-2').innerHTML = blurb;
+        document.getElementById('article-url-2').setAttribute("href", trend_news[1].link_url);
+        document.getElementById('article-url-2').innerText = 'Read More!';
+
+        document.getElementById('article-title-3').innerHTML = trend_news[2].title;
+        blurb = trend_news[2].description;
+        blurb = blurb.slice(0, 150) + '...';
+        document.getElementById('article-blurb-3').innerHTML = blurb;
+        document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
+        document.getElementById('article-url-3').innerText = 'Read More!';
+    });
 }
 
 //slider function

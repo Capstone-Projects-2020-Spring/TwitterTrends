@@ -15,6 +15,7 @@
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         <script src="main.js"></script>
 
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -84,17 +85,32 @@
 
             <!-- Second column -->
 		    <div class="col">
-                <br>
-				<br>
-				<br>
-		        <h3 class="side-title">Top Tweets</h3>
-		        <img src="images/tweets-1.jpeg" class="img-fluid">
-                <br>
-		        <br>
-		        <br>
-		        <br>
-                <h3 class="side-title">Top News</h3>
-		        <img src="images/tweets-2.png" class="img-fluid">
+                <div id="trend-tweets">
+                    <h3 class="side-title">Top Tweets</h3>
+                    <!--<blockquote class="twitter-tweet">
+                        <p lang="en" dir="ltr">Sorry losers and haters, but my I.Q. is one of the highest -and you all know it! Please don&#39;t feel so stupid or insecure,it&#39;s not your fault</p>
+                        &mdash; Donald J. Trump (@realDonaldTrump)
+                        <a href="https://twitter.com/realDonaldTrump/status/332308211321425920?ref_src=twsrc%5Etfw">May 9, 2013</a>
+                    </blockquote>-->
+                </div>
+                <div id="trend-news">
+                    <h3 class="side-title">Top News</h3>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-1"></h6>
+                        <p id="article-blurb-1"></p>
+                        <a id="article-url-1" href=""></a>
+                    </div>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-2"></h6>
+                        <p id="article-blurb-2"></p>
+                        <a id="article-url-2" href=""></a>
+                    </div>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-3"></h6>
+                        <p id="article-blurb-3"></p>
+                        <a id="article-url-3" href=""></a>
+                    </div>
+                </div>
             </div>
 	    </div>
         <footer class="page-footer footer container-fluid">

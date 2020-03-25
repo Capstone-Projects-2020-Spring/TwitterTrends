@@ -281,7 +281,7 @@ svg {
     color: white;
     font-size: 1.3rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-transform: uppercase;
 }
 
@@ -396,32 +396,33 @@ svg {
 }
 
 /* Temporal Page buttons */
+
 form.temporal-search input {
-  padding: 10px;
-  font-size: 17px;
-  border: 1px solid grey;
-  float: left;
-  width: 80%;
-  background-color:#cccccc;
-  color: #000000;
-  margin-top: 20%
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 20%
 }
 
 form.temporal-search button {
-  float: left;
-  width: 19%;
-  padding: 9px;
-  background: #2196F3;
-  color: white;
-  font-size: 17px;
-  border: 1px solid grey;
-  border-left: none;
-  cursor: pointer;
-  margin-top: 20%;
+  	float: left;
+  	width: 19%;
+  	padding: 9px;
+  	background: #2196F3;
+  	color: white;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	border-left: none;
+  	cursor: pointer;
+  	margin-top: 20%;
 }
 
 form.temporal-search button:hover {
-  background: #0b7dda;
+  	background: #0b7dda;
 }
 
 #rangeslider-text{
@@ -435,30 +436,24 @@ form.temporal-search button:hover {
 	margin-top: 100%;
 }
 
-
 .slider {
     -webkit-appearance: none;
-    background: #ffffff;
-	background-color:#cccccc;
+    background-color:#cccccc;
     width: 50%;
     height: 5px;
     opacity: 5;
 	cursor: pointer;
-
-
-   }
+}
 
 .slider:hover {
     opacity: 1;
 }
 
 .rangeslider-value {
-  font-size: 20px;
-  color: white;
-  margin-top: 15px;
-
-  }
-
+  	font-size: 20px;
+  	color: white;
+  	margin-top: 15px;
+}
 
 #add-trend-btn{
 	margin-top: 30%;
@@ -468,21 +463,58 @@ form.temporal-search button:hover {
 	font-size: 20px;
 	padding: 0;
 	border: none;
-
 }
-
 
 #update-graph-btn{
 	margin-top: 20%;
 	margin-left: 18%;
 	background-color: #fff;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 8px 20px;
 	font-size: 18px;
 	font-weight: 600;
 	font-color: #2e2e4d;
 	border-radius: 4px;
 	cursor: pointer;
+}
+
+/* Trend News */
+
+#trend-news {
+	padding-top: 20px;
+}
+
+.trend-news-article{
+	padding: 5px 0;
+}
+
+#article-title-1, #article-title-2, #article-title-3 {
+	padding-bottom: 5px;
+}
+
+#trend-news h6 {
+	font-size: 14px;
+	color: white;
+	font-weight: bolder;
+}
+
+#trend-news p {
+	font-size: 11px;
+	color: white;
+}
+
+#trend-news a {
+	font-size: 11px;
+	color: #599680;
+}
+
+#trend-news a:hover {
+	color: #bebeeb;
+	text-decoration: none;
+}
+
+/* Trend Tweets */
+
+blockquote.twitter-tweet {
+	width: 100px !important;
+	height: auto !important;
 }
