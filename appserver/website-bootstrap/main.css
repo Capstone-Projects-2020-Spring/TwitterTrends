@@ -60,26 +60,35 @@ body {
 	z-index: 3;
 }
 
-.col {
-	background: #515182;
+.top-nav-left {
+	float: left;
+	width: 49%;
 }
 
-#title {
-	position: absolute;
-	left: 37%;
-	top: 30%;
-	color: #ffffff;
-	font-size: 30px;
-	font-family: 'Titillium Web', sans-serif;
+.top-nav-right {
+	float: right;
+	width: 49%;
+}
+
+.logo img{
+	height: 60px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.site-title{
+	font-size: 48px;
+	margin-left: -15px;
+	color: white;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 /*search bar */
 
 #trend-search-box{
 	position: absolute;
-	left: 45%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	float: right;
 	background: #9191c4;
 	height: 35px;
 	border-radius: 40px;
@@ -98,13 +107,10 @@ body {
 
 #trend-search-btn{
 	color: #fff;
-	float: right;
 	width: 15px;
 	height: 20px;
 	border-radius: 50%;
 	background: #9191c4;
-	justify-content: center;
-	align-items: center;
 	transition: 0.4s;
 	
 }
@@ -124,13 +130,9 @@ body {
 
 /*drop-down button*/
 
-
 #pages-drop-btn{
 	background-color: #fff;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 8px 20px;
 	font-size: 18px;
 	font-weight: 600;
 	font-color: #2e2e4d;
@@ -139,10 +141,10 @@ body {
 }
 
 #pages-drop-box{
-	position: relative;
-	left: 50%;
-	display: inline-block;
 	float: right;
+	position: relative;
+	display: inline-block;
+
 }
 
 #pages-dropdown-menu{
@@ -175,8 +177,18 @@ body {
 	display: block;
 }
 
+.col {
+	background: #515182;
+}
 
-
+#title {
+	position: absolute;
+	left: 37%;
+	top: 30%;
+	color: #ffffff;
+	font-size: 30px;
+	font-family: 'Titillium Web', sans-serif;
+}
 
 /*--- header ---*/
 
@@ -184,7 +196,6 @@ body {
 	background-color: #dfdfed; /*url('images/header-background.jpg');*/
 	background-size: cover;
 	background-position: center;
-	position: align;
 	width: 102%;
 	
 }
@@ -199,12 +210,17 @@ body {
 }
 
 /* d3js style stuff */
+svg {
+	width: 1000px;
+	height: 600px;
+}
 
 #mapsvg {
 	width:100%;
 	height: auto;
 	z-index: -1;
 	position: relative;
+	overflow: hidden;
 }
 
 .states {
@@ -227,6 +243,7 @@ body {
 
 .marker :hover {
 	fill: #599680;
+	cursor: pointer;
 }
 
 .tooltip {
@@ -242,8 +259,8 @@ body {
 .tooltip .tooltiptext {
 	background-color: black;
 	text-align : center;
-	padding: 5 px 0;
-	border-radius: 6 px;
+	padding: 5px 0;
+	border-radius: 6px;
 }
 
 .features {
@@ -264,7 +281,7 @@ body {
     color: white;
     font-size: 1.3rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-transform: uppercase;
 }
 
@@ -278,10 +295,13 @@ body {
     position: relative;
 }
 
-.dots {
+.dot {
 	fill: #224cb5;
 }
 
+.dot:hover {
+	fill: #599680;
+}
 
 /*
 .features img {
@@ -307,7 +327,7 @@ body {
 }
 
 .modal-content {
-	width: 500px;
+	width: 510px;
 	height: 300px;
 	background-color: white;
 	border-radius: 4px;
@@ -335,13 +355,7 @@ body {
 	font-size: 24px;
 }
 
-.trend-1 {
-	font-weight: bold;
-	margin: .75em;
-	cursor: pointer;
-}
-
-.trend-2, .trend-3, .trend-4, .trend-5 {
+.top-trends-ul li {
 	font-weight: lighter;
 	margin: .75em;
 	cursor: pointer;
@@ -369,7 +383,7 @@ body {
     width: 100%;
 	background:  #515182;
 	margin: 0;
-    padding: 10px 0 10px 0;
+    padding: 10px 0;
 }
 
 .team-members li {
@@ -381,11 +395,126 @@ body {
 	padding: 10px;
 }
 
-.team-members a {
-	color: inherit;
+/* Temporal Page buttons */
+
+form.temporal-search input {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 20%
 }
 
-.team-members a:hover {
+form.temporal-search button {
+  	float: left;
+  	width: 19%;
+  	padding: 9px;
+  	background: #2196F3;
+  	color: white;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	border-left: none;
+  	cursor: pointer;
+  	margin-top: 20%;
+}
+
+form.temporal-search button:hover {
+  	background: #0b7dda;
+}
+
+#rangeslider-text{
+	font-size: 20px;
+	margin-bottom: 5px;
+	color: white;
+}
+
+.rangeslider{
+	width: 150%;
+	margin-top: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    background-color:#cccccc;
+    width: 50%;
+    height: 5px;
+    opacity: 5;
+	cursor: pointer;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.rangeslider-value {
+  	font-size: 20px;
+  	color: white;
+  	margin-top: 15px;
+}
+
+#add-trend-btn{
+	margin-top: 30%;
+	background:transparent;
+	cursor: pointer;
+	color: white;
+	font-size: 20px;
+	padding: 0;
+	border: none;
+}
+
+#update-graph-btn{
+	margin-top: 20%;
+	margin-left: 18%;
+	background-color: #fff;
+	padding: 8px 20px;
+	font-size: 18px;
+	font-weight: 600;
+	font-color: #2e2e4d;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+/* Trend News */
+
+#trend-news {
+	padding-top: 20px;
+}
+
+.trend-news-article{
+	padding: 5px 0;
+}
+
+#article-title-1, #article-title-2, #article-title-3 {
+	padding-bottom: 5px;
+}
+
+#trend-news h6 {
+	font-size: 14px;
+	color: white;
+	font-weight: bolder;
+}
+
+#trend-news p {
+	font-size: 11px;
+	color: white;
+}
+
+#trend-news a {
+	font-size: 11px;
+	color: #599680;
+}
+
+#trend-news a:hover {
+	color: #bebeeb;
 	text-decoration: none;
-	color: #9191c4;
+}
+
+/* Trend Tweets */
+
+blockquote.twitter-tweet {
+	width: 100px !important;
+	height: auto !important;
 }
