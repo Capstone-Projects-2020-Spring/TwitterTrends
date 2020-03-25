@@ -18,16 +18,21 @@ class TemporalDataManager:
 
     # TODO: this method will be periodically called by a thread
     # TODO: tasked to retrieve trends data and store them somewhere
+    # TODO: call functions to store snapshot entries in trends_snapshot databae table
+    #       table trends_snapshots(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date)
     def periodic_trends_retrieval(self, *loc):
         while self.periodic_trends_on is True:
             #self.algo.get_num_trends_from_database()
             timestamp = datetime.now()
-            snapid = 0
+            snapid = self.algo.get_highest_id_of_database_table('trends_snapshot', idname='id')
             locations = self.algo.get_all_locations()
             for loc in locations:
                 restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
                 print('TEMPORAL GET ', loc['woeid'])
                 snap = self.algo.create_trends_snapshot(snapid, restrends, loc, timestamp)
+
+                # TODO: add snap to database here
+
                 print(snap.__dict__)
                 snapid += 1
                 time.sleep(24)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
@@ -35,4 +40,14 @@ class TemporalDataManager:
     # TODO: periodically pull tweets at different dates
     # TODO: this method template is an oversight and it might not be necessary
     def periodic_tweets_retrieval(self):
+        ()
+
+    # TODO: get the timeline of the trend. Return all occurrences of the trend at a location between a datetime
+    #       trend: the trend keyword
+    #       woeid: the location of the trend
+    #       fromdate: the datetime to search from
+    #       todate: the datetime to search to
+    #       return value: return an array of Trends with each having a timestamp value
+    def get_trend_snapshot(self, trend, woeid, fromdate, todate):
+        # TODO: call algo manager to query to database and return trends within the time frame
         ()

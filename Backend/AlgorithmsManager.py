@@ -18,7 +18,7 @@ class AlgorithmsManager:
         self.database = db
         self.twitter = twit
 
-        newsApiKeyVal = '59656cbf88a342beaaeb007622d726ef' # os.environ.get(NEWS_API_KEY_ENV_VAR)
+        newsApiKeyVal = os.environ.get(NEWS_API_KEY_ENV_VAR)
         assert newsApiKeyVal != None, "News API Key environment variable not defined"
         self.news_api = NewsApiClient(api_key=newsApiKeyVal)
 
@@ -168,6 +168,24 @@ class AlgorithmsManager:
     def get_num_trends_from_database(self):
         dbqueryres = self.database.query("SELECT count(*) FROM trends;")
         print(dbqueryres.get_rows()[0][0])
+
+    def get_highest_id_of_database_table(self, tablename, idname='id', default_id=0):
+        dbqueryres = self.database.query("SELECT * FROM " + tablename + " ORDER BY " + idname + ";")
+        rows = dbqueryres.get_rows()
+        colname = dbqueryres.get_column_names()
+        lens = len(rows)
+        if lens == 0:
+            print("EMPTY TABLE. ID DEFAULT TO", default_id)
+            return 0
+        else:
+            i = 0
+            for n in colname:
+                if n == idname:
+                    highestid = rows[lens-1][i]
+                    print("HIGHEST ID FOR", tablename, ":", highestid)
+                    return highestid
+                i += 1
+
 
     # return a Location object
     # pass in an address string

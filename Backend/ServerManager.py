@@ -200,6 +200,10 @@ def api_get_trend_news():
 
 @app.route('/test', methods=['GET'])
 def api_test():
+    #query = db.query("insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
+    #                 "values(0, 1, 'test', 'testtest', 420, false, '2003-01-01 05:32:21.32');")
+    query = db.query("SELECT * FROM trends_snapshot;")
+    print(query.get_rows())
     return jsonify(["Test", "Test2"])
 
 

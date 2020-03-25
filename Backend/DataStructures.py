@@ -52,12 +52,13 @@ class Follower:
 # [Trend class]
 class Trend:
 
-    def __init__(self, id, cont, istag, query, volume):
+    def __init__(self, id, cont, istag, query, volume, timestamp=None):
         self.trend_PK = id
         self.trend_content = cont
         self.is_hashtag = istag
         self.query_term = query
         self.tweet_volume = volume
+        self.timestamp = timestamp
 
 # end Trend
 
@@ -71,7 +72,6 @@ class TrendsSnapshot:
         self.trends = trends
         self.woeid = woeid
         self.timestamp = timestamp
-
 
 # [TrendTweetsSnapshot class]
 class TrendTweetsSnapshot:
