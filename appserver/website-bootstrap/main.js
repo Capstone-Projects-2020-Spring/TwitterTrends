@@ -216,29 +216,90 @@ rangeSlider();
 //
 
 //add another trend function
-  function toggleSearch() 
+  function addSearch() 
   {
 
     var search2 = document.getElementById('search2');
 	var search3 = document.getElementById('search3');
 	var search4 = document.getElementById('search4');
 	var search5 = document.getElementById('search5');
+	var add = 2;
+	var remove = 2;
+	var test1 = document.getElementById('remove-trend-btn');
+	var test2 = document.getElementById('add-trend-btn');
+
 	
 
 	if (search4.style.display == "block"){
 	  search5.style.display = "block";
+	  remove = 1;
+	  add = 0;
     }
 	else if(search3.style.display == "block"){
 	  search4.style.display = "block";
+	  remove = 1;
 	}
 	else if(search2.style.display == "block"){
 	  search3.style.display = "block";
+	  remove = 1;
 	}
 	else{
 	  search2.style.display = "block";
+	  remove = 1;
+	}
+	
+	
+	
+	if (remove == 1){
+	test1.style.visibility = "visible";
+	}
+	if (add == 0){
+	test2.style.visibility = "hidden";
+	}
+  
+	
+  }
+  
+  function removeSearch() 
+  {
+
+    var search2 = document.getElementById('search2');
+	var search3 = document.getElementById('search3');
+	var search4 = document.getElementById('search4');
+	var search5 = document.getElementById('search5');
+	var add = 2;
+	var remove = 2;
+	var test1 = document.getElementById('remove-trend-btn');
+	var test2 = document.getElementById('add-trend-btn');
+	
+
+	if (search3.style.display == "none"){
+	  search2.style.display = "none";
+	  add = 1;
+	  remove = 0;
+    }
+	else if(search4.style.display == "none"){
+	  search3.style.display = "none";
+	  add = 1;
+	}
+	else if(search5.style.display == "none"){
+	  search4.style.display = "none";
+	  add = 1;
+	}
+	else{
+	  search5.style.display = "none";
+	  add = 1;
+
+	}
+		
+		
+	if (remove == 0){
+	test1.style.visibility = "hidden";
+	}
+	if (add == 1){
+	test2.style.visibility = "visible";
 	}
 
   
 	
   }
-//

@@ -20,7 +20,7 @@
 	
 	<!-- Logo -->
 	<nav class="navbar navbar-expand-md">
-		<a class="navbar-brand" href="index.html">Logo</a>  
+		<a class="logo" href="#"><img src="images/logo2.png"></a>  
 
 		<div id="title">
 			Analyze Time
@@ -191,11 +191,11 @@
 		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
 		
 		<!-- Search bar -->
-		<input type="text" placeholder="Search Tweets. ." id="search1" name="search1">
-		<input type="text" placeholder="Search Tweets. ." id="search2" name="search2">
-		<input type="text" placeholder="Search Tweets. ." id="search3" name="search3">
-		<input type="text" placeholder="Search Tweets. ." id="search4" name="search4">
-		<input type="text" placeholder="Search Tweets. ." id="search5" name="search5">
+		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search1" name="search1">
+		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search2" name="search2">
+		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search3" name="search3">
+		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search4" name="search4">
+		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search5" name="search5">
 		
 
 		<!-- Slider -->
@@ -212,9 +212,18 @@
 		<!-- "Add another trend button" -->
 		<div id="add-trend">
 
-			<button id="add-trend-btn" onclick="toggleSearch()">
+			<button id="add-trend-btn" onclick="addSearch()">
 				<i class="fas fa-plus"></i>
 				Add another trend
+			</button>
+		</div>
+		
+		<!-- "Remove trend button" -->
+		<div id="remove-trend">
+
+			<button id="remove-trend-btn" onclick="removeSearch()">
+				<i class="fas fa-minus"></i>
+				Remove trend
 			</button>
 		</div>
 		
