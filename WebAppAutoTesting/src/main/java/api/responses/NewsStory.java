@@ -13,6 +13,8 @@ protected String date;
 protected String description;
 protected String contentStart;
 
+public NewsStory( ) {}
+
 public NewsStory( final String title, final String author, final String source_name, final String link_url,
 	final String date, final String description, final String content_start )
 {
@@ -25,11 +27,14 @@ public NewsStory( final String title, final String author, final String source_n
 	this.contentStart = content_start;
 }
 
-public NewsStory( ) {}
-
 public String getTitle( )
 {
 	return title;
+}
+
+public void setTitle( final String title )
+{
+	this.title = title;
 }
 
 public String getAuthor( )
@@ -37,9 +42,19 @@ public String getAuthor( )
 	return author;
 }
 
+public void setAuthor( final String author )
+{
+	this.author = author;
+}
+
 public String getSourceName( )
 {
 	return sourceName;
+}
+
+public void setSourceName( final String sourceName )
+{
+	this.sourceName = sourceName;
 }
 
 public String getLinkUrl( )
@@ -47,9 +62,19 @@ public String getLinkUrl( )
 	return linkUrl;
 }
 
+public void setLinkUrl( final String linkUrl )
+{
+	this.linkUrl = linkUrl;
+}
+
 public String getDate( )
 {
 	return date;
+}
+
+public void setDate( final String date )
+{
+	this.date = date;
 }
 
 public String getDescription( )
@@ -57,8 +82,18 @@ public String getDescription( )
 	return description;
 }
 
+public void setDescription( final String description )
+{
+	this.description = description;
+}
+
 public String getContentStart( )
 {
 	return contentStart;
+}
+
+public void setContentStart( final String contentStart )
+{
+	this.contentStart = contentStart;
 }
 }
