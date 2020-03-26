@@ -397,7 +397,7 @@ svg {
 
 /* Temporal Page buttons */
 
-form.temporal-search input {
+#search1 {
 	padding: 10px;
   	font-size: 17px;
   	border: 1px solid grey;
@@ -408,17 +408,52 @@ form.temporal-search input {
   	margin-top: 20%
 }
 
-form.temporal-search button {
-  	float: left;
-  	width: 19%;
-  	padding: 9px;
-  	background: #2196F3;
-  	color: white;
+#search2 {
+	padding: 10px;
   	font-size: 17px;
   	border: 1px solid grey;
-  	border-left: none;
-  	cursor: pointer;
-  	margin-top: 20%;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 3%;
+	display: none;
+}
+
+#search3 {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 3%;
+	display: none;
+}
+
+#search4 {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 3%;
+	display: none;
+}
+
+#search5 {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+  	float: left;
+  	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 3%;
+	display: none;
 }
 
 form.temporal-search button:hover {
@@ -433,7 +468,7 @@ form.temporal-search button:hover {
 
 .rangeslider{
 	width: 150%;
-	margin-top: 100%;
+	margin-top: 120%;
 }
 
 .slider {

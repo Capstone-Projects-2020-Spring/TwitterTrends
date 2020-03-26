@@ -214,3 +214,31 @@ var rangeSlider = function(){
 
 rangeSlider();
 //
+
+//add another trend function
+  function toggleSearch() 
+  {
+
+    var search2 = document.getElementById('search2');
+	var search3 = document.getElementById('search3');
+	var search4 = document.getElementById('search4');
+	var search5 = document.getElementById('search5');
+	
+
+	if (search4.style.display == "block"){
+	  search5.style.display = "block";
+    }
+	else if(search3.style.display == "block"){
+	  search4.style.display = "block";
+	}
+	else if(search2.style.display == "block"){
+	  search3.style.display = "block";
+	}
+	else{
+	  search2.style.display = "block";
+	}
+
+  
+	
+  }
+//

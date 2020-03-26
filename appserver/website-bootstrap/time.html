@@ -191,10 +191,11 @@
 		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
 		
 		<!-- Search bar -->
-		<form class="temporal-search" style="margin:auto;max-width:300px">
-		<input type="text" placeholder="Search Tweets. ." name="search">
-		<button id="temporal-search-btn" type="button"><i class="fa fa-search"></i></button>
-		</form>
+		<input type="text" placeholder="Search Tweets. ." id="search1" name="search1">
+		<input type="text" placeholder="Search Tweets. ." id="search2" name="search2">
+		<input type="text" placeholder="Search Tweets. ." id="search3" name="search3">
+		<input type="text" placeholder="Search Tweets. ." id="search4" name="search4">
+		<input type="text" placeholder="Search Tweets. ." id="search5" name="search5">
 		
 
 		<!-- Slider -->
@@ -211,7 +212,7 @@
 		<!-- "Add another trend button" -->
 		<div id="add-trend">
 
-			<button id="add-trend-btn">
+			<button id="add-trend-btn" onclick="toggleSearch()">
 				<i class="fas fa-plus"></i>
 				Add another trend
 			</button>
