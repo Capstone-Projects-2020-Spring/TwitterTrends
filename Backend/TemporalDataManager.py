@@ -14,7 +14,7 @@ class TemporalDataManager:
         self.main_thread = threading.Thread(target=self.periodic_trends_retrieval, args=loc)
         print("STARTING TEMPORAL THREAD")
         self.testval = 0
-        self.main_thread.start()
+        #self.main_thread.start()
 
 # continue here
     # TODO: this method will be periodically called by a thread
@@ -33,7 +33,7 @@ class TemporalDataManager:
 
                 self.algo.add_trends_snapshot_to_database(snap)
 
-                print(snap.__dict__)
+                # print(snap.__dict__)
                 snapid += 1
                 time.sleep(24)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
 
@@ -48,6 +48,16 @@ class TemporalDataManager:
     #       fromdate: the datetime to search from
     #       todate: the datetime to search to
     #       return value: return an array of Trends with each having a timestamp value
-    def get_trend_snapshot(self, trend, woeid, fromdate, todate):
-        # TODO: call algo manager to query to database and return trends within the time frame
-        ()
+    def get_trends_snapshot(self, trends, fromdate, todate, woeid=0):
+        # call algo manager to query to database and return trends within the time frame
+        snapsres = self.algo.get_trends_snapshot_from_database(trends, fromdate, todate, woeid)
+        rows = snapsres.get_rows()
+
+        print("Snapshots retrieved:", snapsres.rows_count())
+
+        # TODO: group all the trend name together
+
+        # TODO: create csv format string  datetime,val1,val2,val3....  to return to front end for grapahing
+        csv = "test,test1,test2"
+
+        return csv

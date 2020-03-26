@@ -208,10 +208,13 @@ def api_test():
 
     #querystr = "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) values(3, 2459115, '#COVID2019', '%%23COVID2019', 0, True, '2020-03-26 02:08:16.850816');"
     #query = db.query(querystr)
+    #query = db.query("SELECT * FROM trends_snapshot;")
+    #print(query.get_rows())
+    #db.query("DELETE FROM trends_snapshot;")
+    csv = timedata.get_trends_snapshot(['a'], datetime.now()-timedelta(minutes=120), datetime.now())
     query = db.query("SELECT * FROM trends_snapshot;")
-    print(query.get_rows())
-    db.query("DELETE FROM trends_snapshot;")
-    return jsonify(["Test", "Test2"])
+    #print(query.get_rows())
+    return csv
 
 
 # dont use this endpoint too outdated. kept for reference.

@@ -289,11 +289,11 @@ class AlgorithmsManager:
 
             querystr += "({}, {}, '{}', '{}', {}, {}, '{}')".format(highid,
                                                                     snap.woeid,
-                                                                    trend['trend_content'],
-                                                                    trend['query_term'],
+                                                                    trend['trend_content'].replace("%", "%%").replace("\'", "\'\'"),
+                                                                    trend['query_term'].replace("%", "%%").replace("\'", "\'\'"),
                                                                     trend['tweet_volume'] if trend['tweet_volume'] is not None else 0,
                                                                     trend['is_hashtag'],
-                                                                    snap.timestamp).replace("%", "%%")  # we want to avoid single % symbol in sql queries
+                                                                    snap.timestamp)  # we want to avoid single % symbol in sql queries
             if i != trendlen:
                 querystr += ',\n'
             else:
@@ -302,6 +302,32 @@ class AlgorithmsManager:
         print("Adding", trendlen, "trends to snapshot table")
         #print(querystr)
         self.database.query(querystr)
+
+    def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=0):
+        querystr =  "SELECT * FROM trends_snapshot " \
+                    "WHERE created_date >= '{}' AND created_date < '{}' ".format(fromdate, todate)
+
+        i = 0
+        trendsquery = ""
+        trendslen = len(trends)
+        for trend in trends:
+            i += 1
+            trendsquery += " trend_content LIKE '%%{}%%' ".format(trend)
+            if i != trendslen:
+                trendsquery += " OR "
+        if len(trendsquery) != 0:
+            querystr += " AND (" + trendsquery + ")"
+
+        if woeid != 0:
+            querystr += "AND woe_id = {} ORDER BY created_date ASC;".format(woeid)
+        else:
+            querystr += " ORDER BY id ASC;"
+
+        print("SNAPSHOT QUERY: ", querystr)
+        snapsres = self.database.query(querystr)
+        return snapsres
+        # print(snapsres.get_column_names());
+
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
