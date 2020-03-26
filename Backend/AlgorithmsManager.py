@@ -170,7 +170,7 @@ class AlgorithmsManager:
         print(dbqueryres.get_rows()[0][0])
 
     def get_highest_id_of_database_table(self, tablename, idname='id', default_id=0):
-        dbqueryres = self.database.query("SELECT * FROM " + tablename + " ORDER BY " + idname + ";")
+        dbqueryres = self.database.query("SELECT * FROM " + tablename + " ORDER BY " + idname + " DESC;")
         rows = dbqueryres.get_rows()
         colname = dbqueryres.get_column_names()
         lens = len(rows)
@@ -181,7 +181,7 @@ class AlgorithmsManager:
             i = 0
             for n in colname:
                 if n == idname:
-                    highestid = rows[lens-1][i]
+                    highestid = rows[0][i]
                     print("HIGHEST ID FOR", tablename, ":", highestid)
                     return highestid
                 i += 1
@@ -275,6 +275,33 @@ class AlgorithmsManager:
         #todo support fetching multiple pages of results for over 100 stories?
         return example_news_stories
 
+    # TODO: this function adds a TrendSnapshot object to the database with proper format
+    def add_trends_snapshot_to_database(self, snap):
+        highid = self.get_highest_id_of_database_table('trends_snapshot', idname='id')
+
+        querystr = "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) values \n"
+
+        i = 0
+        trendlen = len(snap.trends)
+        for trend in snap.trends:
+            i += 1
+            highid += 1
+
+            querystr += "({}, {}, '{}', '{}', {}, {}, '{}')".format(highid,
+                                                                    snap.woeid,
+                                                                    trend['trend_content'],
+                                                                    trend['query_term'],
+                                                                    trend['tweet_volume'] if trend['tweet_volume'] is not None else 0,
+                                                                    trend['is_hashtag'],
+                                                                    snap.timestamp).replace("%", "%%")  # we want to avoid single % symbol in sql queries
+            if i != trendlen:
+                querystr += ',\n'
+            else:
+                querystr += ';'
+
+        print("Adding", trendlen, "trends to snapshot table")
+        #print(querystr)
+        self.database.query(querystr)
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod

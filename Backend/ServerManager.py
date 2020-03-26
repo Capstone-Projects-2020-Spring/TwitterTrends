@@ -45,7 +45,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>HELLO</h1>" \
-           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]"
+           "<br>Endpoints:<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]"
 
 
 @app.route('/toptweets', methods=['GET'])
@@ -202,8 +202,15 @@ def api_get_trend_news():
 def api_test():
     #query = db.query("insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
     #                 "values(0, 1, 'test', 'testtest', 420, false, '2003-01-01 05:32:21.32');")
+    #query = db.query(
+    #    "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
+    #    "values(1, 1, 'test', 'testtest', 420, false, '2003-01-01 05:32:21.32');")
+
+    #querystr = "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) values(3, 2459115, '#COVID2019', '%%23COVID2019', 0, True, '2020-03-26 02:08:16.850816');"
+    #query = db.query(querystr)
     query = db.query("SELECT * FROM trends_snapshot;")
     print(query.get_rows())
+    db.query("DELETE FROM trends_snapshot;")
     return jsonify(["Test", "Test2"])
 
 

@@ -16,22 +16,22 @@ class TemporalDataManager:
         self.testval = 0
         self.main_thread.start()
 
+# continue here
     # TODO: this method will be periodically called by a thread
     # TODO: tasked to retrieve trends data and store them somewhere
     # TODO: call functions to store snapshot entries in trends_snapshot databae table
     #       table trends_snapshots(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date)
     def periodic_trends_retrieval(self, *loc):
         while self.periodic_trends_on is True:
-            #self.algo.get_num_trends_from_database()
             timestamp = datetime.now()
-            snapid = self.algo.get_highest_id_of_database_table('trends_snapshot', idname='id')
+            snapid = 0
             locations = self.algo.get_all_locations()
             for loc in locations:
                 restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
                 print('TEMPORAL GET ', loc['woeid'])
                 snap = self.algo.create_trends_snapshot(snapid, restrends, loc, timestamp)
 
-                # TODO: add snap to database here
+                self.algo.add_trends_snapshot_to_database(snap)
 
                 print(snap.__dict__)
                 snapid += 1
