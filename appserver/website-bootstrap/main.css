@@ -498,6 +498,18 @@ form.temporal-search button:hover {
 	font-size: 20px;
 	padding: 0;
 	border: none;
+	visibility: visible;
+}
+
+#remove-trend-btn{
+	margin-top: 5%;
+	background:transparent;
+	cursor: pointer;
+	color: white;
+	font-size: 20px;
+	padding: 0;
+	border: none;
+	visibility: hidden;
 }
 
 #update-graph-btn{
