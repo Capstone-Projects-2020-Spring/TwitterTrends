@@ -1,12 +1,12 @@
 package ui.pages;
 
-import ui.components.HomePageNavBar;
-import ui.components.TrendsDialog;
-import ui.enums.Locations;
-import ui.enums.States;
+import base.enums.Locations;
+import base.enums.States;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import ui.components.HomePageNavBar;
+import ui.components.TrendsDialog;
 import ui.pages.base.BasePage;
 
 import java.util.List;

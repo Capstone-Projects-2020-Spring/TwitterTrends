@@ -1,4 +1,4 @@
-package ui.enums;
+package base.enums;
 
 /**
  * list of locations supported by the map visualization

@@ -1,10 +1,10 @@
 package ui;
 
+import base.enums.Locations;
+import base.enums.States;
+import org.junit.jupiter.api.Test;
 import ui.base.BaseUiTest;
 import ui.components.TrendsDialog;
-import ui.enums.Locations;
-import ui.enums.States;
-import org.junit.jupiter.api.Test;
 import ui.pages.HomePage;
 
 import java.util.List;

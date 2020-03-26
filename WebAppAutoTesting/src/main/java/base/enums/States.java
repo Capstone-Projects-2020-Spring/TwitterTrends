@@ -1,4 +1,4 @@
-package ui.enums;
+package base.enums;
 
 /**
  * list of distinct states displayed in the map visualization
