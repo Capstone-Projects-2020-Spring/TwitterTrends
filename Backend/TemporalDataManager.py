@@ -67,8 +67,9 @@ class TemporalDataManager:
                 precsv[dateentry].append(0)
 
         i = 0
-        for key in snapsres.keys():
-            rows = snapsres[key]
+        # queryTrend represent each term in the [trends] argument
+        for queryTrend in snapsres.keys():
+            rows = snapsres[queryTrend]
             lenrows = len(rows)
 
             print("Snapshots retrieved for {}: {}".format(trends[i], lenrows))
