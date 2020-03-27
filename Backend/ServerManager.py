@@ -211,7 +211,7 @@ def api_test():
     #query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     #db.query("DELETE FROM trends_snapshot;")
-    csv = timedata.get_trends_snapshot(['a'], datetime.now()-timedelta(minutes=120), datetime.now())
+    csv = timedata.get_trends_snapshot(['a'], datetime.now()-timedelta(hours=4), datetime.now())
     query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     return csv

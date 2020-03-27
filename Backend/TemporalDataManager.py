@@ -52,10 +52,17 @@ class TemporalDataManager:
         # call algo manager to query to database and return trends within the time frame
         snapsres = self.algo.get_trends_snapshot_from_database(trends, fromdate, todate, woeid)
         rows = snapsres.get_rows()
+        lenrows = snapsres.rows_count()
 
-        print("Snapshots retrieved:", snapsres.rows_count())
+        print("Snapshots retrieved:", lenrows)
 
-        # TODO: group all the trend name together
+        # return a bucket with time and array of snaps within the same timestamp
+        snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, days=0, hours=0, minutes=0, seconds=5)
+        for date in snapsbucket.keys():
+            snaps = snapsbucket[date]
+            print(date, len(snapsbucket[date]))
+
+
 
         # TODO: create csv format string  datetime,val1,val2,val3....  to return to front end for grapahing
         csv = "test,test1,test2"

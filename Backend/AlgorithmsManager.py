@@ -364,6 +364,30 @@ class AlgorithmsManager:
         snap = DataStructures.TrendsSnapshot(snapid, trends, int(loc['woeid']), timestamp)
         return snap
 
+    # create a bucket grouped by date from an array of trendssnapshot tuples from database query
+    # array element format: id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date
+    @staticmethod
+    def get_snapstime_bucket_from_database_tuples(snaps, starttime, days=0, hours=2, minutes=0, seconds=0):
+        snapslen = len(snaps)
+        tempbucket = {}
+
+        if snapslen > 0:
+            curtime = starttime
+            tempbucket[curtime] = []
+            for snap in snaps:
+                d = snap[6]
+                dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+                while d >= dcap:
+                    if len(tempbucket[curtime]) == 0:
+                        del tempbucket[curtime]
+                    curtime = dcap
+                    dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+                    tempbucket[curtime] = []
+                tempbucket[curtime].append(d)
+
+        return tempbucket
+
+
 
     # function that takes two strings and return an HTML text in a format like:
     #       REQUIRED
