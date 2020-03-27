@@ -1,18 +1,18 @@
 from datetime import datetime, timedelta
 import threading
 import time
+import DataStructures
 
 class TemporalDataManager:
 
     # TODO: set up instance of algorithm manager (and anything else needed)
     # TODO: tasked to set up threads that can access trends data retrieving functions
-    def __init__(self,  algomanager, loc, t=3):
+    def __init__(self,  algomanager):
         self.algo = algomanager
-        self.timer = t
         self.periodic_trends_on = True
         self.locations = self.algo.get_all_locations()
         self.timestamps = []
-        self.main_thread = threading.Thread(target=self.periodic_trends_retrieval, args=loc)
+        self.main_thread = threading.Thread(target=self.periodic_trends_retrieval)
         print("STARTING TEMPORAL THREAD")
         self.testval = 0
         self.main_thread.start()
@@ -22,14 +22,14 @@ class TemporalDataManager:
     # tasked to retrieve trends data and store them somewhere
     # call functions to store snapshot entries in trends_snapshot databae table
     #       table trends_snapshots(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date)
-    def periodic_trends_retrieval(self, *loc):
+    def periodic_trends_retrieval(self):
         while self.periodic_trends_on is True:
             timestamp = datetime.now()
             snapid = 0
             for loc in self.locations:
                 restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
                 print('TEMPORAL GET ', loc['woeid'])
-                snap = self.algo.create_trends_snapshot(snapid, restrends, loc, timestamp)
+                snap = DataStructures.TrendsSnapshot.create_trends_snapshot(snapid, restrends, loc, timestamp)
 
                 self.algo.add_trends_snapshot_to_database(snap)
 
@@ -44,12 +44,12 @@ class TemporalDataManager:
 
     #       get the timeline of the trend. Return all occurrences of the trend given a datetime span
     #       trend: the trend keyword
-    #       TODO: woeid: the location of the trend (optional) NOT YET SUPPORTED AND MIGHT NOT BE NECESSARY
+    #       woeid: the location of the trend.
     #       fromdate: the datetime to search from
     #       todate: the datetime to search to
     #       days, hours, minutes, seconds = the time step of each unit
     #       return value: return a csv format string in format:  datetime,val1,val2,val3
-    def get_trends_snapshot_as_csv(self, trends, fromdate, todate, woeid=0, days=0, hours=2, minutes=0, seconds=0):
+    def get_trends_snapshot_as_csv(self, trends, fromdate, todate, woeid=1, days=0, hours=2, minutes=0, seconds=0):
         # call algo manager to query to database and return trends within the time frame
         # snapres return an array of database request for trend_snapshot data
         # each element are for each trend in the trends argument

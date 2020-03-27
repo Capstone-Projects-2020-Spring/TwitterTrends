@@ -45,7 +45,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>HELLO</h1>" \
-           "<br>Endpoints:<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]"
+           "<br>Endpoints:<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]<br>[/temporal]<br>[/trend_news]"
 
 
 @app.route('/toptweets', methods=['GET'])

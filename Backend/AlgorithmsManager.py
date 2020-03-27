@@ -303,16 +303,21 @@ class AlgorithmsManager:
         #print(querystr)
         self.database.query(querystr)
 
-    def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=0):
+    def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=1):
         querytemplate = "SELECT * FROM trends_snapshot " \
                         "WHERE created_date >= '{}' AND created_date < '{}' " \
                         "AND trend_content LIKE '%%{}%%' " \
+                        "{}" \
                         "ORDER BY id ASC;"
+
+        woeidquery = ""
+        if woeid != 1:
+            woeidquery = "AND woe_id = {} ".format(woeid)
 
         snapsresultset = {}
         for trend in trends:
             trendalter = trend.replace("%", "%%")
-            querystr = querytemplate.format(fromdate, todate, trendalter)
+            querystr = querytemplate.format(fromdate, todate, trendalter, woeidquery)
             print(querystr)
             res = self.database.query(querystr)
             snapsresultset[trend] = res.get_rows()
@@ -347,11 +352,6 @@ class AlgorithmsManager:
                 k -= 1
             arr[k + 1] = temp
 
-    # create a trendsnapshot object
-    @staticmethod
-    def create_trends_snapshot(snapid, trends, loc, timestamp):
-        snap = DataStructures.TrendsSnapshot(snapid, trends, int(loc['woeid']), timestamp)
-        return snap
 
     # create a bucket grouped by date from an array of trendssnapshot tuples from database query
     # array element format: id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date

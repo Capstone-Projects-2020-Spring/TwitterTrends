@@ -59,7 +59,6 @@ class Trend:
         self.is_hashtag = istag
         self.query_term = query
         self.tweet_volume = volume
-        self.timestamp = timestamp
 
 # end Trend
 
@@ -73,6 +72,12 @@ class TrendsSnapshot:
         self.trends = trends
         self.woeid = woeid
         self.timestamp = timestamp
+
+    # create a trendsnapshot object
+    @staticmethod
+    def create_trends_snapshot(snapid, trends, loc, timestamp):
+        snap = TrendsSnapshot(snapid, trends, int(loc['woeid']), timestamp)
+        return snap
 
 # [TrendTweetsSnapshot class]
 class TrendTweetsSnapshot:
