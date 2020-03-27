@@ -250,6 +250,21 @@ class AlgorithmsManager:
         return example_news_stories
 
 
+    # retrieves economic data for a state
+    #   arg: state (full name)
+    #   return type: an array of city data entry
+    # city entry format: woe_id, city, state, lat, long, population, density, ranking, age_median
+    #                   male, female, married, family_size, income_household_median, income_six_figure,
+    #                   home_ownership, home_value, rent_median, education_college_or_above, 
+    #                   labor_force_participation, unemployment_rate, race_white
+    #                   race_black, race_asian, race_native, race_pacific, race_other, race_multiple
+    def get_economic_data_by_state(self, state):
+        QueryRes = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
+        resrows = QueryRes.get_rows()
+        all_cities_data = DataStructures.StateData(resrows)
+
+        return all_cities_data
+
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
     def sort_trends(arr):
