@@ -112,6 +112,6 @@ class TemporalDataManager:
                 if valcounter != maxvals:
                     csv += ","
 
-            csv += "<br>"
+            csv += "\n"
 
         return csv
