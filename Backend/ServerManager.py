@@ -201,7 +201,39 @@ def api_get_trend_news():
 # TODO: endpoint that returns the CSV file of trends and their temporal data
 @app.route('/temporal', methods=['GET'])
 def api_get_trends_snapshot():
-    ()
+    trends = request.args.get("trends")
+    fromdate = request.args.get("from")     #YYYY-mm-dd HH:MM:SS
+    todate = request.args.get("to")         #YYYY-mm-dd HH:MM:SS
+
+    try:
+        if trends is not None:
+            trendsparsed = trends.split(",")
+            until = datetime.now()
+            since = until - timedelta(hours=12)
+
+            if fromdate is not None and todate is not None:
+                try:
+                    parsedfrom = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
+                    parsedto = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                    if(parsedfrom < parsedto):
+                        since = parsedfrom
+                        until = parsedto
+                except:
+                    print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+
+            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until)
+            return csv
+        else:
+            argstr = AlgorithmsManager.get_args_as_html_str(['trends'],
+                                                            ['from', 'to'])
+            return 'Error! arguments:<br><br>' + argstr
+    except:
+        print('ERROR ENDPOINT /temporal')
+        return 'ERROR ENDPOINT'
+
+    return str(trendsparsed)
+
+
 
 @app.route('/test', methods=['GET'])
 def api_test():
@@ -216,7 +248,7 @@ def api_test():
     #query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     #db.query("DELETE FROM trends_snapshot;")
-    csv = timedata.get_trends_snapshot(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
+    csv = timedata.get_trends_snapshot_as_csv(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
     query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     return csv

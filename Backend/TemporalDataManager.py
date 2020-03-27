@@ -10,6 +10,7 @@ class TemporalDataManager:
         self.algo = algomanager
         self.timer = t
         self.periodic_trends_on = True
+        self.locations = self.algo.get_all_locations()
         self.timestamps = []
         self.main_thread = threading.Thread(target=self.periodic_trends_retrieval, args=loc)
         print("STARTING TEMPORAL THREAD")
@@ -17,16 +18,15 @@ class TemporalDataManager:
         self.main_thread.start()
 
 # continue here
-    # TODO: this method will be periodically called by a thread
-    # TODO: tasked to retrieve trends data and store them somewhere
-    # TODO: call functions to store snapshot entries in trends_snapshot databae table
+    # this method will be periodically called by a thread
+    # tasked to retrieve trends data and store them somewhere
+    # call functions to store snapshot entries in trends_snapshot databae table
     #       table trends_snapshots(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date)
     def periodic_trends_retrieval(self, *loc):
         while self.periodic_trends_on is True:
             timestamp = datetime.now()
             snapid = 0
-            locations = self.algo.get_all_locations()
-            for loc in locations:
+            for loc in self.locations:
                 restrends = self.algo.get_top_num_trends_from_location(int(loc['woeid']), 50)
                 print('TEMPORAL GET ', loc['woeid'])
                 snap = self.algo.create_trends_snapshot(snapid, restrends, loc, timestamp)
@@ -42,12 +42,13 @@ class TemporalDataManager:
     def periodic_tweets_retrieval(self):
         ()
 
-    # TODO: get the timeline of the trend. Return all occurrences of the trend at a location between a datetime
+    #       get the timeline of the trend. Return all occurrences of the trend given a datetime span
     #       trend: the trend keyword
-    #       woeid: the location of the trend
+    #       TODO: woeid: the location of the trend (optional) NOT YET SUPPORTED AND MIGHT NOT BE NECESSARY
     #       fromdate: the datetime to search from
     #       todate: the datetime to search to
-    #       return value: return an array of Trends with each having a timestamp value
+    #       days, hours, minutes, seconds = the time step of each unit
+    #       return value: return a csv format string in format:  datetime,val1,val2,val3
     def get_trends_snapshot_as_csv(self, trends, fromdate, todate, woeid=0, days=0, hours=2, minutes=0, seconds=0):
         # call algo manager to query to database and return trends within the time frame
         # snapres return an array of database request for trend_snapshot data
@@ -75,9 +76,6 @@ class TemporalDataManager:
             snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, days=days, hours=hours, minutes=minutes, seconds=seconds)
             prevval = 0
             for date in snapsbucket.keys():
-                if date not in precsv.keys():
-                    precsv[date] = []
-
                 snaps = snapsbucket[date]
                 totalvol = 0
                 for snap in snaps:
