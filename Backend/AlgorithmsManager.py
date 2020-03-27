@@ -259,8 +259,8 @@ class AlgorithmsManager:
     #                   labor_force_participation, unemployment_rate, race_white
     #                   race_black, race_asian, race_native, race_pacific, race_other, race_multiple
     def get_economic_data_by_state(self, state):
-        QueryRes = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
-        resrows = QueryRes.get_rows()
+        queryres = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
+        resrows = queryres.get_rows()
         all_cities_data = []
 
         for entry in resrows:
