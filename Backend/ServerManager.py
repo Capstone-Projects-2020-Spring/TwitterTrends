@@ -29,7 +29,7 @@ algo = AlgorithmsManager(cache, db, twitter)
 
 # SETUP TemporalDataManager
 # pass in algorithmsManager object and array of Location objects
-timedata = TemporalDataManager(algo, algo.get_all_locations())
+timedata = TemporalDataManager(algo)
 
 ######################
 # SETUP FLASK
@@ -206,12 +206,22 @@ def api_get_trends_snapshot():
     todate = request.args.get("to")         #YYYY-mm-dd HH:MM:SS
     loc = request.args.get("woeid")         #optional woeid argument
 
+    # args for the time step of each datapoint
+    day = request.args.get("days")
+    hour = request.args.get("hours")
+    min = request.args.get("minutes")
+    sec = request.args.get("seconds")
+
     try:
         if trends is not None:
             trendsparsed = trends.split(",")
             until = datetime.now()
             since = until - timedelta(hours=12)
             woeid = 1
+            days = 1
+            hours = 0
+            minutes = 0
+            seconds = 0
 
             if fromdate is not None and todate is not None:
                 try:
@@ -229,7 +239,28 @@ def api_get_trends_snapshot():
                 except:
                     print("/temporal -- invalid woeid -- using default woeid")
 
-            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid))
+            if day is not None:
+                try:
+                    days = int(day)
+                except:
+                    print("/temporal -- invalid day -- using default day")
+            if hour is not None:
+                try:
+                    hours = int(hour)
+                except:
+                    print("/temporal -- invalid hour -- using default hour")
+            if min is not None:
+                try:
+                    minutes = int(min)
+                except:
+                    print("/temporal -- invalid minute -- using default minute")
+            if sec is not None:
+                try:
+                    seconds = int(sec)
+                except:
+                    print("/temporal -- invalid second -- using default second")
+
+            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid), days, hours, minutes, seconds)
             return csv
         else:
             argstr = AlgorithmsManager.get_args_as_html_str(['trends'],
