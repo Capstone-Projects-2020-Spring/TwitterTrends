@@ -204,12 +204,14 @@ def api_get_trends_snapshot():
     trends = request.args.get("trends")
     fromdate = request.args.get("from")     #YYYY-mm-dd HH:MM:SS
     todate = request.args.get("to")         #YYYY-mm-dd HH:MM:SS
+    loc = request.args.get("woeid")         #optional woeid argument
 
     try:
         if trends is not None:
             trendsparsed = trends.split(",")
             until = datetime.now()
             since = until - timedelta(hours=12)
+            woeid = 1
 
             if fromdate is not None and todate is not None:
                 try:
@@ -221,11 +223,17 @@ def api_get_trends_snapshot():
                 except:
                     print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
 
-            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until)
+            if loc is not None:
+                try:
+                    woeid = int(loc)
+                except:
+                    print("/temporal -- invalid woeid -- using default woeid")
+
+            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid))
             return csv
         else:
             argstr = AlgorithmsManager.get_args_as_html_str(['trends'],
-                                                            ['from', 'to'])
+                                                            ['woeid', 'from', 'to'])
             return 'Error! arguments:<br><br>' + argstr
     except:
         print('ERROR ENDPOINT /temporal')
