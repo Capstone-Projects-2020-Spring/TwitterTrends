@@ -38,6 +38,8 @@ class TemporalDataManager:
                 snapid += 1
                 time.sleep(self.timer)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
 
+            time.sleep(9000) # sleep for 2.5 hours (9000 seconds)
+
     # TODO: periodically pull tweets at different dates
     # TODO: this method template is an oversight and it might not be necessary
     def periodic_tweets_retrieval(self):
