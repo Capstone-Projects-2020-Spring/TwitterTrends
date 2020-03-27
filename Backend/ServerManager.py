@@ -198,6 +198,11 @@ def api_get_trend_news():
     result_json = jsonify(result)
     return result_json
 
+# TODO: endpoint that returns the CSV file of trends and their temporal data
+@app.route('/temporal', methods=['GET'])
+def api_get_trends_snapshot():
+    ()
+
 @app.route('/test', methods=['GET'])
 def api_test():
     #query = db.query("insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
@@ -211,7 +216,7 @@ def api_test():
     #query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     #db.query("DELETE FROM trends_snapshot;")
-    csv = timedata.get_trends_snapshot(['a'], datetime.now()-timedelta(hours=4), datetime.now())
+    csv = timedata.get_trends_snapshot(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
     query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     return csv

@@ -304,30 +304,19 @@ class AlgorithmsManager:
         self.database.query(querystr)
 
     def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=0):
-        querystr =  "SELECT * FROM trends_snapshot " \
-                    "WHERE created_date >= '{}' AND created_date < '{}' ".format(fromdate, todate)
+        querytemplate = "SELECT * FROM trends_snapshot " \
+                        "WHERE created_date >= '{}' AND created_date < '{}' " \
+                        "AND trend_content LIKE '%%{}%%' " \
+                        "ORDER BY id ASC;"
 
-        i = 0
-        trendsquery = ""
-        trendslen = len(trends)
+        snapsresultset = {}
         for trend in trends:
-            i += 1
-            trendsquery += " trend_content LIKE '%%{}%%' ".format(trend)
-            if i != trendslen:
-                trendsquery += " OR "
-        if len(trendsquery) != 0:
-            querystr += " AND (" + trendsquery + ")"
-
-        if woeid != 0:
-            querystr += "AND woe_id = {} ORDER BY created_date ASC;".format(woeid)
-        else:
-            querystr += " ORDER BY id ASC;"
-
-        print("SNAPSHOT QUERY: ", querystr)
-        snapsres = self.database.query(querystr)
-        return snapsres
-        # print(snapsres.get_column_names());
-
+            trendalter = trend.replace("%", "%%")
+            querystr = querytemplate.format(fromdate, todate, trendalter)
+            print(querystr)
+            res = self.database.query(querystr)
+            snapsresultset[trend] = res.get_rows()
+        return snapsresultset
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
@@ -383,7 +372,7 @@ class AlgorithmsManager:
                     curtime = dcap
                     dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
                     tempbucket[curtime] = []
-                tempbucket[curtime].append(d)
+                tempbucket[curtime].append(snap)
 
         return tempbucket
 

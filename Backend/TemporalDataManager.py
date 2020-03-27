@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import threading
 import time
 
@@ -14,7 +14,7 @@ class TemporalDataManager:
         self.main_thread = threading.Thread(target=self.periodic_trends_retrieval, args=loc)
         print("STARTING TEMPORAL THREAD")
         self.testval = 0
-        #self.main_thread.start()
+        self.main_thread.start()
 
 # continue here
     # TODO: this method will be periodically called by a thread
@@ -48,23 +48,70 @@ class TemporalDataManager:
     #       fromdate: the datetime to search from
     #       todate: the datetime to search to
     #       return value: return an array of Trends with each having a timestamp value
-    def get_trends_snapshot(self, trends, fromdate, todate, woeid=0):
+    def get_trends_snapshot_as_csv(self, trends, fromdate, todate, woeid=0, days=0, hours=2, minutes=0, seconds=0):
         # call algo manager to query to database and return trends within the time frame
+        # snapres return an array of database request for trend_snapshot data
+        # each element are for each trend in the trends argument
         snapsres = self.algo.get_trends_snapshot_from_database(trends, fromdate, todate, woeid)
-        rows = snapsres.get_rows()
-        lenrows = snapsres.rows_count()
 
-        print("Snapshots retrieved:", lenrows)
+        # preload the precv dictionary
+        precsv = {}             # dictionary to be parsed into csv. contain date and array of tweet volume values
+        maxvals = len(trends)   # max amount of value for each dictionary entry
+        tempdate = fromdate
+        while tempdate < todate:
+            precsv[tempdate] = []
+            tempdate += timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+        for csventry in precsv:
+            for i in range(maxvals):
+                precsv[csventry].append(0)
 
-        # return a bucket with time and array of snaps within the same timestamp
-        snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, days=0, hours=0, minutes=0, seconds=5)
-        for date in snapsbucket.keys():
-            snaps = snapsbucket[date]
-            print(date, len(snapsbucket[date]))
+        i = 0
+        for key in snapsres.keys():
+            rows = snapsres[key]
+            lenrows = len(rows)
 
+            print("Snapshots retrieved for {}: {}".format(trends[i], lenrows))
 
+            snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, days=days, hours=hours, minutes=minutes, seconds=seconds)
+            prevval = 0
+            for date in snapsbucket.keys():
+                if date not in precsv.keys():
+                    precsv[date] = []
 
-        # TODO: create csv format string  datetime,val1,val2,val3....  to return to front end for grapahing
-        csv = "test,test1,test2"
+                snaps = snapsbucket[date]
+                totalvol = 0
+                for snap in snaps:
+                    totalvol += snap[4]
+                precsv[date][i] = totalvol    # updating the tweet volume value normally with just totalvol
+
+                # code comment below is for saving previous totalvol value.
+                # if new value is 0 then reuse the previous totalvol value
+                """
+                if totalvol == 0:
+                    precsv[date][i] = prevval
+                else:
+                    precsv[date][i] = totalvol
+                    prevval = totalvol
+                """
+            i += 1  # increment the trend index
+            print()
+
+        # create csv format string  datetime,val1,val2,val3....  to return to front end for grapahing
+        #       format: datetime,v1,v2,v3
+        #               datetime,v1,v2,v3
+        csv = ""
+
+        for key in precsv:
+            csv += "{},".format(key)
+
+            vals = precsv[key]
+            valcounter = 0
+            for val in vals:
+                valcounter += 1
+                csv += str(val)
+                if valcounter != maxvals:
+                    csv += ","
+
+            csv += "<br>"
 
         return csv
