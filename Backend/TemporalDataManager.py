@@ -56,15 +56,15 @@ class TemporalDataManager:
         snapsres = self.algo.get_trends_snapshot_from_database(trends, fromdate, todate, woeid)
 
         # preload the precv dictionary
-        precsv = {}             # dictionary to be parsed into csv. contain date and array of tweet volume values
+        precsv = {}             # dictionary to be parsed into csv. contain date key and array of tweet volume values
         maxvals = len(trends)   # max amount of value for each dictionary entry
         tempdate = fromdate
         while tempdate < todate:
             precsv[tempdate] = []
             tempdate += timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
-        for csventry in precsv:
+        for dateentry in precsv:
             for i in range(maxvals):
-                precsv[csventry].append(0)
+                precsv[dateentry].append(0)
 
         i = 0
         for key in snapsres.keys():
