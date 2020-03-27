@@ -60,13 +60,13 @@ class TemporalDataManager:
 
         # preload the precv dictionary
         precsv = {}             # dictionary to be parsed into csv. contain date key and array of tweet volume values
-        maxvals = len(trends)   # max amount of value for each dictionary entry
+        numTrendsRequested = len(trends)   # max amount of value for each dictionary entry
         tempdate = fromdate
         while tempdate < todate:
             precsv[tempdate] = []
             tempdate += timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
         for dateentry in precsv:
-            for i in range(maxvals):
+            for i in range(numTrendsRequested):
                 precsv[dateentry].append(0)
 
         i = 0
@@ -111,7 +111,7 @@ class TemporalDataManager:
             for val in vals:
                 valcounter += 1
                 csv += str(val)
-                if valcounter != maxvals:
+                if valcounter != numTrendsRequested:
                     csv += ","
 
             csv += "\n"
