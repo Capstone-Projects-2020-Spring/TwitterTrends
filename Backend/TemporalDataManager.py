@@ -7,8 +7,9 @@ class TemporalDataManager:
 
     # TODO: set up instance of algorithm manager (and anything else needed)
     # TODO: tasked to set up threads that can access trends data retrieving functions
-    def __init__(self,  algomanager):
+    def __init__(self,  algomanager, t=24):
         self.algo = algomanager
+        self.timer = t
         self.periodic_trends_on = True
         self.locations = self.algo.get_all_locations()
         self.timestamps = []
@@ -35,7 +36,7 @@ class TemporalDataManager:
 
                 # print(snap.__dict__)
                 snapid += 1
-                time.sleep(24)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
+                time.sleep(self.timer)   # sleep for 24 seconds to avoid Twitter get/trends rate limit
 
     # TODO: periodically pull tweets at different dates
     # TODO: this method template is an oversight and it might not be necessary
