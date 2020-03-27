@@ -261,7 +261,28 @@ class AlgorithmsManager:
     def get_economic_data_by_state(self, state):
         QueryRes = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
         resrows = QueryRes.get_rows()
-        all_cities_data = DataStructures.StateData(resrows)
+        all_cities_data = []
+
+        for entry in resrows:
+            city_data = {}
+            city_data["woe_id"] = entry[1]; city_data["city"] = entry[2]
+            city_data["state"] = entry[3]; city_data["lat"] = entry[4]
+            city_data["long"] = entry[5]; city_data["population"] = entry[7]
+            city_data["density"] = entry[8]; city_data["ranking"] = entry[9]
+            city_data["age_median"] = entry[10]; city_data["male"] = entry[11]
+            city_data["female"] = entry[12]; city_data["married"] = entry[13]
+            city_data["family_size"] = entry[14]
+            city_data["income_household_median"] = entry[15]
+            city_data["income_six_figure_percent"] = entry[16]; city_data["home_ownership"] = entry[17]
+            city_data["home_value"] = entry[18]; city_data["rent_median"] = entry[19]
+            city_data["education_college_or_above"] = entry[20]
+            city_data["labor_force_participation"] = entry[21]
+            city_data["unemployment_rate"] = entry[22]
+            city_data["race_white"] = entry[23]; city_data["race_black"] = entry[24]
+            city_data["race_asian"] = entry[25]; city_data["race_native"] = entry[26]
+            city_data["race_pacific"] = entry[27]; city_data["race_other"] = entry[28]
+            city_data["race_multiple"] = entry[29]
+            all_cities_data.append(city_data)
 
         return all_cities_data
 
