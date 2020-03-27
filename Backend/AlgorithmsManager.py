@@ -306,14 +306,14 @@ class AlgorithmsManager:
     def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=1):
         querytemplate = "SELECT * FROM trends_snapshot " \
                         "WHERE created_date >= '{}' AND created_date < '{}' " \
-                        "AND trend_content = '{}'" \   
-                        "{}" \
-                        "ORDER BY id ASC;"
+                        "AND trend_content = '{}'"
+
         # legacy query term checking query  # AND trend_content LIKE '%%{}%%'
 
         woeidquery = ""
         if woeid != 1:
             woeidquery = "AND woe_id = {} ".format(woeid)
+        querytemplate += woeidquery + ";"
 
         snapsresultset = {}
         for trend in trends:
