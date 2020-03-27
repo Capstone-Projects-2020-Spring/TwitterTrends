@@ -10,6 +10,7 @@ class Tweet:
     def __init__(self, id, ids, uid, cont, lat, lon, locid, likes, quotes, rtweets, repl, date):
         self.tweet_PK = id
         self.tweet_id_str = ids
+        self.userid = uid
         self.content = cont
         self.latitude = lat
         self.longitude = lon
@@ -52,7 +53,7 @@ class Follower:
 # [Trend class]
 class Trend:
 
-    def __init__(self, id, cont, istag, query, volume):
+    def __init__(self, id, cont, istag, query, volume, timestamp=None):
         self.trend_PK = id
         self.trend_content = cont
         self.is_hashtag = istag
@@ -61,6 +62,22 @@ class Trend:
 
 # end Trend
 
+
+# [TrendsSnapshot class]
+class TrendsSnapshot:
+    # trends is an array of Trend objects in dictionary format
+    # loc is a Location object in dictionary format
+    def __init__(self, snapid, trends, woeid, timestamp):
+        self.snapid = snapid
+        self.trends = trends
+        self.woeid = woeid
+        self.timestamp = timestamp
+
+    # create a trendsnapshot object
+    @staticmethod
+    def create_trends_snapshot(snapid, trends, loc, timestamp):
+        snap = TrendsSnapshot(snapid, trends, int(loc['woeid']), timestamp)
+        return snap
 
 # [TrendTweetsSnapshot class]
 class TrendTweetsSnapshot:
@@ -114,17 +131,3 @@ class Country:
         self.country_name = name
 
 # end Country
-
-
-# [TrendSnapshot class]
-class TrendSnapshot:
-    def __init__(self, id, time, locfk, trendfk, rank, tvol24h):
-        self.trend_snapshot_PK = id
-        self.timestamp = time
-        self.location_PK = locfk
-        self.trend_FK = trendfk
-        self.rank = rank
-        self.tweet_volume_24h = tvol24h
-
-# end TrendSnapshot
-

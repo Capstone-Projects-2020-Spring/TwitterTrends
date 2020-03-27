@@ -18,7 +18,7 @@ class DataCacheResult:
 class DataCache:
 
     # TODO: Constructor takes a cache_max argument but is not yet implemented
-    def __init__(self, cache_max=5):
+    def __init__(self, cache_max=20):
         self.cache = {}
         self.cache_max = cache_max
 

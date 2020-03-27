@@ -27,12 +27,12 @@ class AlgorithmsManager:
     # return top [num] trends
     # querystr argument is used for cache checking
     #       querystr must not be None
-    def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None):
+    def get_top_num_trends_from_location(self, woeid, num, sort=1, querystr=None, c_time = 5):
 
         if querystr is None:
             querystr = "/toptrends{}".format(woeid)
 
-        cachetime = 5 # n minutes cache time check
+        cachetime = c_time # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime) or querystr is None:
 
@@ -89,12 +89,12 @@ class AlgorithmsManager:
     def get_top_tweets_from_query(self, query, num, location,
                                 timefrom=datetime.now() - timedelta(days=5),
                                 timeto=datetime.now(),
-                                sort=1, querystr=None):
+                                sort=1, querystr=None, c_time = 15):
         # Call a function from the TwitterAPIManager to return a list of tweets
         if querystr is None:
             querystr = "/toptweets{}{}-{}".format(query, location.latitude, location.longitude)
 
-        cachetime = 15 # n minutes cache time check
+        cachetime = c_time # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime):
 
@@ -164,6 +164,29 @@ class AlgorithmsManager:
             return tweets_n
     # end get_top_tweets_from_query
 
+    # method that find the length of the trends table from database
+    def get_num_trends_from_database(self):
+        dbqueryres = self.database.query("SELECT count(*) FROM trends;")
+        print(dbqueryres.get_rows()[0][0])
+
+    def get_highest_id_of_database_table(self, tablename, idname='id', default_id=0):
+        dbqueryres = self.database.query("SELECT * FROM " + tablename + " ORDER BY " + idname + " DESC;")
+        rows = dbqueryres.get_rows()
+        colname = dbqueryres.get_column_names()
+        lens = len(rows)
+        if lens == 0:
+            print("EMPTY TABLE. ID DEFAULT TO", default_id)
+            return 0
+        else:
+            i = 0
+            for n in colname:
+                if n == idname:
+                    highestid = rows[0][i]
+                    print("HIGHEST ID FOR", tablename, ":", highestid)
+                    return highestid
+                i += 1
+
+
     # return a Location object
     # pass in an address string
     # Example addrstr: "1801 N Broad St, Philadelphia, PA 19122"
@@ -196,6 +219,9 @@ class AlgorithmsManager:
         for row in resrows:
             resarr.append(DataStructures.Location(row[0], row[1], row[2], None, row[0], row[3], row[4]).__dict__)
         return resarr
+
+    def test(self):
+        self.database.query("SELECT * FROM ")
 
     # parse the location json returned by twitter.get_closest_location
     # args:
@@ -249,6 +275,54 @@ class AlgorithmsManager:
         #todo support fetching multiple pages of results for over 100 stories?
         return example_news_stories
 
+    # TODO: this function adds a TrendSnapshot object to the database with proper format
+    def add_trends_snapshot_to_database(self, snap):
+        highid = self.get_highest_id_of_database_table('trends_snapshot', idname='id')
+
+        querystr = "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) values \n"
+
+        i = 0
+        trendlen = len(snap.trends)
+        for trend in snap.trends:
+            i += 1
+            highid += 1
+
+            querystr += "({}, {}, '{}', '{}', {}, {}, '{}')".format(highid,
+                                                                    snap.woeid,
+                                                                    trend['trend_content'].replace("%", "%%").replace("\'", "\'\'"),
+                                                                    trend['query_term'].replace("%", "%%").replace("\'", "\'\'"),
+                                                                    trend['tweet_volume'] if trend['tweet_volume'] is not None else 0,
+                                                                    trend['is_hashtag'],
+                                                                    snap.timestamp)  # we want to avoid single % symbol in sql queries
+            if i != trendlen:
+                querystr += ',\n'
+            else:
+                querystr += ';'
+
+        print("Adding", trendlen, "trends to snapshot table")
+        #print(querystr)
+        self.database.query(querystr)
+
+    def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=1):
+        querytemplate = "SELECT * FROM trends_snapshot " \
+                        "WHERE created_date >= '{}' AND created_date < '{}' " \
+                        "AND trend_content = '{}'" \   
+                        "{}" \
+                        "ORDER BY id ASC;"
+        # legacy query term checking query  # AND trend_content LIKE '%%{}%%'
+
+        woeidquery = ""
+        if woeid != 1:
+            woeidquery = "AND woe_id = {} ".format(woeid)
+
+        snapsresultset = {}
+        for trend in trends:
+            trendalter = trend.replace("%", "%%")
+            querystr = querytemplate.format(fromdate, todate, trendalter, woeidquery)
+            print(querystr)
+            res = self.database.query(querystr)
+            snapsresultset[trend] = res.get_rows()
+        return snapsresultset
 
     # retrieves economic data for a state
     #   arg: state (full name)
@@ -314,6 +388,32 @@ class AlgorithmsManager:
                 arr[k + 1] = arr[k]
                 k -= 1
             arr[k + 1] = temp
+
+
+    # create a bucket grouped by date from an array of trendssnapshot tuples from database query
+    # array element format: id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date
+    @staticmethod
+    def get_snapstime_bucket_from_database_tuples(snaps, starttime, days=0, hours=2, minutes=0, seconds=0):
+        snapslen = len(snaps)
+        tempbucket = {}
+
+        if snapslen > 0:
+            curtime = starttime
+            tempbucket[curtime] = []
+            for snap in snaps:
+                d = snap[6]
+                dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+                while d >= dcap:
+                    if len(tempbucket[curtime]) == 0:
+                        del tempbucket[curtime]
+                    curtime = dcap
+                    dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+                    tempbucket[curtime] = []
+                tempbucket[curtime].append(snap)
+
+        return tempbucket
+
+
 
     # function that takes two strings and return an HTML text in a format like:
     #       REQUIRED

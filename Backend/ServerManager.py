@@ -7,6 +7,7 @@ from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
 from TwitterAPIManager import TwitterAPIManager
 from AlgorithmsManager import AlgorithmsManager
+from TemporalDataManager import TemporalDataManager
 import DataStructures
 
 # SETUP DataCache
@@ -26,6 +27,9 @@ twitter = TwitterAPIManager()
 # SETUP AlgorithmsManager
 algo = AlgorithmsManager(cache, db, twitter)
 
+# SETUP TemporalDataManager
+# pass in algorithmsManager object and array of Location objects
+timedata = TemporalDataManager(algo)
 
 ######################
 # SETUP FLASK
@@ -41,7 +45,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>HELLO</h1>" \
-           "<br>Endpoints:<br>[/test]<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]"
+           "<br>Endpoints:<br>[/toptrends]<br>[/toptweets]<br>[/getlocation]<b>[/locations]<br>[/temporal]<br>[/trend_news]"
 
 
 @app.route('/toptweets', methods=['GET'])
@@ -194,9 +198,99 @@ def api_get_trend_news():
     result_json = jsonify(result)
     return result_json
 
+# TODO: endpoint that returns the CSV file of trends and their temporal data
+@app.route('/temporal', methods=['GET'])
+def api_get_trends_snapshot():
+    trends = request.args.get("trends")
+    fromdate = request.args.get("from")     #YYYY-mm-dd HH:MM:SS
+    todate = request.args.get("to")         #YYYY-mm-dd HH:MM:SS
+    loc = request.args.get("woeid")         #optional woeid argument
+
+    # args for the time step of each datapoint
+    day = request.args.get("days")
+    hour = request.args.get("hours")
+    min = request.args.get("minutes")
+    sec = request.args.get("seconds")
+
+    try:
+        if trends is not None:
+            trendsparsed = trends.split(",")
+            until = datetime.now()
+            since = until - timedelta(hours=12)
+            woeid = 1
+            days = 1
+            hours = 0
+            minutes = 0
+            seconds = 0
+
+            if fromdate is not None and todate is not None:
+                try:
+                    parsedfrom = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
+                    parsedto = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                    if(parsedfrom < parsedto):
+                        since = parsedfrom
+                        until = parsedto
+                except:
+                    print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+
+            if loc is not None:
+                try:
+                    woeid = int(loc)
+                except:
+                    print("/temporal -- invalid woeid -- using default woeid")
+
+            if day is not None:
+                try:
+                    days = int(day)
+                except:
+                    print("/temporal -- invalid day -- using default day")
+            if hour is not None:
+                try:
+                    hours = int(hour)
+                except:
+                    print("/temporal -- invalid hour -- using default hour")
+            if min is not None:
+                try:
+                    minutes = int(min)
+                except:
+                    print("/temporal -- invalid minute -- using default minute")
+            if sec is not None:
+                try:
+                    seconds = int(sec)
+                except:
+                    print("/temporal -- invalid second -- using default second")
+
+            csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid), days, hours, minutes, seconds)
+            return csv
+        else:
+            argstr = AlgorithmsManager.get_args_as_html_str(['trends'],
+                                                            ['woeid', 'from', 'to'])
+            return 'Error! arguments:<br><br>' + argstr
+    except:
+        print('ERROR ENDPOINT /temporal')
+        return 'ERROR ENDPOINT'
+
+    return str(trendsparsed)
+
+
+
 @app.route('/test', methods=['GET'])
 def api_test():
-    return jsonify(["Test", "Test2"])
+    #query = db.query("insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
+    #                 "values(0, 1, 'test', 'testtest', 420, false, '2003-01-01 05:32:21.32');")
+    #query = db.query(
+    #    "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
+    #    "values(1, 1, 'test', 'testtest', 420, false, '2003-01-01 05:32:21.32');")
+
+    #querystr = "insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) values(3, 2459115, '#COVID2019', '%%23COVID2019', 0, True, '2020-03-26 02:08:16.850816');"
+    #query = db.query(querystr)
+    #query = db.query("SELECT * FROM trends_snapshot;")
+    #print(query.get_rows())
+    #db.query("DELETE FROM trends_snapshot;")
+    csv = timedata.get_trends_snapshot_as_csv(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
+    query = db.query("SELECT * FROM trends_snapshot;")
+    #print(query.get_rows())
+    return csv
 
 
 # dont use this endpoint too outdated. kept for reference.
