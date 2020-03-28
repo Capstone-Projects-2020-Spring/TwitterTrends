@@ -10,4 +10,11 @@ public class GetLocationApiTests extends BaseApiTest
 
 @Override
 protected String getEndpoint( ) { return "getlocation"; }
+
+protected static final String WOEID_ARG = "woeid";
+protected static final String LAT_ARG1 = "latitude";
+protected static final String LAT_ARG2 = "lat";
+protected static final String LONG_ARG1 = "longitude";
+protected static final String LONG_ARG2 = "long";
+protected static final String ADDR_ARG = "address";
 }
