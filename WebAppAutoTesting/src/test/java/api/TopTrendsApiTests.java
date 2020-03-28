@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class TopTrendsApiTests extends BaseApiTest
 {
-@Override
-protected String getEndpoint( ) { return "toptrends"; }
 
 protected static final String WOEID_ARG = "woeid";
 protected static final String LAT_ARG1 = "latitude";
@@ -27,6 +25,9 @@ protected static final String LONG_ARG1 = "longitude";
 protected static final String LONG_ARG2 = "long";
 protected static final String NUM_ARG = "num";
 protected static final String SORT_ARG = "sort";
+
+@Override
+protected String getEndpoint( ) { return "toptrends"; }
 
 @Test
 public void getTrendsWithWoeidHappyTest( )

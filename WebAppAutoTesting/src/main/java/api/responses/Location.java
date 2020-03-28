@@ -18,6 +18,6 @@ protected String cityId;
 protected String stateId;
 protected String countryId;
 protected int woeid;
-protected int latitude;
-protected int longitude;
+protected double latitude;
+protected double longitude;
 }

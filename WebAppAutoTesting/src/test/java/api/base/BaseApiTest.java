@@ -1,5 +1,6 @@
 package api.base;
 
+import api.responses.Location;
 import api.responses.Trend;
 import api.responses.Tweet;
 import com.google.gson.FieldNamingPolicy;
@@ -10,7 +11,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,50 +32,69 @@ public BaseApiTest( )
 /**
  * converts the json of the response's body into a list of Trend pojos
  *
- * @param resp a response from the /toptrends endpoint
+ * @param response a response from the /toptrends endpoint
  *
  * @return a list of Trends
  */
-protected List<Trend> parseTrends( Response resp )
-{
-	List<Trend> trends = null;
-	
-	try
-	{
-		String respJson = resp.getBody()
-							  .asString();
-		
-		Type trendListType = new TypeToken<ArrayList<Trend>>() { }.getType();
-		trends = gson.fromJson(respJson, trendListType);
-	} catch ( Exception e )
-	{
-		System.err.println("Couldn't parse trends from a response. Exception: " + e.getMessage());
-	}
-	
-	return trends;
-}
+protected List<Trend> parseTrends( Response response )
+{ return parseResponseJson(response, "a list of trends"); }
 
 /**
  * converts the json of the response's body into a list of Tweet pojos
  *
- * @param resp a response from the /toptweets endpoint
+ * @param response a response from the /toptweets endpoint
  *
  * @return a list of Tweets
  */
-protected List<Tweet> parseTweets( Response resp )
+protected List<Tweet> parseTweets( Response response )
+{ return parseResponseJson(response, "a list of tweets"); }
+
+/**
+ * converts the json of the response's body into a Location pojo
+ *
+ * @param response a response from the /getlocation endpoint
+ *
+ * @return a location pojo
+ */
+protected Location parseLocation( Response response )
+{ return parseResponseJson(response, "a location"); }
+
+/**
+ * converts the json of the response's body into a list of Location pojos
+ *
+ * @param response a response from the /locations endpoint
+ *
+ * @return a list of location pojos
+ */
+protected List<Location> parseLocations( Response response )
+{ return parseResponseJson(response, "a list of locations"); }
+
+/**
+ * parses the json of the response's body into some kind of pojo(s)
+ *
+ * @param response       a response from some api endpoint
+ * @param retDescription a description of the pojo or pojos being parsed out of the json
+ * @param <K>            the type of the object(s) being parsed out of the json
+ *                       ie. this could be some collection type parameterized with some pojo class
+ *
+ * @return one or more pojos of some type
+ */
+private <K> K parseResponseJson( Response response, String retDescription )
 {
-	List<Tweet> tweets = null;
+	K ret = null;
+	
 	try
 	{
-		String respJson = resp.getBody()
-							  .asString();
+		String respJson = response.getBody()
+								  .asString();
 		
-		Type trendListType = new TypeToken<ArrayList<Tweet>>() { }.getType();
-		tweets = gson.fromJson(respJson, trendListType);
+		Type returnType = new TypeToken<K>() { }.getType();
+		ret = gson.fromJson(respJson, returnType);
 	} catch ( Exception e )
 	{
-		System.err.println("Couldn't parse tweets from a response. Exception: " + e.getMessage());
+		System.err.println("Couldn't parse " + retDescription + " from a response. Exception: " + e.getMessage());
 	}
-	return tweets;
+	
+	return ret;
 }
 }
