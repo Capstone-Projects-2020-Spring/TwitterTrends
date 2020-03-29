@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
+    <head>
 
-    <title>Analyze Time</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
-	<script src="https://d3js.org/d3.v4.js"></script>
-	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <title>Analyze Time</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	    <script src="https://d3js.org/d3.v4.js"></script>
+	    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="temporal.js"></script>
 	
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
-
-  </head>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
 <body>
 
 	<!-- Navigation bar -->
@@ -43,162 +45,24 @@
 
     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
 	<div class="row">
-        
-		<!-- First column -->
+        <!-- First column -->
 		<div class="col-12 col-md-10">
-		<header class="page-header header container-fluid">
-			<div id="linegraph"></div>
-			<script>
-				var margin = {top: 10, right: 10, bottom: 10, left: 100},
-					width = 800 - margin.left - margin.right,
-					height = 400 - margin.top - margin.bottom;
-
-				var svg = d3.select("#linegraph")
-					.append("svg")
-					.attr("viewBox", "0 0 900 500")
-					.classed("svg-content-responsive", true)
-					.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-				d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv", function(data) {
-				//this stand-in csv is formatted time,valueA,valueB,valueC
-    
-					var allGroup = ["valueA", "valueB", "valueC"] //group names in the csv
-				
-					//format the data to get tuples
-					var dataReady = allGroup.map( function(grpName) {
-						return {
-							name: grpName,
-							values: data.map(function(d) {
-								//WHEN CSV TIME IS Y-M-D, do this to parse the time
-								//return {time : d3.timeParse("%Y-%m-%d")(d.time), value: +d[grpName]};
-								return {time: d.time, value: +d[grpName]};
-							})
-						};
-					});
-
-					var myColor = d3.scaleOrdinal()
-						.domain(allGroup)
-						.range(d3.schemePaired); //changes color schemes, schemeSet2 is nice too
-	  
-					//x axis
-					var x = d3.scaleLinear()
-						.domain([0,10])
-						.range([ 0, width ]);
-					svg.append("g")
-						.attr("transform", "translate(0," + height + ")")
-						.call(d3.axisBottom(x));
-
-					//y axis
-					var y = d3.scaleLinear()
-						.domain( [0,20])
-						.range([ height, 0 ]);
-					svg.append("g")
-						.call(d3.axisLeft(y));
-
-					//lines
-					var line = d3.line()
-						.x(function(d) { return x(+d.time) })
-						.y(function(d) { return y(+d.value) })
-					svg.selectAll("myLines")
-						.data(dataReady)
-						.enter()
-						.append("path")
-							.attr("class", function(d){ return d.name })
-							.attr("d", function(d){ return line(d.values) } )
-							.attr("stroke", function(d){ return myColor(d.name) })
-							.style("stroke-width", 4)
-							.style("fill", "none")
-
-					//tooltip stuff
-					var Tooltip = d3.select("#linegraph")
-						.append("div")
-						.style("opacity", 0)
-						.attr("class", "tooltip")
-      
-					var mouseover = function(d) {
-						Tooltip
-							.style("opacity", 1)
-					}
-					var mousemove = function(d) {
-						Tooltip
-							.html("Value: " + d.value)
-							.style("left", (d3.mouse(this)[0]+100) + "px")
-							.style("top", (d3.mouse(this)[1]) + "px")
-					}
-					var mouseleave = function(d) {
-						Tooltip
-							.style("opacity", 0)
-					}
-
-					//points
-					svg
-						.selectAll("myDots")
-						.data(dataReady)
-						.enter()
-							.append('g')
-							.style("fill", function(d){ return myColor(d.name) })
-							.attr("class", function(d){ return d.name })
-						.selectAll("myPoints")
-						.data(function(d){ return d.values })
-						.enter()
-						.append("circle")
-							.attr("cx", function(d) { return x(d.time) } )
-							.attr("cy", function(d) { return y(d.value) } )
-							.attr("r", 8)
-							.on("mouseover", mouseover)
-							.on("mousemove", mousemove)
-							.on("mouseleave", mouseleave)
-
-					//line labels to the right of the last data point
-					svg
-						.selectAll("myLabels")
-						.data(dataReady)
-						.enter()
-						.append('g')
-						.append("text")
-							.attr("class", function(d){ return d.name })
-							.datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; }) // keep only the last value of each time series
-							.attr("transform", function(d) { return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
-							.attr("x", 12) // shift the text a bit more right
-							.text(function(d) { return d.name; })
-							.style("fill", function(d){ return myColor(d.name) })
-							.style("font-size", 15)
-
-					//interactivity, line disappears on click of name in upper left
-					//the failsafe, just in case adding new trends doesn't work, can just get top however many trends up front and change opacity to fulfill that feature requirement
-					svg
-						.selectAll("myLegend")
-						.data(dataReady)
-						.enter()
-						.append('g')
-						.append("text")
-							.attr('x', function(d,i){ return 30 + i*60})
-							.attr('y', 30)
-							.text(function(d) { return d.name; })
-							.style("fill", function(d){ return myColor(d.name) })
-							.style("font-size", 17)
-						.on("click", function(d){
-							currentOpacity = d3.selectAll("." + d.name).style("opacity")
-							d3.selectAll("." + d.name).transition().style("opacity", currentOpacity == 1 ? 0:1) //switch opacity
-						})
-				})
-			</script>
-	        </header>
+		    <header class="page-header header container-fluid">
+                <div id="linegraph"></div>
+            </header>
         </div>
 	
 		<!-- Second column -->
 		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
 		
-		<!-- Search bar -->
-		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search1" name="search1">
-		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search2" name="search2">
-		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search3" name="search3">
-		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search4" name="search4">
-		<input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search5" name="search5">
-		
+		    <!-- Search bar -->
+		    <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search1" name="search1">
+		    <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search2" name="search2">
+		    <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search3" name="search3">
+		    <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search4" name="search4">
+		    <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search5" name="search5">
 
-		<!-- Slider -->
+            <!-- Slider -->
 		<div class="rangeslider">
 				<div id="rangeslider-text">
 			<b> Time Span: </b>
@@ -237,9 +101,5 @@
 		
 		</div>
 	</div>
-
-<script src="jquery-3.3.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
 </body>
 </html>
