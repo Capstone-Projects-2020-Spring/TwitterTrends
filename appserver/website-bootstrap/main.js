@@ -137,6 +137,7 @@ $(document).ready(function(){
 		document.getElementById('trend-4').innerText = '';
 		document.getElementById('trend-5').innerText = '';
 	});
+	getStartingNews();
 });
 
 function retrieveTrends(trendUrl) {
@@ -189,4 +190,46 @@ function getMoreInfo() {
         document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
         document.getElementById('article-url-3').innerText = 'Read More!';
     });
+}
+
+function getStartingNews() {
+	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=1";
+	let world_news_url = "http://18.214.197.203:5000/trend_news?trend=";
+	let world_trends = null;
+	let top_world_trend = null;
+	let world_news = null;
+
+	$.getJSON(world_trend_url, function(data){
+		world_trends = data;
+	}).then(function() {
+		top_world_trend = world_trends[0].trend_content;
+		if (top_world_trend.startsWith('#')){
+        	top_world_trend = top_world_trend.substring(1);
+		}
+		world_news_url = world_news_url + top_world_trend;
+		$.getJSON(world_news_url, function (news) {
+			world_news = news;
+
+			document.getElementById('article-title-1').innerHTML = world_news[0].title;
+			let blurb = world_news[0].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-1').innerHTML = blurb;
+			document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
+			document.getElementById('article-url-1').innerText = 'Read More!';
+
+			document.getElementById('article-title-2').innerHTML = world_news[1].title;
+			blurb = world_news[1].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-2').innerHTML = blurb;
+			document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
+			document.getElementById('article-url-2').innerText = 'Read More!';
+
+			document.getElementById('article-title-3').innerHTML = world_news[2].title;
+			blurb = world_news[2].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-3').innerHTML = blurb;
+			document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
+			document.getElementById('article-url-3').innerText = 'Read More!';
+		});
+	});
 }
