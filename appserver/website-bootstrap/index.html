@@ -23,21 +23,24 @@
     </head>
     <body>
         <!-- Navigation bar -->
-        <!-- Logo -->
         <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
             <div class="top-nav-left">
-                <a class="logo" href="#"><img src="images/logo2.png"></a>
                 <a href="#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="#"><img src="images/logo2.png"></a>
             </div>
 
             <div class="top-nav-right">
                 <!-- Search Bar -->
-                <div id="trend-search-box">
+                <!--<div id="trend-search-box">
                     <input id="trend-search-txt" type="text" placeholder="Search . . ." name="">
                     <a id="trend-search-btn">
                         <i class="fas fa-search"></i>
                     </a>
-                </div>
+                </div>-->
+                <div id="title">
+                    <h3>Analyze Location</h3>
+		        </div>
 
                 <!-- Drop down menu -->
                 <div id="pages-drop-box">
@@ -47,7 +50,6 @@
 
                     <div id="pages-dropdown-menu">
                         <a href="time.html">Time</a>
-                        <a href="location.html">Location</a>
                         <a href="network.html">Network</a>
                     </div>
                 </div>
@@ -76,10 +78,9 @@
 		            <!-- <div id="overlay"></div> -->
                     <!-- Temple Logo(delete after d3.js done*maybe*) -->
 			        <!-- d3js map stuff -->
-			<svg>
-				<svg id="mapsvg" ></svg>
-			</svg>
-
+			        <svg>
+				        <svg id="mapsvg"></svg>
+			        </svg>
                 </header>
 		    </div>
 

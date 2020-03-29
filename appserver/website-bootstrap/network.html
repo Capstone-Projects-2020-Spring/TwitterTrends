@@ -1,64 +1,68 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
+    <head>
+        <title>Analyze Network</title>
 
-    <title>Analyze Network</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
 	
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="#"><img src="images/logo2.png"></a>
+            </div>
 
-  </head>
-<body>
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Analyze Network</h3>
+                </div>
 
-	<!-- Navigation bar -->
-	
-	<!-- Logo -->
-	<nav class="navbar navbar-expand-md">
-		<a class="navbar-brand" href="index.html">Logo</a>  
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                        <i class="fas fa-caret-down"></i>
+                    </button>
 
-		<div id="title">
-			Analyze Network
-		</div>
-		
-		<!-- Drop down menu -->
-		<div id="pages-drop-box">
-			<button id="pages-drop-btn" type="reset">ANALYZE
-			<i class="fas fa-caret-down"></i>
-			</button>
-			
-			<div id="pages-dropdown-menu">
-				<a href="time.html">Time</a>
-				<a href="location.html">Location</a>
-			</div> 
-		</div>	
-		
-	</nav>
+                    <div id="pages-dropdown-menu">
+                        <a href="index.html">Location</a>
+                        <a href="time.html">Time</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
+        <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+        <div class="row">
+            <!-- First column -->
+            <div class="col-12 col-md-10">
+                <header class="page-header header container-fluid">
+                    <svg id="network"></svg>
+                </header>
+            </div>
+            <!-- Second column -->
+            <div class="col">
 
-     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-	<div class="row">
-        
-		<!-- First column -->
-		<div class="col-12 col-md-10">
-	<header class="page-header header container-fluid">
-			
-		</div>
-	</header>
-	
-		<!-- Second column -->
-		<div class="col" style="background-color: #515182"> <!-- Second column background color -->
-		
-			
-		
-		</div>
-	</div>
-
-<script src="jquery-3.3.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
-</body>
+            </div>
+        </div>
+        <footer class="page-footer footer container-fluid">
+            <ul class="team-members">
+                <li>Jennifer Chao</li>
+                <li>Conor Kennedy</li>
+                <li>Mike Lauw</li>
+                <li>Chris Nelson</li>
+                <li>Scott Salisbury</li>
+                <li>Dan Tran</li>
+                <li>Thanh Tran</li>
+            </ul>
+        </footer>
+    </body>
 </html>

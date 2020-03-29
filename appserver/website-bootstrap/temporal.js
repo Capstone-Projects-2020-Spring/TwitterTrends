@@ -129,12 +129,9 @@ $(document).ready(function(){
             .style("font-size", 17)
             .on("click", function(d){
                 currentOpacity = d3.selectAll("." + d.name).style("opacity");
-                d3.selectAll("." + d.name).transition().style("opacity", currentOpacity == 1 ? 0:1) //switch opacity
+                d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
             })
     });
-
-
-
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let time = document.getElementById('temporal-slider').value;
@@ -143,7 +140,9 @@ $(document).ready(function(){
         let trend3 = document.getElementById('search3').value;
         let trend4 = document.getElementById('search4').value;
         let trend5 = document.getElementById('search5').value;
-        let temporalURL = 'http://18.214.197.203:5000/snapshot?trends=' + trend1 + ',' + trend2 + ',' + trend3 + ',' + trend4 + ',' + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
+        let temporalURL = 'http://18.214.197.203:5000/snapshot?trends='
+            + trend1 + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
+            + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
         temporalCSV(temporalURL);
     });
 
@@ -182,8 +181,6 @@ function addSearch() {
 	let test1 = document.getElementById('remove-trend-btn');
 	let test2 = document.getElementById('add-trend-btn');
 
-
-
 	if (search4.style.display == "block"){
 	    search5.style.display = "block";
 	    remove = 1;
@@ -220,18 +217,18 @@ function removeSearch() {
     let test1 = document.getElementById('remove-trend-btn');
     let test2 = document.getElementById('add-trend-btn');
 
-	if (search3.style.display == "none"){
+	if (search3.style.display === "none"){
 	    search2.style.display = "none";
 	    search2.value = "";
 	    add = 1;
 	    remove = 0;
     }
-	else if(search4.style.display == "none"){
+	else if(search4.style.display === "none"){
 	    search3.style.display = "none";
 	    search3.value = "";
 	    add = 1;
 	}
-	else if(search5.style.display == "none"){
+	else if(search5.style.display === "none"){
 	    search4.style.display = "none";
 	    search4.value = "";
 	    add = 1;
@@ -242,10 +239,10 @@ function removeSearch() {
 	    add = 1;
 	}
 
-	if (remove == 0){
+	if (remove === 0){
 	    test1.style.visibility = "hidden";
 	}
-	if (add == 1){
+	if (add === 1){
 	    test2.style.visibility = "visible";
 	}
 }
