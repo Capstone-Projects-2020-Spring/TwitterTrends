@@ -14,20 +14,6 @@ def fetchApiCredentials():
     :return: credentials for the standard api
     """
 
-    """
-    apiKey = "d4L3VAamXt6ocQIYgPOl62Irz"
-    assert apiKey != None, missingEnvVarErrorStr.format("API Key")
-
-    apiSecretKey = "j20OhYUrtrOLGTZ01edYwzFh0nh7GIVUO2xhLlt94WyEaVwU0W"
-    assert apiSecretKey != None, missingEnvVarErrorStr.format("API Secret Key")
-
-    accessToken = "942781891714932738-x5UlXEbzCxHvaShdqn9H2XRvlTnkbQf"
-    assert accessToken != None, missingEnvVarErrorStr.format("API Access Token")
-
-    accessTokenSecret = "MLL9ypOh24XYv4iyaRtmzgdCNrLZvJJu003akIFn6PEuj"
-    assert accessTokenSecret != None, missingEnvVarErrorStr.format("API Access Token Secret")
-
-    """
     apiKey = os.environ.get(API_KEY_ENV_VAR_NAME)
     assert apiKey != None, missingEnvVarErrorStr.format("API Key")
 
@@ -39,11 +25,5 @@ def fetchApiCredentials():
 
     accessTokenSecret = os.environ.get(ACCESS_TOKEN_SECRET_ENV_VAR_NAME)
     assert accessTokenSecret != None, missingEnvVarErrorStr.format("API Access Token Secret")
-
-
-    print(apiKey)
-    print(apiSecretKey)
-    print(accessToken)
-    print(accessTokenSecret)
 
     return apiKey, apiSecretKey, accessToken, accessTokenSecret

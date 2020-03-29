@@ -152,15 +152,15 @@ $(document).ready(function(){
 
 
 //slider function
-var rangeSlider = function(){
-    var slider = $('.rangeslider'),
+const rangeSlider = function(){
+    let slider = $('.rangeslider'),
         range = $('.slider'),
         value = $('.range-slider-value');
 
     slider.each(function(){
 
         value.each(function(){
-            var value = $(this).prev().attr('value');
+            let value = $(this).prev().attr('value');
             $(this).html(value);
         });
 
@@ -173,14 +173,14 @@ var rangeSlider = function(){
 //add another trend function
 function addSearch() {
 
-    var search2 = document.getElementById('search2');
-	var search3 = document.getElementById('search3');
-	var search4 = document.getElementById('search4');
-	var search5 = document.getElementById('search5');
-	var add = 2;
-	var remove = 2;
-	var test1 = document.getElementById('remove-trend-btn');
-	var test2 = document.getElementById('add-trend-btn');
+    let search2 = document.getElementById('search2');
+	let search3 = document.getElementById('search3');
+	let search4 = document.getElementById('search4');
+	let search5 = document.getElementById('search5');
+	let add = 2;
+	let remove = 2;
+	let test1 = document.getElementById('remove-trend-btn');
+	let test2 = document.getElementById('add-trend-btn');
 
 
 
@@ -211,30 +211,34 @@ function addSearch() {
 
 function removeSearch() {
 
-    var search2 = document.getElementById('search2');
-	var search3 = document.getElementById('search3');
-	var search4 = document.getElementById('search4');
-	var search5 = document.getElementById('search5');
-	var add = 2;
-	var remove = 2;
-	var test1 = document.getElementById('remove-trend-btn');
-	var test2 = document.getElementById('add-trend-btn');
+    let search2 = document.getElementById('search2');
+    let search3 = document.getElementById('search3');
+    let search4 = document.getElementById('search4');
+    let search5 = document.getElementById('search5');
+    let add = 2;
+    let remove = 2;
+    let test1 = document.getElementById('remove-trend-btn');
+    let test2 = document.getElementById('add-trend-btn');
 
 	if (search3.style.display == "none"){
 	    search2.style.display = "none";
+	    search2.value = "";
 	    add = 1;
 	    remove = 0;
     }
 	else if(search4.style.display == "none"){
 	    search3.style.display = "none";
+	    search3.value = "";
 	    add = 1;
 	}
 	else if(search5.style.display == "none"){
 	    search4.style.display = "none";
+	    search4.value = "";
 	    add = 1;
 	}
 	else{
 	    search5.style.display = "none";
+	    search5.value = "";
 	    add = 1;
 	}
 
