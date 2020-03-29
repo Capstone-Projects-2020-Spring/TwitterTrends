@@ -275,19 +275,23 @@ rangeSlider();
 
 	if (search3.style.display == "none"){
 	  search2.style.display = "none";
+	  search2.value = "";
 	  add = 1;
 	  remove = 0;
     }
 	else if(search4.style.display == "none"){
 	  search3.style.display = "none";
+	  search3.value = "";
 	  add = 1;
 	}
 	else if(search5.style.display == "none"){
 	  search4.style.display = "none";
+	  search4.value = "";
 	  add = 1;
 	}
 	else{
 	  search5.style.display = "none";
+	  search5.value = "";
 	  add = 1;
 
 	}
