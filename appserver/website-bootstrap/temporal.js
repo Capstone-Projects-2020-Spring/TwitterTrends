@@ -1,4 +1,163 @@
 $(document).ready(function(){
+    const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
+    makeLineGraph(default_csv);
+
+    document.getElementById('update-graph-btn').addEventListener('click', function () {
+        let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';
+        let length = temporalURL.length;
+        let time = document.getElementById('temporal-slider').value;
+        let trend1 = document.getElementById('search1').value;
+        let trend2 = document.getElementById('search2').value;
+        let trend3 = document.getElementById('search3').value;
+        let trend4 = document.getElementById('search4').value;
+        let trend5 = document.getElementById('search5').value;
+
+        if(trend1 === '' && trend2 === '' && trend3 === '' && trend4 === '' && trend5 === ''){
+            alert('No trends supplied')
+        } else {
+
+            if (trend1 != '') {
+                temporalURL += trend1;
+                if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend2 !== '') {
+                temporalURL += trend2;
+                if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend3 !== '') {
+                temporalURL += trend3;
+                if (trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend4 !== '') {
+                temporalURL += trend4;
+                if (trend5 !== '') {
+                    temporalURL += ',' + trend5;
+                    alert(temporalURL)
+                } else {
+                    alert(temporalURL);
+                }
+            }
+        }
+        // temporalURL += trend1 + ','+ trend2 + ',' + trend3 + ',' + trend4 + ',';
+        // + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
+        //     + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
+        // makeLineGraph("http://18.214.197.203:5000/temporal?trends=Dream,Ratings&days=0&hours=1");
+    });
+
+    rangeSlider();
+});
+
+
+//slider function
+let rangeSlider = function(){
+    let slider = $('#rangeslider'),
+        range = $('.slider'),
+        value = $('.range-slider-value');
+
+    slider.each(function(){
+
+        value.each(function(){
+            let value = $(this).prev().attr('value');
+            $(this).html(value);
+        });
+
+        range.on('input', function(){
+            $(this).next(value).html(this.value + " Weeks");
+        });
+    });
+};
+
+//add another trend function
+function addSearch() {
+
+    let search2 = document.getElementById('search2');
+	let search3 = document.getElementById('search3');
+	let search4 = document.getElementById('search4');
+	let search5 = document.getElementById('search5');
+	let add = 2;
+	let remove = 2;
+	let test1 = document.getElementById('remove-trend-btn');
+	let test2 = document.getElementById('add-trend-btn');
+
+	if (search4.style.display == "block"){
+	    search5.style.display = "block";
+	    remove = 1;
+	    add = 0;
+    }
+	else if(search3.style.display == "block"){
+	    search4.style.display = "block";
+	    remove = 1;
+	}
+	else if(search2.style.display == "block"){
+	    search3.style.display = "block";
+	    remove = 1;
+	}
+	else{
+	    search2.style.display = "block";
+	    remove = 1;
+	}
+	if (remove == 1){
+	    test1.style.visibility = "visible";
+	}
+	if (add == 0){
+	    test2.style.visibility = "hidden";
+	}
+}
+
+function removeSearch() {
+
+    let search2 = document.getElementById('search2');
+    let search3 = document.getElementById('search3');
+    let search4 = document.getElementById('search4');
+    let search5 = document.getElementById('search5');
+    let add = 2;
+    let remove = 2;
+    let test1 = document.getElementById('remove-trend-btn');
+    let test2 = document.getElementById('add-trend-btn');
+
+	if (search3.style.display === "none"){
+	    search2.style.display = "none";
+	    search2.value = "";
+	    add = 1;
+	    remove = 0;
+    }
+	else if(search4.style.display === "none"){
+	    search3.style.display = "none";
+	    search3.value = "";
+	    add = 1;
+	}
+	else if(search5.style.display === "none"){
+	    search4.style.display = "none";
+	    search4.value = "";
+	    add = 1;
+	}
+	else{
+	    search5.style.display = "none";
+	    search5.value = "";
+	    add = 1;
+	}
+
+	if (remove === 0){
+	    test1.style.visibility = "hidden";
+	}
+	if (add === 1){
+	    test2.style.visibility = "visible";
+	}
+}
+
+function makeLineGraph(csv_url) {
     let margin = {top: 10, right: 10, bottom: 10, left: 100},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -10,7 +169,7 @@ $(document).ready(function(){
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv", function(data) {
+    d3.csv(csv_url, function(data) {
         //this stand-in csv is formatted time,valueA,valueB,valueC
         let allGroup = ["valueA", "valueB", "valueC"] //group names in the csv
 
@@ -132,121 +291,4 @@ $(document).ready(function(){
                 d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
             })
     });
-
-    document.getElementById('update-graph-btn').addEventListener('click', function () {
-        let time = document.getElementById('temporal-slider').value;
-        let trend1 = document.getElementById('search1').value;
-        let trend2 = document.getElementById('search2').value;
-        let trend3 = document.getElementById('search3').value;
-        let trend4 = document.getElementById('search4').value;
-        let trend5 = document.getElementById('search5').value;
-        let temporalURL = 'http://18.214.197.203:5000/snapshot?trends='
-            + trend1 + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
-            + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
-        temporalCSV(temporalURL);
-    });
-
-    rangeSlider();
-});
-
-
-//slider function
-const rangeSlider = function(){
-    let slider = $('.rangeslider'),
-        range = $('.slider'),
-        value = $('.range-slider-value');
-
-    slider.each(function(){
-
-        value.each(function(){
-            let value = $(this).prev().attr('value');
-            $(this).html(value);
-        });
-
-        range.on('input', function(){
-            $(this).next(value).html(this.value + " Weeks");
-        });
-    });
-};
-
-//add another trend function
-function addSearch() {
-
-    let search2 = document.getElementById('search2');
-	let search3 = document.getElementById('search3');
-	let search4 = document.getElementById('search4');
-	let search5 = document.getElementById('search5');
-	let add = 2;
-	let remove = 2;
-	let test1 = document.getElementById('remove-trend-btn');
-	let test2 = document.getElementById('add-trend-btn');
-
-	if (search4.style.display == "block"){
-	    search5.style.display = "block";
-	    remove = 1;
-	    add = 0;
-    }
-	else if(search3.style.display == "block"){
-	    search4.style.display = "block";
-	    remove = 1;
-	}
-	else if(search2.style.display == "block"){
-	    search3.style.display = "block";
-	    remove = 1;
-	}
-	else{
-	    search2.style.display = "block";
-	    remove = 1;
-	}
-	if (remove == 1){
-	    test1.style.visibility = "visible";
-	}
-	if (add == 0){
-	    test2.style.visibility = "hidden";
-	}
-}
-
-function removeSearch() {
-
-    let search2 = document.getElementById('search2');
-    let search3 = document.getElementById('search3');
-    let search4 = document.getElementById('search4');
-    let search5 = document.getElementById('search5');
-    let add = 2;
-    let remove = 2;
-    let test1 = document.getElementById('remove-trend-btn');
-    let test2 = document.getElementById('add-trend-btn');
-
-	if (search3.style.display === "none"){
-	    search2.style.display = "none";
-	    search2.value = "";
-	    add = 1;
-	    remove = 0;
-    }
-	else if(search4.style.display === "none"){
-	    search3.style.display = "none";
-	    search3.value = "";
-	    add = 1;
-	}
-	else if(search5.style.display === "none"){
-	    search4.style.display = "none";
-	    search4.value = "";
-	    add = 1;
-	}
-	else{
-	    search5.style.display = "none";
-	    search5.value = "";
-	    add = 1;
-	}
-
-	if (remove === 0){
-	    test1.style.visibility = "hidden";
-	}
-	if (add === 1){
-	    test2.style.visibility = "visible";
-	}
-}
-
-function temporalCSV(temporalURL) {
-    alert(temporalURL);
 }
