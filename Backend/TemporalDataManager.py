@@ -104,7 +104,7 @@ class TemporalDataManager:
 
         csv = "datetime, "
         for i in range(numTrendsRequested):
-            csv += "trend{}".format(i)
+            csv += trends[i]
             if i != numTrendsRequested-1:
                 csv += ", "
         csv += "\n"
