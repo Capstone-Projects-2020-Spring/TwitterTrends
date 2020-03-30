@@ -177,7 +177,13 @@ function getMoreInfo() {
 			document.getElementById('article-blurb-1').innerHTML = blurb;
 			document.getElementById('article-url-1').setAttribute("href", trend_news[0].link_url);
 			document.getElementById('article-url-1').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-1').innerHTML = "";
+			document.getElementById('article-blurb-1').innerHTML ="";
+			document.getElementById('article-url-1').setAttribute("href", "");
+			document.getElementById('article-url-1').innerText = "";
 		}
+
         if (news.length > 1) {
 			document.getElementById('article-title-2').innerHTML = trend_news[1].title;
 			blurb = trend_news[1].description;
@@ -185,7 +191,13 @@ function getMoreInfo() {
 			document.getElementById('article-blurb-2').innerHTML = blurb;
 			document.getElementById('article-url-2').setAttribute("href", trend_news[1].link_url);
 			document.getElementById('article-url-2').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-2').innerHTML = "";
+			document.getElementById('article-blurb-2').innerHTML ="";
+			document.getElementById('article-url-2').setAttribute("href", "");
+			document.getElementById('article-url-2').innerText = "";
 		}
+
         if(news.length > 2) {
 			document.getElementById('article-title-3').innerHTML = trend_news[2].title;
 			blurb = trend_news[2].description;
@@ -193,6 +205,11 @@ function getMoreInfo() {
 			document.getElementById('article-blurb-3').innerHTML = blurb;
 			document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
 			document.getElementById('article-url-3').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-3').innerHTML = "";
+			document.getElementById('article-blurb-3').innerHTML ="";
+			document.getElementById('article-url-3').setAttribute("href", "");
+			document.getElementById('article-url-3').innerText = "";
 		}
     });
 
@@ -225,13 +242,22 @@ function getMoreInfo() {
 			document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
 			document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
 			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+		} else {
+			document.getElementById("pop-tweet-header-1").innerHTML = "";
+			document.getElementById('tweet-content-1').innerHTML = "";
+			document.getElementById("tweet-date-1").innerHTML = "";
 		}
+
 		if (most_liked_tweet) {
 			document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
 			//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
 			document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
 			document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
 			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+		} else {
+			document.getElementById("pop-tweet-header-2").innerHTML = "";
+			document.getElementById('tweet-content-2').innerHTML = "";
+			document.getElementById("tweet-date-2").innerHTML = "";
 		}
 	});
 
@@ -263,7 +289,13 @@ function getStartingNews() {
 					document.getElementById('article-blurb-1').innerHTML = blurb;
 					document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
 					document.getElementById('article-url-1').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-1').innerHTML = "";
+					document.getElementById('article-blurb-1').innerHTML ="";
+					document.getElementById('article-url-1').setAttribute("href", "");
+					document.getElementById('article-url-1').innerText = "";
 				}
+
 				if(world_news.length > 1) {
 					document.getElementById('article-title-2').innerHTML = world_news[1].title;
 					blurb = world_news[1].description;
@@ -271,7 +303,13 @@ function getStartingNews() {
 					document.getElementById('article-blurb-2').innerHTML = blurb;
 					document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
 					document.getElementById('article-url-2').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-2').innerHTML = "";
+					document.getElementById('article-blurb-2').innerHTML ="";
+					document.getElementById('article-url-2').setAttribute("href", "");
+					document.getElementById('article-url-2').innerText = "";
 				}
+
 				if (world_news.length > 2) {
 					document.getElementById('article-title-3').innerHTML = world_news[2].title;
 					blurb = world_news[2].description;
@@ -279,6 +317,11 @@ function getStartingNews() {
 					document.getElementById('article-blurb-3').innerHTML = blurb;
 					document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
 					document.getElementById('article-url-3').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-3').innerHTML = "";
+					document.getElementById('article-blurb-3').innerHTML ="";
+					document.getElementById('article-url-3').setAttribute("href", "");
+					document.getElementById('article-url-3').innerText = "";
 				}
 			});
 		}
