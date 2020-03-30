@@ -4,6 +4,7 @@ $(document).ready(function(){
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';
+        let length = temporalURL.length;
         let time = document.getElementById('temporal-slider').value;
         let trend1 = document.getElementById('search1').value;
         let trend2 = document.getElementById('search2').value;
@@ -11,9 +12,48 @@ $(document).ready(function(){
         let trend4 = document.getElementById('search4').value;
         let trend5 = document.getElementById('search5').value;
 
-            + trend1 + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
-            + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
-        makeLineGraph("http://18.214.197.203:5000/temporal?trends=Dream,Ratings&days=0&hours=1");
+        if(trend1 === '' && trend2 === '' && trend3 === '' && trend4 === '' && trend5 === ''){
+            alert('No trends supplied')
+        } else {
+
+            if (trend1 != '') {
+                temporalURL += trend1;
+                if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend2 !== '') {
+                temporalURL += trend2;
+                if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend3 !== '') {
+                temporalURL += trend3;
+                if (trend4 !== '' || trend5 !== '') {
+                    temporalURL += ',';
+                } else {
+                    alert(temporalURL);
+                }
+            }
+            if (trend4 !== '') {
+                temporalURL += trend4;
+                if (trend5 !== '') {
+                    temporalURL += ',' + trend5;
+                    alert(temporalURL)
+                } else {
+                    alert(temporalURL);
+                }
+            }
+        }
+        // temporalURL += trend1 + ','+ trend2 + ',' + trend3 + ',' + trend4 + ',';
+        // + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
+        //     + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
+        // makeLineGraph("http://18.214.197.203:5000/temporal?trends=Dream,Ratings&days=0&hours=1");
     });
 
     rangeSlider();
