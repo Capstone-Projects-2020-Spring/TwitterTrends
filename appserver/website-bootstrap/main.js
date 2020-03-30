@@ -162,6 +162,7 @@ function retrieveTrends(trendUrl) {
 function getMoreInfo() {
     let trend = this.innerHTML;
     let trend_news = null;
+    orig_trend= trend
     if (trend.startsWith('#')){
         trend = trend.substring(1);
     }
@@ -190,6 +191,43 @@ function getMoreInfo() {
         document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
         document.getElementById('article-url-3').innerText = 'Read More!';
     });
+
+    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + orig_trend;
+    $.getJSON(tweetsURL, function (tweets) {
+    	var most_retweeted_tweet = null;
+    	var max_retweets=0;
+		var most_liked_tweet = null;
+		var second_most_liked_tweet = null;
+    	var max_likes=0;
+		for (const tweet of tweets) {
+			if (tweet.retweets >= max_retweets) {
+				most_retweeted_tweet = tweet;
+				max_retweets = tweet.retweets;
+			}
+			if (tweet.likes >= max_likes) {
+				second_most_liked_tweet = most_liked_tweet;
+				most_liked_tweet = tweet;
+				max_likes = tweet.likes;
+			}
+		}
+
+		if (most_retweeted_tweet === most_liked_tweet) {
+			most_liked_tweet = second_most_liked_tweet;
+		}
+
+		document.getElementById("pop-tweet-header-1").innerHTML = "Tweet with " + max_retweets + " retweets:";
+		//todo? document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
+		document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
+		document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
+		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+
+		document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
+		//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
+		document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
+		document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
+		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+	});
+
 }
 
 function getStartingNews() {
