@@ -215,12 +215,14 @@ function getMoreInfo() {
 			most_liked_tweet = second_most_liked_tweet;
 		}
 
-		document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
+		document.getElementById("pop-tweet-header-1").innerHTML = "Tweet with " + max_retweets + " retweets:";
+		//todo? document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
 		document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
 		document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
 		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
 
-		document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
+		document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
+		//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
 		document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
 		document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
 		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);

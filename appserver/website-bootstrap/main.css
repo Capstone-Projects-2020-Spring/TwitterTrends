@@ -580,9 +580,15 @@ blockquote.twitter-tweet {
 	padding: 5px 0;
 }
 
+#pop-tweet-header-1, #pop-tweet-header-2 {
+	padding-bottom: 5px;
+}
+
+/*
 #tweet-author-1, #tweet-author-2, #tweet-author-3 {
 	padding-bottom: 5px;
 }
+ */
 
 #trend-tweets h6 {
 	font-size: 14px;
