@@ -101,10 +101,16 @@ class TemporalDataManager:
         # create csv format string  datetime,val1,val2,val3....  to return to front end for grapahing
         #       format: datetime,v1,v2,v3
         #               datetime,v1,v2,v3
-        csv = ""
+
+        csv = "datetime, "
+        for i in range(numTrendsRequested):
+            csv += trends[i]
+            if i != numTrendsRequested-1:
+                csv += ", "
+        csv += "\n"
 
         for key in precsv:
-            csv += "{},".format(key)
+            csv += "{}, ".format(key)
 
             vals = precsv[key]
             valcounter = 0
@@ -112,8 +118,9 @@ class TemporalDataManager:
                 valcounter += 1
                 csv += str(val)
                 if valcounter != numTrendsRequested:
-                    csv += ","
+                    csv += ", "
 
             csv += "\n"
 
+        print(csv)
         return csv
