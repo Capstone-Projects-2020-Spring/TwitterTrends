@@ -218,9 +218,9 @@ def api_get_trends_snapshot():
             until = datetime.now()
             since = until - timedelta(hours=12)
             woeid = 1
-            days = 1
-            hours = 0
-            minutes = 0
+            days = 0
+            hours = 3
+            minutes = 30
             seconds = 0
 
             if fromdate is not None and todate is not None:
