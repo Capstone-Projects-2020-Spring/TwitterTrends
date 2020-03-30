@@ -162,7 +162,6 @@ function retrieveTrends(trendUrl) {
 function getMoreInfo() {
     let trend = this.innerHTML;
     let trend_news = null;
-    orig_trend= trend
     if (trend.startsWith('#')){
         trend = trend.substring(1);
     }
@@ -192,7 +191,7 @@ function getMoreInfo() {
         document.getElementById('article-url-3').innerText = 'Read More!';
     });
 
-    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + orig_trend;
+    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + trend;
     $.getJSON(tweetsURL, function (tweets) {
     	var most_retweeted_tweet = null;
     	var max_retweets=0;
