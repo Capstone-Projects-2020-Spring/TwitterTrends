@@ -566,8 +566,47 @@ form.temporal-search button:hover {
 }
 
 /* Trend Tweets */
-
+/*
 blockquote.twitter-tweet {
 	width: 100px !important;
 	height: auto !important;
+}
+ */
+#trend-tweets {
+	padding-top: 20px;
+}
+
+.trend-pop-retweet, .trend-pop-likes {
+	padding: 5px 0;
+}
+
+#pop-tweet-header-1, #pop-tweet-header-2 {
+	padding-bottom: 5px;
+}
+
+/*
+#tweet-author-1, #tweet-author-2, #tweet-author-3 {
+	padding-bottom: 5px;
+}
+ */
+
+#trend-tweets h6 {
+	font-size: 14px;
+	color: white;
+	font-weight: bolder;
+}
+
+#trend-tweets p {
+	font-size: 11px;
+	color: white;
+}
+
+#trend-tweets a {
+	font-size: 11px;
+	color: #599680;
+}
+
+#trend-tweets a:hover {
+	color: #bebeeb;
+	text-decoration: none;
 }
