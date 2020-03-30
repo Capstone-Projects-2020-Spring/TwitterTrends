@@ -1,11 +1,13 @@
 $(document).ready(function(){
     const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
-    makeLineGraph(default_csv);
+    //this stand-in csv is formatted time,valueA,valueB,valueC
+    let allGroup = ["valueA", "valueB", "valueC"]; //group names in the csv
+    makeLineGraph(default_csv, allGroup);
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';
-        let length = temporalURL.length;
-        let time = document.getElementById('temporal-slider').value;
+        let trendGroup = [];
+        //let time = document.getElementById('temporal-slider').value;
         let trend1 = document.getElementById('search1').value;
         let trend2 = document.getElementById('search2').value;
         let trend3 = document.getElementById('search3').value;
@@ -18,42 +20,39 @@ $(document).ready(function(){
 
             if (trend1 != '') {
                 temporalURL += trend1;
+                trendGroup.push(trend1);
                 if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend2 !== '') {
                 temporalURL += trend2;
+                trendGroup.push(trend2);
                 if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend3 !== '') {
                 temporalURL += trend3;
+                trendGroup.push(trend3);
                 if (trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend4 !== '') {
                 temporalURL += trend4;
+                trendGroup.push(trend4);
                 if (trend5 !== '') {
                     temporalURL += ',' + trend5;
-                    alert(temporalURL)
-                } else {
-                    alert(temporalURL);
+                    trendGroup.push(trend5);
                 }
             }
+            //alert(trendGroup.toString());
+            temporalURL += "&days=0&hours=1";
+            //alert(temporalURL);
+            d3.select("svg").remove();
+            makeLineGraph(temporalURL, trendGroup);
         }
-        // temporalURL += trend1 + ','+ trend2 + ',' + trend3 + ',' + trend4 + ',';
-        // + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
-        //     + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
-        // makeLineGraph("http://18.214.197.203:5000/temporal?trends=Dream,Ratings&days=0&hours=1");
     });
 
     rangeSlider();
@@ -74,7 +73,12 @@ let rangeSlider = function(){
         });
 
         range.on('input', function(){
-            $(this).next(value).html(this.value + " Weeks");
+            if(this.value > 1){
+                $(this).next(value).html(this.value + " Days");
+            } else {
+                $(this).next(value).html(this.value + " Day");
+            }
+
         });
     });
 };
@@ -157,7 +161,7 @@ function removeSearch() {
 	}
 }
 
-function makeLineGraph(csv_url) {
+function makeLineGraph(csv_url, allGroup) {
     let margin = {top: 10, right: 10, bottom: 10, left: 100},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -170,8 +174,6 @@ function makeLineGraph(csv_url) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(csv_url, function(data) {
-        //this stand-in csv is formatted time,valueA,valueB,valueC
-        let allGroup = ["valueA", "valueB", "valueC"] //group names in the csv
 
         //format the data to get tuples
         let dataReady = allGroup.map( function(grpName) {
@@ -179,7 +181,7 @@ function makeLineGraph(csv_url) {
                 name: grpName,
                 values: data.map(function(d) {
                     //WHEN CSV TIME IS Y-M-D, do this to parse the time
-                    //return {time : d3.timeParse("%Y-%m-%d")(d.time), value: +d[grpName]};
+                    //return {time : d3.utcParse("%Y-%m-%dT%H:%M:%S")(d.time), value: +d[grpName]};
                     return {time: d.time, value: +d[grpName]};
                 })
             };
@@ -191,7 +193,7 @@ function makeLineGraph(csv_url) {
 
         //x axis
         let x = d3.scaleLinear()
-            .domain([0,10])
+            .domain([0,12])
             .range([ 0, width ]);
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -206,7 +208,7 @@ function makeLineGraph(csv_url) {
 
         //lines
         let line = d3.line()
-            .x(function(d) { return x(+d.time) })
+            .x(function(d) { return x(+/*d3.utcParse("%Y-%m-%dT%H:%M:%S")(d.time)*/d.time) })
             .y(function(d) { return y(+d.value) })
         svg.selectAll("myLines")
             .data(dataReady)
@@ -251,7 +253,7 @@ function makeLineGraph(csv_url) {
             .data(function(d){ return d.values })
             .enter()
             .append("circle")
-            .attr("cx", function(d) { return x(d.time) } )
+            .attr("cx", function(d) { return x(/*d3.utcParse("%Y-%m-%dT%H:%M:%S")(d.time)*/d.time) } )
             .attr("cy", function(d) { return y(d.value) } )
             .attr("r", 8)
             .on("mouseover", mouseover)
