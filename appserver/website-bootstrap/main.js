@@ -170,62 +170,96 @@ function getMoreInfo() {
     $.getJSON(newsURL, function (news) {
         trend_news = news;
 
-        document.getElementById('article-title-1').innerHTML = trend_news[0].title;
-        let blurb = trend_news[0].description;
-        blurb = blurb.slice(0, 150) + '...';
-        document.getElementById('article-blurb-1').innerHTML = blurb;
-        document.getElementById('article-url-1').setAttribute("href", trend_news[0].link_url);
-        document.getElementById('article-url-1').innerText = 'Read More!';
+        if (news.length > 0) {
+			document.getElementById('article-title-1').innerHTML = trend_news[0].title;
+			let blurb = trend_news[0].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-1').innerHTML = blurb;
+			document.getElementById('article-url-1').setAttribute("href", trend_news[0].link_url);
+			document.getElementById('article-url-1').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-1').innerHTML = "";
+			document.getElementById('article-blurb-1').innerHTML ="";
+			document.getElementById('article-url-1').setAttribute("href", "");
+			document.getElementById('article-url-1').innerText = "";
+		}
 
-        document.getElementById('article-title-2').innerHTML = trend_news[1].title;
-        blurb = trend_news[1].description;
-        blurb = blurb.slice(0, 150) + '...';
-        document.getElementById('article-blurb-2').innerHTML = blurb;
-        document.getElementById('article-url-2').setAttribute("href", trend_news[1].link_url);
-        document.getElementById('article-url-2').innerText = 'Read More!';
+        if (news.length > 1) {
+			document.getElementById('article-title-2').innerHTML = trend_news[1].title;
+			blurb = trend_news[1].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-2').innerHTML = blurb;
+			document.getElementById('article-url-2').setAttribute("href", trend_news[1].link_url);
+			document.getElementById('article-url-2').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-2').innerHTML = "";
+			document.getElementById('article-blurb-2').innerHTML ="";
+			document.getElementById('article-url-2').setAttribute("href", "");
+			document.getElementById('article-url-2').innerText = "";
+		}
 
-        document.getElementById('article-title-3').innerHTML = trend_news[2].title;
-        blurb = trend_news[2].description;
-        blurb = blurb.slice(0, 150) + '...';
-        document.getElementById('article-blurb-3').innerHTML = blurb;
-        document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
-        document.getElementById('article-url-3').innerText = 'Read More!';
+        if(news.length > 2) {
+			document.getElementById('article-title-3').innerHTML = trend_news[2].title;
+			blurb = trend_news[2].description;
+			blurb = blurb.slice(0, 150) + '...';
+			document.getElementById('article-blurb-3').innerHTML = blurb;
+			document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
+			document.getElementById('article-url-3').innerText = 'Read More!';
+		} else {
+			document.getElementById('article-title-3').innerHTML = "";
+			document.getElementById('article-blurb-3').innerHTML ="";
+			document.getElementById('article-url-3').setAttribute("href", "");
+			document.getElementById('article-url-3').innerText = "";
+		}
     });
 
+    //alert("about to fetch example tweets")
     let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + orig_trend;
     $.getJSON(tweetsURL, function (tweets) {
-    	var most_retweeted_tweet = null;
-    	var max_retweets=0;
-		var most_liked_tweet = null;
-		var second_most_liked_tweet = null;
-    	var max_likes=0;
-		for (const tweet of tweets) {
-			if (tweet.retweets >= max_retweets) {
-				most_retweeted_tweet = tweet;
-				max_retweets = tweet.retweets;
+    	//alert("fetched example tweets")
+		//alert(tweets.length)
+    	if (tweets.length > 0) {
+			var most_retweeted_tweet = null;
+			var max_retweets=0;
+			var most_liked_tweet = null;
+			var second_most_liked_tweet = null;
+			var max_likes=0;
+			for (const tweet of tweets) {
+				if (tweet.retweets >= max_retweets) {
+					most_retweeted_tweet = tweet;
+					max_retweets = tweet.retweets;
+				}
+				if (tweet.likes >= max_likes) {
+					second_most_liked_tweet = most_liked_tweet;
+					most_liked_tweet = tweet;
+					max_likes = tweet.likes;
+				}
 			}
-			if (tweet.likes >= max_likes) {
-				second_most_liked_tweet = most_liked_tweet;
-				most_liked_tweet = tweet;
-				max_likes = tweet.likes;
+
+			if (most_retweeted_tweet === most_liked_tweet) {
+				most_liked_tweet = second_most_liked_tweet;
 			}
+
+			document.getElementById("pop-tweet-header-1").innerHTML = "Tweet with " + max_retweets + " retweets:";
+			//todo? document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
+			document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
+			document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
+			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+
+			document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
+			//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
+			document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
+			document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
+			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+		} else {
+			document.getElementById("pop-tweet-header-1").innerHTML = "";
+			document.getElementById('tweet-content-1').innerHTML = "";
+			document.getElementById("tweet-date-1").innerHTML = "";
+
+			document.getElementById("pop-tweet-header-2").innerHTML = "";
+			document.getElementById('tweet-content-2').innerHTML = "";
+			document.getElementById("tweet-date-2").innerHTML = "";
 		}
-
-		if (most_retweeted_tweet === most_liked_tweet) {
-			most_liked_tweet = second_most_liked_tweet;
-		}
-
-		document.getElementById("pop-tweet-header-1").innerHTML = "Tweet with " + max_retweets + " retweets:";
-		//todo? document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
-		document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
-		document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
-		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
-
-		document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
-		//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
-		document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
-		document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
-		//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
 	});
 
 }
@@ -240,34 +274,57 @@ function getStartingNews() {
 	$.getJSON(world_trend_url, function(data){
 		world_trends = data;
 	}).then(function() {
-		top_world_trend = world_trends[0].trend_content;
-		if (top_world_trend.startsWith('#')){
-        	top_world_trend = top_world_trend.substring(1);
+		if (world_trends.length > 0) {
+			top_world_trend = world_trends[0].trend_content;
+			if (top_world_trend.startsWith('#')){
+				top_world_trend = top_world_trend.substring(1);
+			}
+			world_news_url = world_news_url + top_world_trend;
+			$.getJSON(world_news_url, function (news) {
+				world_news = news;
+
+				if(world_news.length > 0) {
+					document.getElementById('article-title-1').innerHTML = world_news[0].title;
+					let blurb = world_news[0].description;
+					blurb = blurb.slice(0, 150) + '...';
+					document.getElementById('article-blurb-1').innerHTML = blurb;
+					document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
+					document.getElementById('article-url-1').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-1').innerHTML = "";
+					document.getElementById('article-blurb-1').innerHTML ="";
+					document.getElementById('article-url-1').setAttribute("href", "");
+					document.getElementById('article-url-1').innerText = "";
+				}
+
+				if(world_news.length > 1) {
+					document.getElementById('article-title-2').innerHTML = world_news[1].title;
+					blurb = world_news[1].description;
+					blurb = blurb.slice(0, 150) + '...';
+					document.getElementById('article-blurb-2').innerHTML = blurb;
+					document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
+					document.getElementById('article-url-2').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-2').innerHTML = "";
+					document.getElementById('article-blurb-2').innerHTML ="";
+					document.getElementById('article-url-2').setAttribute("href", "");
+					document.getElementById('article-url-2').innerText = "";
+				}
+
+				if (world_news.length > 2) {
+					document.getElementById('article-title-3').innerHTML = world_news[2].title;
+					blurb = world_news[2].description;
+					blurb = blurb.slice(0, 150) + '...';
+					document.getElementById('article-blurb-3').innerHTML = blurb;
+					document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
+					document.getElementById('article-url-3').innerText = 'Read More!';
+				} else {
+					document.getElementById('article-title-3').innerHTML = "";
+					document.getElementById('article-blurb-3').innerHTML ="";
+					document.getElementById('article-url-3').setAttribute("href", "");
+					document.getElementById('article-url-3').innerText = "";
+				}
+			});
 		}
-		world_news_url = world_news_url + top_world_trend;
-		$.getJSON(world_news_url, function (news) {
-			world_news = news;
-
-			document.getElementById('article-title-1').innerHTML = world_news[0].title;
-			let blurb = world_news[0].description;
-			blurb = blurb.slice(0, 150) + '...';
-			document.getElementById('article-blurb-1').innerHTML = blurb;
-			document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
-			document.getElementById('article-url-1').innerText = 'Read More!';
-
-			document.getElementById('article-title-2').innerHTML = world_news[1].title;
-			blurb = world_news[1].description;
-			blurb = blurb.slice(0, 150) + '...';
-			document.getElementById('article-blurb-2').innerHTML = blurb;
-			document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
-			document.getElementById('article-url-2').innerText = 'Read More!';
-
-			document.getElementById('article-title-3').innerHTML = world_news[2].title;
-			blurb = world_news[2].description;
-			blurb = blurb.slice(0, 150) + '...';
-			document.getElementById('article-blurb-3').innerHTML = blurb;
-			document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
-			document.getElementById('article-url-3').innerText = 'Read More!';
-		});
 	});
 }

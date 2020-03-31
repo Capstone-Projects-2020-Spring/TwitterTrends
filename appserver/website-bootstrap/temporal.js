@@ -1,3 +1,5 @@
+const time_svg_id= "time-svg";
+
 $(document).ready(function(){
     const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
     makeLineGraph(default_csv);
@@ -16,28 +18,22 @@ $(document).ready(function(){
             alert('No trends supplied')
         } else {
 
-            if (trend1 != '') {
+            if (trend1 !== '') {
                 temporalURL += trend1;
                 if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend2 !== '') {
                 temporalURL += trend2;
                 if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend3 !== '') {
                 temporalURL += trend3;
                 if (trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
-                } else {
-                    alert(temporalURL);
                 }
             }
             if (trend4 !== '') {
@@ -45,15 +41,18 @@ $(document).ready(function(){
                 if (trend5 !== '') {
                     temporalURL += ',' + trend5;
                     alert(temporalURL)
-                } else {
-                    alert(temporalURL);
                 }
             }
         }
-        // temporalURL += trend1 + ','+ trend2 + ',' + trend3 + ',' + trend4 + ',';
-        // + ',' + trend2 + ',' + trend3 + ',' + trend4 + ','
-        //     + trend5 + '&from=' + time; //YYYY-mm-dd HH:MM:SS
-        // makeLineGraph("http://18.214.197.203:5000/temporal?trends=Dream,Ratings&days=0&hours=1");
+        temporalURL += '&days=0&hours=3';
+        //todo temporalURL += '&from=' + time; //YYYY-mm-dd HH:MM:SS
+        //alert(temporalURL);
+
+        const svgPresent = !! document.getElementById(time_svg_id)
+        if (svgPresent) { d3.select("#" + time_svg_id).remove(); }
+
+
+        makeLineGraph(temporalURL);
     });
 
     rangeSlider();
@@ -164,23 +163,63 @@ function makeLineGraph(csv_url) {
 
     let svg = d3.select("#linegraph")
         .append("svg")
+        .attr("id", time_svg_id)
         .attr("viewBox", "0 0 900 500")
         .classed("svg-content-responsive", true)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv(csv_url, function(data) {
-        //this stand-in csv is formatted time,valueA,valueB,valueC
-        let allGroup = ["valueA", "valueB", "valueC"] //group names in the csv
+        if (data.length === 0) {
+            console.log("no data received for graphing. terminating graphing routine")
+            return;
+        }
+
+        let allGroup = []; //group names in the csv
+
+        let trend1 = document.getElementById('search1').value;
+        if(trend1) { allGroup.push(trend1);}
+        let trend2 = document.getElementById('search2').value;
+        if(trend2) { allGroup.push(trend2);}
+        let trend3 = document.getElementById('search3').value;
+        if(trend3) { allGroup.push(trend3);}
+        let trend4 = document.getElementById('search4').value;
+        if(trend4) { allGroup.push(trend4);}
+        let trend5 = document.getElementById('search5').value;
+        if(trend5) { allGroup.push(trend5);}
+
+        console.log(allGroup.toString());
+
+        //convert datetime strings to Date objects accurate to the hour
+        for (var snapshot of data) {
+            jsDate = new Date(snapshot.datetime+"Z");
+            jsDate.setMinutes(0);
+            jsDate.setSeconds(0);
+            jsDate.setMilliseconds(0);
+            snapshot.datetime = jsDate;
+        }
+
+        const earliestDate = data.reduce(
+            (min, snap) => snap.datetime <= min ? snap.datetime : min , data[0].datetime);
+
+        var maxPopularity= 0;
 
         //format the data to get tuples
         let dataReady = allGroup.map( function(grpName) {
             return {
                 name: grpName,
                 values: data.map(function(d) {
-                    //WHEN CSV TIME IS Y-M-D, do this to parse the time
-                    //return {time : d3.timeParse("%Y-%m-%d")(d.time), value: +d[grpName]};
-                    return {time: d.time, value: +d[grpName]};
+                    const millisDiff = Math.abs(d.datetime.getTime() - earliestDate.getTime());
+                    const hoursDiff = millisDiff/(60*60*1000);
+
+                    const popVal = +d[grpName];
+
+                    if (popVal > maxPopularity) {
+                        maxPopularity = popVal;
+                    }
+
+
+                    return {time : hoursDiff, value: popVal};
                 })
             };
         });
@@ -199,7 +238,7 @@ function makeLineGraph(csv_url) {
 
         //y axis
         let y = d3.scaleLinear()
-            .domain( [0,20])
+            .domain( [0, maxPopularity])
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
