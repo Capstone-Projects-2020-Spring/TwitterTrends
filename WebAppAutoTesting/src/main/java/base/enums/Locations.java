@@ -67,9 +67,9 @@ public enum Locations
 	TALLAHASSEE("Tallahassee", States.FLORIDA, "2503713", 30.438256, -84.280733),
 	PROVIDENCE("Providence", States.RHODE_ISLAND, "2477058", 41.823989, -71.412834),
 	NEW_HAVEN("New Haven", States.CONNECTICUT, "2458410", 41.308274, -72.927883),
+	
 	HARRISBURG("Harrisburg", States.PENNSYLVANIA, "2418046", 40.273191, -76.886701),
-	//todo finish filling these in
-	USA("???", null, "????", Double.NaN, Double.NaN),
+	USA("???", null, "23424977", Double.NaN, Double.NaN),
 	WORLD("???", null, "23424775", Double.NaN, Double.NaN);//or woeid = 1?
 
 protected String cityName;
