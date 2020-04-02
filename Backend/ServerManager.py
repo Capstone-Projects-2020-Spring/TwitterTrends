@@ -224,14 +224,15 @@ def api_get_trends_snapshot():
             seconds = 0
 
             try:
-                since = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
-                until = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                if fromdate is not None:
+                    since = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
+                if todate is not None:
+                    until = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                # Final check to make sure since and until datetimes are valid
+                if since >= until:
+                    since = until - timedelta(hours=12)
             except:
                 print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
-
-            # Final check to make sure since and until datetimes are valid
-            if since >= until:
-                since = until - timedelta(hours=12)
 
             if loc is not None:
                 try:
