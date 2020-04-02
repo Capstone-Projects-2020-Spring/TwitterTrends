@@ -218,20 +218,21 @@ def api_get_trends_snapshot():
             until = datetime.now()
             since = until - timedelta(hours=12)
             woeid = 1
-            days = 1
-            hours = 0
-            minutes = 0
+            days = 0
+            hours = 3
+            minutes = 30
             seconds = 0
 
-            if fromdate is not None and todate is not None:
-                try:
-                    parsedfrom = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
-                    parsedto = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
-                    if(parsedfrom < parsedto):
-                        since = parsedfrom
-                        until = parsedto
-                except:
-                    print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+            try:
+                if fromdate is not None:
+                    since = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
+                if todate is not None:
+                    until = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                # Final check to make sure since and until datetimes are valid
+                if since >= until:
+                    since = until - timedelta(hours=12)
+            except:
+                print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
 
             if loc is not None:
                 try:
@@ -259,6 +260,10 @@ def api_get_trends_snapshot():
                     seconds = int(sec)
                 except:
                     print("/temporal -- invalid second -- using default second")
+
+            if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
+                hours = 3
+                minutes = 30
 
             csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid), days, hours, minutes, seconds)
             return csv
