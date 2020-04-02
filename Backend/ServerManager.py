@@ -223,15 +223,24 @@ def api_get_trends_snapshot():
             minutes = 30
             seconds = 0
 
-            if fromdate is not None and todate is not None:
+            if fromdate is not None:
                 try:
                     parsedfrom = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
-                    parsedto = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
-                    if(parsedfrom < parsedto):
-                        since = parsedfrom
-                        until = parsedto
                 except:
                     print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+
+            if todate is not None:
+                try:
+                    parsedto = datetime.strptime(todate, "%Y-%m%d %H:%M%:S")
+                except:
+                    print( "/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+
+            if (parsedfrom < parsedto):
+                since = parsedfrom
+                until = parsedto
+            else:
+                until = parsedto
+                since = until - timedelta(days=1)
 
             if loc is not None:
                 try:
