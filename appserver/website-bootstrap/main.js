@@ -160,12 +160,8 @@ function retrieveTrends(trendUrl) {
 }
 
 function getMoreInfo() {
-    let trend = this.innerHTML;
+    let trend = encodeURIComponent(this.innerHTML);
     let trend_news = null;
-    orig_trend= trend
-    if (trend.startsWith('#')){
-        trend = trend.substring(1);
-    }
     let newsURL = "http://18.214.197.203:5000/trend_news?trend=" + trend;
     $.getJSON(newsURL, function (news) {
         trend_news = news;
@@ -214,7 +210,7 @@ function getMoreInfo() {
     });
 
     //alert("about to fetch example tweets")
-    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + orig_trend;
+    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + trend;
     $.getJSON(tweetsURL, function (tweets) {
     	//alert("fetched example tweets")
 		//alert(tweets.length)
