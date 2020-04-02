@@ -16,7 +16,7 @@ class TemporalDataManager:
         self.main_thread = threading.Thread(target=self.periodic_trends_retrieval)
         print("STARTING TEMPORAL THREAD")
         self.testval = 0
-        self.main_thread.start()
+        #self.main_thread.start()
 
 # continue here
     # this method will be periodically called by a thread
