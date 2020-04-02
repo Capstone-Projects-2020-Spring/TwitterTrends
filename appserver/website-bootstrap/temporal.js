@@ -19,27 +19,27 @@ $(document).ready(function(){
         } else {
 
             if (trend1 !== '') {
-                temporalURL += trend1;
+                temporalURL += encodeURIComponent(trend1);
                 if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend2 !== '') {
-                temporalURL += trend2;
+                temporalURL += encodeURIComponent(trend2);
                 if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend3 !== '') {
-                temporalURL += trend3;
+                temporalURL += encodeURIComponent(trend3);
                 if (trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend4 !== '') {
-                temporalURL += trend4;
+                temporalURL += encodeURIComponent(trend4);
                 if (trend5 !== '') {
-                    temporalURL += ',' + trend5;
+                    temporalURL += ',' + encodeURIComponent(trend5);
                     alert(temporalURL)
                 }
             }
