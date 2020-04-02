@@ -233,7 +233,6 @@ def api_get_trends_snapshot():
             if since >= until:
                 since = until - timedelta(hours=12)
 
-
             if loc is not None:
                 try:
                     woeid = int(loc)
