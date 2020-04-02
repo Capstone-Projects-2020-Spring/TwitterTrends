@@ -260,6 +260,10 @@ def api_get_trends_snapshot():
                 except:
                     print("/temporal -- invalid second -- using default second")
 
+            if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
+                hours = 3
+                minutes = 30
+
             csv = timedata.get_trends_snapshot_as_csv(trendsparsed, since, until, max(1, woeid), days, hours, minutes, seconds)
             return csv
         else:

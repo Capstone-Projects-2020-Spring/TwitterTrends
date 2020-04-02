@@ -369,6 +369,7 @@ class AlgorithmsManager:
             temp = arr[l]
             tempval = temp.tweet_volume
             k = l-1
+
             while k >= 0 and    (tempval if tempval is not None else 0) >= \
                                 (arr[k].tweet_volume if arr[k].tweet_volume is not None else 0):
                 arr[k+1] = arr[k]
@@ -394,7 +395,7 @@ class AlgorithmsManager:
     # create a bucket grouped by date from an array of trendssnapshot tuples from database query
     # array element format: id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date
     @staticmethod
-    def get_snapstime_bucket_from_database_tuples(snaps, starttime, days=0, hours=2, minutes=0, seconds=0):
+    def get_snapstime_bucket_from_database_tuples(snaps, starttime, endtime, days=0, hours=2, minutes=0, seconds=0):
         snapslen = len(snaps)
         tempbucket = {}
 
@@ -404,7 +405,7 @@ class AlgorithmsManager:
             for snap in snaps:
                 d = snap[6]
                 dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
-                while d >= dcap:
+                while d >= dcap and d <= endtime:
                     if len(tempbucket[curtime]) == 0:
                         del tempbucket[curtime]
                     curtime = dcap

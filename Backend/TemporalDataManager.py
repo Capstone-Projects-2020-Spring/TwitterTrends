@@ -77,7 +77,7 @@ class TemporalDataManager:
 
             print("Snapshots retrieved for {}: {}".format(trends[i], lenrows))
 
-            snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, days=days, hours=hours, minutes=minutes, seconds=seconds)
+            snapsbucket = self.algo.get_snapstime_bucket_from_database_tuples(rows, fromdate, todate, days=days, hours=hours, minutes=minutes, seconds=seconds)
             prevval = 0
             for date in snapsbucket.keys():
                 snaps = snapsbucket[date]
