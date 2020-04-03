@@ -3,8 +3,16 @@ from wrappers.geocode import geocoding
 from newsapi import NewsApiClient
 import os
 
+from DataCache import DataCache
+from DatabaseRequester import DatabaseRequester
+from TwitterAPIManager import TwitterAPIManager
 # from flask import jsonify # pronbably not needed
 import DataStructures
+
+import sys
+import traceback
+
+
 
 NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 
@@ -327,7 +335,7 @@ class AlgorithmsManager:
 
     # retrieves economic data for a state
     #   arg: state (full name)
-    #   return type: an array of city data entry
+    #   return type: a list of city data entry
     # city entry format: woe_id, city, state, lat, long, population, density, ranking, age_median
     #                   male, female, married, family_size, income_household_median, income_six_figure,
     #                   home_ownership, home_value, rent_median, education_college_or_above, 
@@ -339,27 +347,49 @@ class AlgorithmsManager:
         all_cities_data = []
 
         for entry in resrows:
-            city_data = {}
-            city_data["woe_id"] = entry[1]; city_data["city"] = entry[2]
-            city_data["state"] = entry[3]; city_data["lat"] = entry[4]
-            city_data["long"] = entry[5]; city_data["population"] = entry[7]
-            city_data["density"] = entry[8]; city_data["ranking"] = entry[9]
-            city_data["age_median"] = entry[10]; city_data["male"] = entry[11]
-            city_data["female"] = entry[12]; city_data["married"] = entry[13]
-            city_data["family_size"] = entry[14]
-            city_data["income_household_median"] = entry[15]
-            city_data["income_six_figure_percent"] = entry[16]; city_data["home_ownership"] = entry[17]
-            city_data["home_value"] = entry[18]; city_data["rent_median"] = entry[19]
-            city_data["education_college_or_above"] = entry[20]
-            city_data["labor_force_participation"] = entry[21]
-            city_data["unemployment_rate"] = entry[22]
-            city_data["race_white"] = entry[23]; city_data["race_black"] = entry[24]
-            city_data["race_asian"] = entry[25]; city_data["race_native"] = entry[26]
-            city_data["race_pacific"] = entry[27]; city_data["race_other"] = entry[28]
-            city_data["race_multiple"] = entry[29]
-            all_cities_data.append(city_data)
+            city = self.parse_city_data(entry)
+            all_cities_data.append(city)
 
         return all_cities_data
+
+    # retrieves economic data for a city or woeid
+    #   arg: city (full name), woeid (either str or int)
+    #   return type: dict
+    def get_economic_data_by_city(self, city, woeid):
+        if city is not None:
+            queryres = self.database.query("SELECT * FROM city_social_data WHERE city = (%s);", city)
+
+        elif woeid is not None:
+            queryres = self.database.query("SELECT * FROM city_social_data WHERE woe_id = (%s);", woeid)
+
+        resrows = queryres.get_rows()
+        city_data = self.parse_city_data(resrows[0])
+
+        return city_data  
+
+    # returns a city object (dict) for each city in the state
+    # object contains socioeconomic data
+    def parse_city_data(self, entry):
+        city_data = {}
+        city_data["woe_id"] = entry[1]; city_data["city"] = entry[2]
+        city_data["state"] = entry[3]; city_data["lat"] = entry[4]
+        city_data["long"] = entry[5]; city_data["population"] = entry[7]
+        city_data["density"] = entry[8]; city_data["ranking"] = entry[9]
+        city_data["age_median"] = entry[10]; city_data["male"] = entry[11]
+        city_data["female"] = entry[12]; city_data["married"] = entry[13]
+        city_data["family_size"] = entry[14]
+        city_data["income_household_median"] = entry[15]
+        city_data["income_six_figure_percent"] = entry[16]; city_data["home_ownership"] = entry[17]
+        city_data["home_value"] = entry[18]; city_data["rent_median"] = entry[19]
+        city_data["education_college_or_above"] = entry[20]
+        city_data["labor_force_participation"] = entry[21]
+        city_data["unemployment_rate"] = entry[22]
+        city_data["race_white"] = entry[23]; city_data["race_black"] = entry[24]
+        city_data["race_asian"] = entry[25]; city_data["race_native"] = entry[26]
+        city_data["race_pacific"] = entry[27]; city_data["race_other"] = entry[28]
+        city_data["race_multiple"] = entry[29]
+
+        return city_data
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
@@ -370,10 +400,26 @@ class AlgorithmsManager:
             tempval = temp.tweet_volume
             k = l-1
 
+            num_trend_sort_iter = 0
+
             while k >= 0 and    (tempval if tempval is not None else 0) >= \
                                 (arr[k].tweet_volume if arr[k].tweet_volume is not None else 0):
                 arr[k+1] = arr[k]
                 k -= 1
+
+                # todo strip debugging code from while loop
+                num_trend_sort_iter +=1
+                if num_trend_sort_iter >= 10000:
+                    print("while loop started to go infinite:\nARGUMENTS:\n",
+                          "arr= ", arr,
+                          ";\n\nVARIABLES:\n",
+                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
+                          "\nSTACK TRACE:\n")
+
+                    currStackTrace = sys.last_traceback
+                    traceback.print_tb(currStackTrace)
+                    raise Exception("got into infinite loop")
+
             arr[k+1] = temp
 
 
@@ -385,10 +431,28 @@ class AlgorithmsManager:
             temp = arr[l]
             tempval = temp.retweets
             k = l - 1
+
+            num_tweet_sort_iter = 0
+
             while k >= 0 and (tempval if tempval is not None else 0) >= \
                     (arr[k].retweets if arr[k].retweets is not None else 0):
                 arr[k + 1] = arr[k]
                 k -= 1
+
+                #todo strip debugging code from while loop
+                num_tweet_sort_iter += 1
+                if num_tweet_sort_iter >= 10000:
+                    print("while loop started to go infinite:\nARGUMENTS:\n",
+                          "arr= ", arr,
+                          ";\n\nVARIABLES:\n",
+                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
+                          "\nSTACK TRACE:\n")
+
+                    currStackTrace = sys.last_traceback
+                    traceback.print_tb(currStackTrace)
+                    raise Exception("got into infinite loop")
+
+
             arr[k + 1] = temp
 
 
@@ -405,12 +469,31 @@ class AlgorithmsManager:
             for snap in snaps:
                 d = snap[6]
                 dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+
+                num_bucket_cap_search_iter = 0
+
                 while d >= dcap and d <= endtime:
                     if len(tempbucket[curtime]) == 0:
                         del tempbucket[curtime]
                     curtime = dcap
                     dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
                     tempbucket[curtime] = []
+
+                    # todo strip debugging code from while loop
+                    num_bucket_cap_search_iter += 1
+                    if num_bucket_cap_search_iter >= 10000:
+                        print("while loop started to go infinite:\nARGUMENTS:\n",
+                              "snaps= ", snaps, "\nstarttime= ", starttime, "\nendtime= ", endtime,
+                              "\n\ndays= ", days, "\nhours= ", hours, "\nminutes= ", minutes, "\nseconds= ", seconds,
+                              ";\n\nVARIABLES:\n",
+                              "tempbucket= ", tempbucket, "\ncurtime= ", curtime, "\nsnap= ", snap,
+                              "\nd= ", d, "\ndcap= ", dcap,
+                              "\nSTACK TRACE:\n")
+
+                        currStackTrace = sys.last_traceback
+                        traceback.print_tb(currStackTrace)
+                        raise Exception("got into infinite loop")
+
                 tempbucket[curtime].append(snap)
 
         return tempbucket
@@ -441,5 +524,24 @@ class AlgorithmsManager:
 
 
 if __name__ == "__main__":
-    algos = AlgorithmsManager(None, None, None)
-    print(algos.get_trend_news("tacos"))
+    #algos = AlgorithmsManager(None, None, None)
+    #print(algos.get_trend_news("tacos"))
+
+    # SETUP DataCache
+    cache = DataCache()
+
+    # SETUP DatabaseRequester
+    db = DatabaseRequester( host="twittertrends.cmxd9oibzmhi.us-east-2.rds.amazonaws.com",
+                        port="5432",
+                        database="postgres",
+                        user="master_user",
+                        password="ULllhejK2ykYroghntj0"
+    )
+
+    # SETUP TwitterAPIManager
+    twitter = TwitterAPIManager()
+
+    # SETUP AlgorithmsManager
+    algo = AlgorithmsManager(cache, db, twitter)
+
+    print(algo.get_economic_data_by_city(None, "2459115"))
