@@ -278,6 +278,29 @@ def api_get_trends_snapshot():
     return str(trendsparsed)
 
 
+@app.route('/economics', methods=['GET'])
+def api_get_economic_data():
+    state = request.args.get('state')
+    city = request.args.get('city')
+    woeid = request.args.get('woeid')
+
+    try:
+        print("\n/economics args: ", state, city, woeid, "\n")
+
+        if city is not None or woeid is not None:
+            return jsonify(algo.get_economic_data_by_city(city, woeid))
+
+        if state is not None:
+            return jsonify(algo.get_economic_data_by_state(state))
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have at least 1 of the three arguments</b>',
+                                                        'state', 'city', 'woeid'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+    except:
+        print('ERROR ENDPOINT /economics')
+        return 'ERROR ENDPOINT'
+
 
 @app.route('/test', methods=['GET'])
 def api_test():
