@@ -54,6 +54,16 @@ class standardAPI:
 
             return tweetsparsed
 
+    # Get twitter user profile with screen_name (e.g. @ttclaire2)
+    #   return type: a twitter User object
+    def get_user(self, public_id):
+        try:
+            user_object = self.tweepy.get_user(id=None, user_id=None, screen_name=public_id)
+            return user_object
+        except:
+            return "EXCEPTION: Twitter user cannot be found"
+
+
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
         place = trendsResult['locations'][0]['name']
@@ -65,3 +75,9 @@ class standardAPI:
 
         trends_dict = {'location': place, 'woeid': woeid, 'trends': trends, 'time': timestamp}
         return trends_dict
+
+if __name__ == "__main__":
+
+    api = standardAPI()
+
+    #print(api.get_followers('ttclaire2'))
