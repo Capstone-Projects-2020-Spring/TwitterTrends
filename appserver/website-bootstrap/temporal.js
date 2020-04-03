@@ -40,7 +40,6 @@ $(document).ready(function(){
                 temporalURL += encodeURIComponent(trend4);
                 if (trend5 !== '') {
                     temporalURL += ',' + encodeURIComponent(trend5);
-                    alert(temporalURL)
                 }
             }
         }
