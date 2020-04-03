@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$('.header').height($(window).height());
 	/*
     ** Top Trends data from Philly:
-    ** http://18.214.197.203:5000/toptrends?woeid=2471217
+    ** http://18.214.197.203:5000/toptrends?woeid=247121
     ** Locations data:
     ** http://18.214.197.203:5000/locations
     ** CORS proxy:
@@ -38,6 +38,7 @@ $(document).ready(function(){
 	};
 
 	const mapsvg = d3.select("#mapsvg")
+		.append("svg")
 		.attr("width", width)
 		.attr("height", height);
 
@@ -72,7 +73,7 @@ $(document).ready(function(){
 				.scale([1200]);
 			path.projection(projection);
 
-			mapsvg.append("g")
+			let us_state = mapsvg.append("g")
 				.attr("class", "states")
 				.selectAll('path')
 				.data(states.features)
@@ -83,32 +84,43 @@ $(document).ready(function(){
 				.attr('cursor', 'pointer')
 				.on('click', function clicked(d)
 				{
-					let x, y, zoomLevel;
+					let x, y, z;
 
 					if (d && centered !== d) {
-						let centroid = path.centroid(d);
-						x = centroid[0];
-						y = centroid[1];
-						zoomLevel = 4;
+						let bounds = path.bounds(d);
+						let w_scale = (bounds[1][0] - bounds[0][0]) / width;
+						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
+						z = .85 / Math.max(w_scale, h_scale);
+						x = (bounds[1][0] + bounds[0][0]) / 2;
+						y = ((bounds[1][1] + bounds[0][1]) / 2);
 						centered = d;
 					} else {
 						x = width / 2;
 						y = height / 2;
-						zoomLevel = 1;
+						z = 1;
 						centered = null;
 					}
 
-					mapsvg.selectAll("path")
+					us_state.selectAll("path")
 						.classed("active", centered && function(d) { return d === centered; });
 
-					mapsvg.transition()
+					us_cities.selectAll("path")
+						.classed("active", centered && function(d) { return d === centered; });
+
+					us_state.transition()
 						.duration(1000)
-						.style("stroke-width", 1.5 / zoomLevel + "px")
 						.attr("transform",
-							"translate(" + width / 2  + "," + height / 2 + ")scale(" + zoomLevel + ")translate(" + -x + "," + -y + ")");
+							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
+						.style("stroke-width", 1 / z + "px");
+
+					us_cities.transition()
+						.duration(1000)
+						.attr("transform",
+							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
+						.style("stroke-width", 1 / z + "px");
 				});
 
-			mapsvg.append("g")
+			let us_cities = mapsvg.append("g")
 				.attr("class", "marker")
 				.selectAll('myCircles')
 				.data(locations)

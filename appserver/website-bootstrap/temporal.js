@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';
-        let length = temporalURL.length;
+        let trendGroup = [];
         let time = document.getElementById('temporal-slider').value;
         let trend1 = document.getElementById('search1').value;
         let trend2 = document.getElementById('search2').value;
@@ -14,33 +14,37 @@ $(document).ready(function(){
         let trend4 = document.getElementById('search4').value;
         let trend5 = document.getElementById('search5').value;
 
-        if(trend1 === '' && trend2 === '' && trend3 === '' && trend4 === '' && trend5 === ''){
+        if(!trend1 && !trend2 && !trend3  && !trend4  && !trend5 ){
             alert('No trends supplied')
         } else {
 
             if (trend1 !== '') {
                 temporalURL += encodeURIComponent(trend1);
+                trendGroup.push(trend1);
                 if (trend2 !== '' || trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend2 !== '') {
                 temporalURL += encodeURIComponent(trend2);
+                trendGroup.push(trend2);
                 if (trend3 !== '' || trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend3 !== '') {
                 temporalURL += encodeURIComponent(trend3);
+                trendGroup.push(trend3);
                 if (trend4 !== '' || trend5 !== '') {
                     temporalURL += ',';
                 }
             }
             if (trend4 !== '') {
                 temporalURL += encodeURIComponent(trend4);
+                trendGroup.push(trend4);
                 if (trend5 !== '') {
                     temporalURL += ',' + encodeURIComponent(trend5);
-                    alert(temporalURL)
+                    trendGroup.push(trend5);
                 }
             }
         }
@@ -68,7 +72,7 @@ $(document).ready(function(){
         if (svgPresent) { d3.select("#" + time_svg_id).remove(); }
 
 
-        makeLineGraph(temporalURL);
+        makeLineGraph(temporalURL, trendGroup);
     });
 
     rangeSlider();
@@ -89,7 +93,12 @@ let rangeSlider = function(){
         });
 
         range.on('input', function(){
-            $(this).next(value).html(this.value + " Days");
+            if (this.value > 1){
+                $(this).next(value).html(this.value + " Days");
+            } else {
+                $(this).next(value).html(this.value + " Day");
+            }
+
         });
     });
 };
@@ -172,7 +181,7 @@ function removeSearch() {
 	}
 }
 
-function makeLineGraph(csv_url) {
+function makeLineGraph(csv_url, trendGroup) {
     let margin = {top: 10, right: 10, bottom: 10, left: 100},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -191,24 +200,11 @@ function makeLineGraph(csv_url) {
             return;
         }
 
-        let allGroup = []; //group names in the csv
-
-        let trend1 = document.getElementById('search1').value;
-        if(trend1) { allGroup.push(trend1);}
-        let trend2 = document.getElementById('search2').value;
-        if(trend2) { allGroup.push(trend2);}
-        let trend3 = document.getElementById('search3').value;
-        if(trend3) { allGroup.push(trend3);}
-        let trend4 = document.getElementById('search4').value;
-        if(trend4) { allGroup.push(trend4);}
-        let trend5 = document.getElementById('search5').value;
-        if(trend5) { allGroup.push(trend5);}
-
-        console.log(allGroup.toString());
+        console.log(trendGroup.toString());
 
         //convert datetime strings to Date objects accurate to the hour
-        for (var snapshot of data) {
-            jsDate = new Date(snapshot.datetime+"Z");
+        for (let snapshot of data) {
+            let jsDate = new Date(snapshot.datetime+"Z");
             jsDate.setMinutes(0);
             jsDate.setSeconds(0);
             jsDate.setMilliseconds(0);
@@ -218,11 +214,11 @@ function makeLineGraph(csv_url) {
         const earliestDate = data.reduce(
             (min, snap) => snap.datetime <= min ? snap.datetime : min , data[0].datetime);
 
-        var maxPopularity= 0;
-        var latestHourOffset = 0;
+        let maxPopularity= 0;
+        let latestHourOffset = 0;
 
         //format the data to get tuples
-        let dataReady = allGroup.map( function(grpName) {
+        let dataReady = trendGroup.map( function(grpName) {
             return {
                 name: grpName,
                 values: data.map(function(d) {
@@ -245,7 +241,7 @@ function makeLineGraph(csv_url) {
         });
 
         let myColor = d3.scaleOrdinal()
-            .domain(allGroup)
+            .domain(trendGroup)
             .range(d3.schemePaired); //changes color schemes, schemeSet2 is nice too
 
         //x axis
