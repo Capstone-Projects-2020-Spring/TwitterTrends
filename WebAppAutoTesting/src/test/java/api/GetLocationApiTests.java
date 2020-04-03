@@ -38,13 +38,69 @@ public void getGreensboroByAddressTest( )
 	validateLocation(location, testLoc);
 }
 
+@Test
+public void getSaltLakeCityByAddressTest( )
+{
+	Locations testLoc = Locations.SALT_LAKE_CITY;
+	Response response = given().param(ADDR_ARG, buildLocationAddrString(testLoc))
+							   .get();
+	Location location = parseLocation(response);
+	validateLocation(location, testLoc);
+}
+
+@Test
+public void getOmahaByAddressTest( )
+{
+	Locations testLoc = Locations.OMAHA;
+	Response response = given().param(ADDR_ARG, buildLocationAddrString(testLoc))
+							   .get();
+	Location location = parseLocation(response);
+	validateLocation(location, testLoc);
+}
+
+@Test
+public void getRaleighByAddressTest( )
+{
+	Locations testLoc = Locations.RALEIGH;
+	Response response = given().param(ADDR_ARG, buildLocationAddrString(testLoc))
+							   .get();
+	Location location = parseLocation(response);
+	validateLocation(location, testLoc);
+}
+
+@Test
+public void getNewYorkByAddressTest( )
+{
+	Locations testLoc = Locations.NEW_YORK;
+	Response response = given().param(ADDR_ARG, buildLocationAddrString(testLoc))
+							   .get();
+	Location location = parseLocation(response);
+	validateLocation(location, testLoc);
+}
+
+@Test
+public void getSanFranciscoByAddressTest( )
+{
+	Locations testLoc = Locations.SAN_FRANCISCO;
+	Response response = given().param(ADDR_ARG, buildLocationAddrString(testLoc))
+							   .get();
+	Location location = parseLocation(response);
+	validateLocation(location, testLoc);
+}
+
+/**
+ * verifies that a returned location pojo has expected values
+ *
+ * @param locPojo  the pojo parsed from an api response
+ * @param location the enum entry describing what the location's values actually are
+ */
 public void validateLocation( Location locPojo, Locations location )
 {
 	assertNotNull(locPojo);
-	assertEquals(locPojo.getCityId(), location.getCityName());
-	assertEquals(locPojo.getWoeid(), location.getWoeidVal());
-	assertEquals(locPojo.getLatitude(), location.getLatitude(), LAT_LONG_COMPARISON_THRESHOLD);
-	assertEquals(locPojo.getLongitude(), location.getLongitude(), LAT_LONG_COMPARISON_THRESHOLD);
+	assertEquals(location.getCityName(), locPojo.getCityId());
+	assertEquals(location.getWoeidVal(), locPojo.getWoeid());
+	assertEquals(location.getLatitude(), locPojo.getLatitude(), LAT_LONG_COMPARISON_THRESHOLD);
+	assertEquals(location.getLongitude(), locPojo.getLongitude(), LAT_LONG_COMPARISON_THRESHOLD);
 }
 
 /**
