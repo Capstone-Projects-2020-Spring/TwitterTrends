@@ -63,6 +63,14 @@ class standardAPI:
         except:
             return "EXCEPTION: Twitter user cannot be found"
 
+    # Get the followers of the specified user 
+    #   return type: a list of twitter User objects
+    def get_followers(self, public_id):
+        try:
+            followers = self.tweepy.followers(screen_name=public_id)
+            return followers
+        except:
+            return "EXCEPTION: Page does not exist"
 
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
