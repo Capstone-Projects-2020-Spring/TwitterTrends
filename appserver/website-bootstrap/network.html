@@ -116,12 +116,12 @@
 							]
 						}
   
-						function run(graphData) {
+						function run(data) {
 							
 							var link = svg.append("g")
 								.style("stroke", "#224cb5")
 								.selectAll("line")
-								.data(graphData.links)
+								.data(data.links)
 								.enter()
 								.append("line")
 									.style("stroke-width", function(d) {return Math.sqrt(d.value);});
@@ -129,7 +129,7 @@
 							var node = svg.append("g")
 								.attr("class", "nodes")
 								.selectAll("circle")
-								.data(graphData.nodes)
+								.data(data.nodes)
 								.enter()
 								.append("circle")
 									//.attr("r", 4)
@@ -141,18 +141,18 @@
 							var label = svg.append("g")
 								.attr("class", "labels")
 								.selectAll("text")
-								.data(graphData.nodes)
+								.data(data.nodes)
 								.enter()
 								.append("text")
 									.attr("class", "label")
 									.text(function(d) { return d.id; });
 
 							simulation
-								.nodes(graphData.nodes)
+								.nodes(data.nodes)
 								.on("tick", ticked);
 
 							simulation.force("link")
-								.links(graphData.links);
+								.links(data.links);
 
 							function ticked() {
 								link
