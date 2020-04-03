@@ -44,8 +44,24 @@ $(document).ready(function(){
                 }
             }
         }
-        temporalURL += '&days=0&hours=3';
-        //todo temporalURL += '&from=' + time; //YYYY-mm-dd HH:MM:SS
+
+
+        const daysInMillis = time*24*60*60*1000;
+        const displayIntervalDateObj = new Date(daysInMillis); //wrapping the # of milliseconds in a Date object might not be necessary
+
+        const currDate = Date.now();
+
+        const startDate = new Date(currDate - displayIntervalDateObj);
+
+        var startDateStr = startDate.toISOString();
+        //todo why isn't the backend just following the ISO standard for datetime values?
+        startDateStr = startDateStr.replace("T", " ");
+        //cuts off the milliseconds and the 'Z' at the end of the string
+        const millisPeriodIndex = startDateStr.lastIndexOf(".");
+        startDateStr = startDateStr.substring(0, millisPeriodIndex);
+
+        startDateStr = encodeURIComponent(startDateStr);
+        temporalURL += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
         //alert(temporalURL);
 
         const svgPresent = !! document.getElementById(time_svg_id)
@@ -73,7 +89,7 @@ let rangeSlider = function(){
         });
 
         range.on('input', function(){
-            $(this).next(value).html(this.value + " Weeks");
+            $(this).next(value).html(this.value + " Days");
         });
     });
 };
@@ -203,12 +219,14 @@ function makeLineGraph(csv_url) {
             (min, snap) => snap.datetime <= min ? snap.datetime : min , data[0].datetime);
 
         var maxPopularity= 0;
+        var latestHourOffset = 0;
 
         //format the data to get tuples
         let dataReady = allGroup.map( function(grpName) {
             return {
                 name: grpName,
                 values: data.map(function(d) {
+                    //todo try removing this Math.abs() wrapper, it shouldn't be doing anything
                     const millisDiff = Math.abs(d.datetime.getTime() - earliestDate.getTime());
                     const hoursDiff = millisDiff/(60*60*1000);
 
@@ -217,7 +235,9 @@ function makeLineGraph(csv_url) {
                     if (popVal > maxPopularity) {
                         maxPopularity = popVal;
                     }
-
+                    if(hoursDiff > latestHourOffset) {
+                        latestHourOffset = hoursDiff;
+                    }
 
                     return {time : hoursDiff, value: popVal};
                 })
@@ -230,7 +250,7 @@ function makeLineGraph(csv_url) {
 
         //x axis
         let x = d3.scaleLinear()
-            .domain([0,10])
+            .domain([0,latestHourOffset])
             .range([ 0, width ]);
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
