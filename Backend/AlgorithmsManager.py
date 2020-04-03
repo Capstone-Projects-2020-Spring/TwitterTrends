@@ -418,6 +418,7 @@ class AlgorithmsManager:
 
                     currStackTrace = sys.last_traceback
                     traceback.print_tb(currStackTrace)
+                    raise Exception("got into infinite loop")
 
             arr[k+1] = temp
 
@@ -449,6 +450,7 @@ class AlgorithmsManager:
 
                     currStackTrace = sys.last_traceback
                     traceback.print_tb(currStackTrace)
+                    raise Exception("got into infinite loop")
 
 
             arr[k + 1] = temp
@@ -490,6 +492,7 @@ class AlgorithmsManager:
 
                         currStackTrace = sys.last_traceback
                         traceback.print_tb(currStackTrace)
+                        raise Exception("got into infinite loop")
 
                 tempbucket[curtime].append(snap)
 

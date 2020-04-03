@@ -84,6 +84,7 @@ class TemporalDataManager:
 
                 currStackTrace = sys.last_traceback
                 traceback.print_tb(currStackTrace)
+                raise Exception("got into infinite loop")
 
         for dateentry in precsv:
             for i in range(numTrendsRequested):
