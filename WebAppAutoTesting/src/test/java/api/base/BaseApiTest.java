@@ -37,7 +37,25 @@ public BaseApiTest( )
  * @return a list of Trends
  */
 protected List<Trend> parseTrends( Response response )
-{ return parseResponseJson(response, "a list of trends"); }
+{
+	List<Trend> ret = null;
+	
+	String respJson = null;
+	try
+	{
+		respJson = response.getBody()
+						   .asString();
+		
+		Type returnType = new TypeToken<List<Trend>>() { }.getType();
+		ret = gson.fromJson(respJson, returnType);
+	} catch ( Exception e )
+	{
+		System.err.println("Couldn't parse a list of trends from a response." + "Response JSON string was: \n" +
+						   ((respJson == null) ? "NULL :(" : respJson) + "\nException: " + e.getMessage());
+	}
+	
+	return ret;
+}
 
 /**
  * converts the json of the response's body into a list of Tweet pojos
@@ -47,7 +65,25 @@ protected List<Trend> parseTrends( Response response )
  * @return a list of Tweets
  */
 protected List<Tweet> parseTweets( Response response )
-{ return parseResponseJson(response, "a list of tweets"); }
+{
+	List<Tweet> ret = null;
+	
+	String respJson = null;
+	try
+	{
+		respJson = response.getBody()
+						   .asString();
+		
+		Type returnType = new TypeToken<List<Tweet>>() { }.getType();
+		ret = gson.fromJson(respJson, returnType);
+	} catch ( Exception e )
+	{
+		System.err.println("Couldn't parse a list of tweets from a response." + "Response JSON string was: \n" +
+						   ((respJson == null) ? "NULL :(" : respJson) + "\nException: " + e.getMessage());
+	}
+	
+	return ret;
+}
 
 /**
  * converts the json of the response's body into a Location pojo
@@ -57,7 +93,25 @@ protected List<Tweet> parseTweets( Response response )
  * @return a location pojo
  */
 protected Location parseLocation( Response response )
-{ return parseResponseJson(response, "a location"); }
+{
+	Location ret = null;
+	
+	String respJson = null;
+	try
+	{
+		respJson = response.getBody()
+						   .asString();
+		
+		Type returnType = new TypeToken<Location>() { }.getType();
+		ret = gson.fromJson(respJson, returnType);
+	} catch ( Exception e )
+	{
+		System.err.println("Couldn't parse a location from a response." + "Response JSON string was: \n" +
+						   ((respJson == null) ? "NULL :(" : respJson) + "\nException: " + e.getMessage());
+	}
+	
+	return ret;
+}
 
 /**
  * converts the json of the response's body into a list of Location pojos
@@ -67,32 +121,21 @@ protected Location parseLocation( Response response )
  * @return a list of location pojos
  */
 protected List<Location> parseLocations( Response response )
-{ return parseResponseJson(response, "a list of locations"); }
-
-/**
- * parses the json of the response's body into some kind of pojo(s)
- *
- * @param response       a response from some api endpoint
- * @param retDescription a description of the pojo or pojos being parsed out of the json
- * @param <K>            the type of the object(s) being parsed out of the json
- *                       ie. this could be some collection type parameterized with some pojo class
- *
- * @return one or more pojos of some type
- */
-private <K> K parseResponseJson( Response response, String retDescription )
 {
-	K ret = null;
+	List<Location> ret = null;
 	
+	String respJson = null;
 	try
 	{
-		String respJson = response.getBody()
-								  .asString();
+		respJson = response.getBody()
+						   .asString();
 		
-		Type returnType = new TypeToken<K>() { }.getType();
+		Type returnType = new TypeToken<List<Location>>() { }.getType();
 		ret = gson.fromJson(respJson, returnType);
 	} catch ( Exception e )
 	{
-		System.err.println("Couldn't parse " + retDescription + " from a response. Exception: " + e.getMessage());
+		System.err.println("Couldn't parse a list of locations from a response." + "Response JSON string was: \n" +
+						   ((respJson == null) ? "NULL :(" : respJson) + "\nException: " + e.getMessage());
 	}
 	
 	return ret;

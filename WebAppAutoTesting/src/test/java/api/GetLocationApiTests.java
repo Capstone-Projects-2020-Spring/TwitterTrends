@@ -176,7 +176,7 @@ protected void validateLocation( Location locPojo, Locations location )
  */
 protected String buildLocationAddrString( Locations location )
 {
-	if ( location != Locations.USA && location != Locations.WORLD )
+	if ( location == Locations.USA || location == Locations.WORLD )
 	{ throw new IllegalArgumentException("can't build location address for a country or planet"); }
 	
 	String locAddr = location.getCityName() + ", " + location.getState()

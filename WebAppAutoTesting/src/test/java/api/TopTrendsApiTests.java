@@ -52,6 +52,10 @@ public void getNumTrendsWithWoeidTest( )
 	assertNotNull(trends);
 	int fetchedTrendCount = trends.size();
 	Assertions.assertEquals(numTrends, fetchedTrendCount);
+	for ( Trend trend : trends )
+	{
+		//todo
+	}
 }
 
 @Test
