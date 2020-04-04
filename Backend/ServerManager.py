@@ -79,6 +79,7 @@ def api_toptweets():
                     print(type(e))
                     print(e.args)
                     print(e)
+                    traceback.print_exc()
             if tostr is not None:   # try parsing the todate argument
                 try:
                     todate = datetime.strptime(tostr, '%Y-%m-%d')
@@ -86,6 +87,7 @@ def api_toptweets():
                     print(type(e))
                     print(e.args)
                     print(e)
+                    traceback.print_exc()
             if sort is not None and (int(sort) == 0 or int(sort) == 1):
                 issort = int(sort)
             if latitude is not None and longitude is not None:
