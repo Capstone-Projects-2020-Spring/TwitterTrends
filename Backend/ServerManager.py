@@ -109,10 +109,11 @@ def api_toptweets():
                                             ['from', 'to', 'num', 'lat/latitude', 'lon/longitude', 'sort'])
             return "Error! arguments:<br><br>" + argstr
     except Exception as e:
+        errStr = str(e)
         print("ERROR ENDPOINT /toptweets")
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return "ERROR ENDPOINT"
+        return "ERROR ENDPOINT " + errStr
 
 
 @app.route('/toptrends', methods=['GET'])
@@ -153,10 +154,11 @@ def api_toptrends():
             argstr = AlgorithmsManager.get_args_as_html_str(['[woeid]  <b>OR</b>   [lat <b>AND</b> lon]'], ['num', 'sort'])
             return 'Error! arguments:<br><br>' + argstr
     except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /toptrends')
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return 'ERROR ENDPOINT'
+        return 'ERROR ENDPOINT ' + errStr
 
 @app.route('/getlocation', methods=['GET'])
 def api_getlocation():
@@ -184,10 +186,11 @@ def api_getlocation():
 
         return 'Error! arguments:<br><br>' + argstr
     except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /getlocation')
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return 'ERROR ENDPOINT'
+        return 'ERROR ENDPOINT ' + errStr
 
 @app.route('/locations', methods=['GET'])
 def api_get_all_locations():
@@ -207,10 +210,11 @@ def api_get_trend_news():
             result = algo.get_trend_news(trend=trend, num_stories=num_stories)
         result_json = jsonify(result)
     except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /trend_news')
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return 'ERROR ENDPOINT'
+        return 'ERROR ENDPOINT ' + errStr
     return result_json
 
 # TODO: endpoint that returns the CSV file of trends and their temporal data
@@ -299,10 +303,11 @@ def api_get_trends_snapshot():
                                                             ['woeid', 'from', 'to'])
             return 'Error! arguments:<br><br>' + argstr
     except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /temporal')
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return 'ERROR ENDPOINT'
+        return 'ERROR ENDPOINT ' + errStr
 
     #todo cut unreachable code?
     return str(trendsparsed)
@@ -328,10 +333,11 @@ def api_get_economic_data():
 
         return 'Error! arguments:<br><br>' + argstr
     except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /economics')
-        print("Exception: ", e.__doc__, str(e))
+        print("Exception: ", e.__doc__, errStr)
         traceback.print_exc()
-        return 'ERROR ENDPOINT'
+        return 'ERROR ENDPOINT ' + errStr
 
 
 @app.route('/test', methods=['GET'])
