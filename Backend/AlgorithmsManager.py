@@ -9,7 +9,6 @@ from TwitterAPIManager import TwitterAPIManager
 # from flask import jsonify # pronbably not needed
 import DataStructures
 
-import sys
 import traceback
 
 
@@ -416,8 +415,7 @@ class AlgorithmsManager:
                           "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
                           "\nSTACK TRACE:\n")
 
-                    currStackTrace = sys.last_traceback
-                    traceback.print_tb(currStackTrace)
+                    traceback.print_stack()
                     raise Exception("got into infinite loop")
 
             arr[k+1] = temp
@@ -448,8 +446,7 @@ class AlgorithmsManager:
                           "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
                           "\nSTACK TRACE:\n")
 
-                    currStackTrace = sys.last_traceback
-                    traceback.print_tb(currStackTrace)
+                    traceback.print_stack()
                     raise Exception("got into infinite loop")
 
 
@@ -490,8 +487,7 @@ class AlgorithmsManager:
                               "\nd= ", d, "\ndcap= ", dcap,
                               "\nSTACK TRACE:\n")
 
-                        currStackTrace = sys.last_traceback
-                        traceback.print_tb(currStackTrace)
+                        traceback.print_stack()
                         raise Exception("got into infinite loop")
 
                 tempbucket[curtime].append(snap)
