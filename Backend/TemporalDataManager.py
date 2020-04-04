@@ -3,7 +3,6 @@ import threading
 import time
 import DataStructures
 
-import sys
 import traceback
 
 class TemporalDataManager:
@@ -82,8 +81,7 @@ class TemporalDataManager:
                       "snapsres= ", snapsres, "\nprecsv= ", precsv, "\ntempdate= ", tempdate,
                       "\nSTACK TRACE:\n")
 
-                currStackTrace = sys.last_traceback
-                traceback.print_tb(currStackTrace)
+                traceback.print_stack()
                 raise Exception("got into infinite loop")
 
         for dateentry in precsv:
