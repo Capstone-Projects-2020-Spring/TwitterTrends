@@ -36,7 +36,7 @@ public BaseApiTest( )
  *
  * @return a list of Trends
  */
-protected List<Trend> parseTrends( Response response )
+protected List<Trend> parseTrends( final Response response )
 {
 	List<Trend> ret = null;
 	
@@ -64,7 +64,7 @@ protected List<Trend> parseTrends( Response response )
  *
  * @return a list of Tweets
  */
-protected List<Tweet> parseTweets( Response response )
+protected List<Tweet> parseTweets( final Response response )
 {
 	List<Tweet> ret = null;
 	
@@ -92,7 +92,7 @@ protected List<Tweet> parseTweets( Response response )
  *
  * @return a location pojo
  */
-protected Location parseLocation( Response response )
+protected Location parseLocation( final Response response )
 {
 	Location ret = null;
 	
@@ -120,7 +120,7 @@ protected Location parseLocation( Response response )
  *
  * @return a list of location pojos
  */
-protected List<Location> parseLocations( Response response )
+protected List<Location> parseLocations( final Response response )
 {
 	List<Location> ret = null;
 	
