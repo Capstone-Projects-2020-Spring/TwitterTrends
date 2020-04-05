@@ -19,11 +19,12 @@ protected static final String WOEID_ARG = "woeid";
 protected static final String LAT_ARG1 = "latitude";
 protected static final String LAT_ARG2 = "lat";
 protected static final String LONG_ARG1 = "longitude";
-protected static final String LONG_ARG2 = "long";
+protected static final String LONG_ARG2 = "lon";
 protected static final String ADDR_ARG = "address";
 
 protected static final double LAT_LONG_COMPARISON_THRESHOLD = 0.5;
 protected static final String API_ERROR_STRING = "ERROR ENDPOINT";
+protected static final String API_BAD_ARGS_ERROR_STRING = "Error! arguments:";
 
 @Override
 protected String getEndpoint( ) { return "getlocation"; }
@@ -124,13 +125,13 @@ public void invalidLatOnlyTest( )
 							   .get();
 	String respStr = response.getBody()
 							 .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_BAD_ARGS_ERROR_STRING), respStr);
 	
 	response = given().param(LAT_ARG2, testLatitude)
 					  .get();
 	respStr = response.getBody()
 					  .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_BAD_ARGS_ERROR_STRING), respStr);
 }
 
 @Test
@@ -141,13 +142,13 @@ public void invalidLongOnlyTest( )
 							   .get();
 	String respStr = response.getBody()
 							 .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_BAD_ARGS_ERROR_STRING), respStr);
 	
 	response = given().param(LONG_ARG2, testLongitude)
 					  .get();
 	respStr = response.getBody()
 					  .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_BAD_ARGS_ERROR_STRING), respStr);
 }
 
 // FUNCTIONS FOR TEST CASE TYPES
@@ -227,7 +228,7 @@ protected void testInvalidAddress( final String invalidAddr )
 							   .get();
 	String respStr = response.getBody()
 							 .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 }
 
 /**
@@ -241,7 +242,7 @@ protected void testInvalidWoeid( final String invalidWoeid )
 							   .get();
 	String respStr = response.getBody()
 							 .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 }
 
 /**
@@ -261,7 +262,7 @@ protected void testInvalidLatLong( final double latitude, final double longitude
 							   .get();
 	String respStr = response.getBody()
 							 .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 	
 	//full and short names - latitude & long
 	response = given().param(LAT_ARG1, latitude)
@@ -269,7 +270,7 @@ protected void testInvalidLatLong( final double latitude, final double longitude
 					  .get();
 	respStr = response.getBody()
 					  .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 	
 	//short full names - lat & longitude
 	response = given().param(LAT_ARG2, latitude)
@@ -277,7 +278,7 @@ protected void testInvalidLatLong( final double latitude, final double longitude
 					  .get();
 	respStr = response.getBody()
 					  .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 	
 	//short names - lat & long
 	response = given().param(LAT_ARG2, latitude)
@@ -285,7 +286,7 @@ protected void testInvalidLatLong( final double latitude, final double longitude
 					  .get();
 	respStr = response.getBody()
 					  .asString();
-	assertTrue(respStr.contains(API_ERROR_STRING));
+	assertTrue(respStr.contains(API_ERROR_STRING), respStr);
 }
 
 //TEST HELPER FUNCTIONS
