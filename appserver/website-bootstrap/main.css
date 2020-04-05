@@ -612,3 +612,44 @@ blockquote.twitter-tweet {
 	color: #bebeeb;
 	text-decoration: none;
 }
+
+
+/* Network Page Buttons */
+
+#user-inputs-network {
+	height: 45%;
+	margin: auto;
+}
+
+#search-network {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 10%
+}
+
+#drop-list-title {
+	background:transparent;
+	cursor: pointer;
+	color: white;
+	font-size: 20px;
+	padding: 0;
+	border: none;
+	visibility: visible;
+}
+
+#drop-list-network {
+	font-size: 18px;
+	max-height: 50px;
+    overflow: auto;
+	size: 5;
+	length: 5;
+}
+
+#update-graph-network {
+	text-align: center;
+	margin-top: 50%;
+}

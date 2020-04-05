@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Analyze Network</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+	
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="index.html#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="index.html#"><img src="images/logo2.png"></a>
+            </div>
+
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Word Cloud</h3>
+                </div>
+
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div id="pages-dropdown-menu">
+                        <a href="index.html">Location</a>
+                        <a href="time.html">Time</a>
+						<a href="network.html">Network</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+        <div class="row">
+            <!-- First column -->
+            <div class="col-12 col-md-10">
+
+
+
+            </div>
+            <!-- Second column -->
+            <div class="col">
+
+
+			<!-- Search bar -->
+		    <div id="user-inputs-network">
+                <input type="text" placeholder="Search User" autocomplete="off" id="search-network" name="search-network">
+            </div>
+			
+			<!-- Drop-down menu -->
+			 <label id="drop-list-title" for="drop-list-network">Number of network:</label>
+			<select id="drop-list-network" autocomplete="off" >
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+				<option value="17">17</option>
+				<option value="18">18</option>
+				<option value="19">19</option>
+				<option value="20">20</option>
+			</select> 
+
+			
+
+			
+			<!-- Update graph button -->
+			<div id="update-graph-network">
+                <button id="update-graph-btn">
+				    Update Graph
+			    </button>
+		    </div>
+			
+			
+            </div>
+
+		
+		
+            </div>
+			        
+        <footer class="page-footer footer container-fluid">
+            <ul class="team-members">
+                <li>Jennifer Chao</li>
+                <li>Conor Kennedy</li>
+                <li>Mike Lauw</li>
+                <li>Chris Nelson</li>
+                <li>Scott Salisbury</li>
+                <li>Dan Tran</li>
+                <li>Thanh Tran</li>
+            </ul>
+        </footer>
+    </body>
+</html>
