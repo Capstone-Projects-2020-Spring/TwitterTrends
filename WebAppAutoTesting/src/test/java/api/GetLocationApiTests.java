@@ -108,15 +108,6 @@ public void invalidEmptyWoeidTest( ) { testInvalidWoeid(""); }
 public void invalidLongWoeidTest( ) { testInvalidWoeid("293872057394");}
 
 @Test
-public void invalidNegativeLatTest( ) { testInvalidLatLong(-23, 26.8);}
-
-@Test
-public void invalidNegativeLongTest( ) { testInvalidLatLong(80.2, -26.8);}
-
-@Test
-public void invalidNegativeLatLongTest( ) { testInvalidLatLong(-63.0, -73.5);}
-
-@Test
 public void invalidBigLatTest( ) { testInvalidLatLong(45563, 78.4);}
 
 @Test
@@ -124,6 +115,40 @@ public void invalidBigLongTest( ) { testInvalidLatLong(21.9, 49275);}
 
 @Test
 public void invalidBigLatLongTest( ) { testInvalidLatLong(344938, 20538);}
+
+@Test
+public void invalidLatOnlyTest( )
+{
+	final double testLatitude = 60.4;
+	Response response = given().param(LAT_ARG1, testLatitude)
+							   .get();
+	String respStr = response.getBody()
+							 .asString();
+	assertTrue(respStr.contains(API_ERROR_STRING));
+	
+	response = given().param(LAT_ARG2, testLatitude)
+					  .get();
+	respStr = response.getBody()
+					  .asString();
+	assertTrue(respStr.contains(API_ERROR_STRING));
+}
+
+@Test
+public void invalidLongOnlyTest( )
+{
+	final double testLongitude = 149.6;
+	Response response = given().param(LONG_ARG1, testLongitude)
+							   .get();
+	String respStr = response.getBody()
+							 .asString();
+	assertTrue(respStr.contains(API_ERROR_STRING));
+	
+	response = given().param(LONG_ARG2, testLongitude)
+					  .get();
+	respStr = response.getBody()
+					  .asString();
+	assertTrue(respStr.contains(API_ERROR_STRING));
+}
 
 // FUNCTIONS FOR TEST CASE TYPES
 
