@@ -73,7 +73,7 @@ let rangeSlider = function(){
         });
 
         range.on('input', function(){
-            $(this).next(value).html(this.value + " Weeks");
+            $(this).next(value).html(this.value + " Days");
         });
     });
 };
