@@ -1,6 +1,8 @@
 package ui.base;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -247,6 +249,25 @@ protected void clickElem( final By loc )
 {
 	WebElement elem = getElement(loc);
 	clickElem(elem);
+}
+
+protected void clickElemWithOffset( final WebElement elem, final double xOffsetFraction, final double yOffsetFraction )
+{
+	waitForElementEnabled(elem);
+	
+	Dimension elemDim = elem.getSize();
+	int xOffset = (int) Math.floor(xOffsetFraction * elemDim.getWidth());
+	int yOffset = (int) Math.floor(yOffsetFraction * elemDim.getHeight());
+	
+	Actions actionBuilder = new Actions(driver);
+	//the javadoc says this is offset from the upper left corner, but a warning gets logged that W3C Actions
+	// are from the center of the bounding box going right and down (for positive values), and I've confirmed that
+	Action clickOffsetAction = actionBuilder.moveToElement(elem, xOffset, yOffset)
+											.click()
+											.build();
+	clickOffsetAction.perform();
+	
+	waitForPageLoad();
 }
 
 // |||||||||||||||||||||||||| WAIT UTILITIES ||||||||||||||||||||||||

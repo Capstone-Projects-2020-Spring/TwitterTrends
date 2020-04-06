@@ -100,7 +100,7 @@ public boolean isStateVisible( final States state )
 public void clickState( final States state )
 {
 	WebElement stateElem = getState(state);
-	clickElem(stateElem);
+	clickElemWithOffset(stateElem, state.getHorizOffsetFraction(), state.getVertOffsetFraction());
 	sleep(MILLIS_WAIT_FOR_ZOOM_TRANSITION);
 }
 

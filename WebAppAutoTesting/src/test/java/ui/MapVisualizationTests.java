@@ -9,8 +9,7 @@ import ui.pages.HomePage;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * tests that some^ of the features of the map visualization on the home page are working
@@ -29,6 +28,7 @@ public class MapVisualizationTests extends BaseUiTest
 public void texasZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.TEXAS);
+	assertFalse(startPage.isStateVisible(States.NORTH_DAKOTA));
 	cityTrendsLoadTester(startPage, Locations.DALLAS);
 }
 
@@ -36,13 +36,25 @@ public void texasZoomTrendsLoadTest( )
 public void rhodeIslandZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.RHODE_ISLAND);
+	assertFalse(startPage.isStateVisible(States.ARIZONA));
 	cityTrendsLoadTester(startPage, Locations.PROVIDENCE);
+}
+
+@Test
+public void marylandZoomUnzoomTrendsLoadTest( )
+{
+	startPage.clickState(States.MARYLAND);
+	assertFalse(startPage.isStateVisible(States.NEBRASKA));
+	startPage.clickState(States.MARYLAND);
+	assertTrue(startPage.isStateVisible(States.NEBRASKA));
+	cityTrendsLoadTester(startPage, Locations.BALTIMORE);
 }
 
 @Test
 public void floridaZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.FLORIDA);
+	assertFalse(startPage.isStateVisible(States.IDAHO));
 	cityTrendsLoadTester(startPage, Locations.ORLANDO);
 }
 
@@ -50,13 +62,17 @@ public void floridaZoomTrendsLoadTest( )
 public void californiaZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.CALIFORNIA);
+	assertFalse(startPage.isStateVisible(States.VERMONT));
 	cityTrendsLoadTester(startPage, Locations.SAN_DIEGO);
 }
 
 @Test
-public void oregonZoomTrendsLoadTest( )
+public void oregonZoomUnzoomTrendsLoadTest( )
 {
 	startPage.clickState(States.OREGON);
+	assertFalse(startPage.isStateVisible(States.SOUTH_CAROLINA));
+	startPage.clickState(States.OREGON);
+	assertTrue(startPage.isStateVisible(States.SOUTH_CAROLINA));
 	cityTrendsLoadTester(startPage, Locations.PORTLAND);
 }
 
@@ -64,24 +80,63 @@ public void oregonZoomTrendsLoadTest( )
 public void louisianaZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.LOUISIANA);
+	assertFalse(startPage.isStateVisible(States.MAINE));
 	cityTrendsLoadTester(startPage, Locations.NEW_ORLEANS);
+}
+
+@Test
+public void connecticutZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.CONNECTICUT);
+	assertFalse(startPage.isStateVisible(States.NEVADA));
+	cityTrendsLoadTester(startPage, Locations.NEW_HAVEN);
+}
+
+@Test
+public void virginiaZoomUnzoomTrendsLoadTest( )
+{
+	startPage.clickState(States.VIRGINIA);
+	assertFalse(startPage.isStateVisible(States.IDAHO));
+	startPage.clickState(States.VIRGINIA);
+	assertTrue(startPage.isStateVisible(States.IDAHO));
+	cityTrendsLoadTester(startPage, Locations.RICHMOND);
 }
 
 @Test
 public void coloradoZoomTrendsLoadTest( )
 {
 	startPage.clickState(States.COLORADO);
+	assertFalse(startPage.isStateVisible(States.GEORGIA));
 	cityTrendsLoadTester(startPage, Locations.DENVER);
 }
 
 @Test
-public void michiganZoomTrendsLoadTest( )
+public void michiganZoomUnzoomTrendsLoadTest( )
 {
 	startPage.clickState(States.MICHIGAN);
+	assertFalse(startPage.isStateVisible(States.NEW_MEXICO));
+	startPage.clickState(States.MICHIGAN);
+	assertTrue(startPage.isStateVisible(States.NEW_MEXICO));
 	cityTrendsLoadTester(startPage, Locations.DETROIT);
 }
 
-//hawaii zoom?
+@Test
+public void hawaiiZoomUnzoomTrendsLoadTest( )
+{
+	startPage.clickState(States.HAWAII);
+	assertFalse(startPage.isStateVisible(States.WISCONSIN));
+	startPage.clickState(States.HAWAII);
+	assertTrue(startPage.isStateVisible(States.WISCONSIN));
+	cityTrendsLoadTester(startPage, Locations.HONOLULU);
+}
+
+@Test
+public void kentuckyZoomTrendsLoadTest( )
+{
+	startPage.clickState(States.KENTUCKY);
+	assertFalse(startPage.isStateVisible(States.OREGON));
+	cityTrendsLoadTester(startPage, Locations.LOUISVILLE);
+}
 
 //todo try clicking on state, then clicking on state again, then investigating location far from that state
 
@@ -131,8 +186,8 @@ public void tucsonAtlantaDifferentTrendsTest( )
 { citiesTrendsDifferentTester(startPage, Locations.TUCSON, Locations.ATLANTA); }
 
 @Test
-public void philadelphiaLADifferentTrendsTest( )
-{ citiesTrendsDifferentTester(startPage, Locations.PHILADELPHIA, Locations.LOS_ANGELES); }
+public void philadelphiaMinneapolisDifferentTrendsTest( )
+{ citiesTrendsDifferentTester(startPage, Locations.PHILADELPHIA, Locations.MINNEAPOLIS); }
 
 @Test
 public void detroitMemphisDifferentTrendsTest( )
