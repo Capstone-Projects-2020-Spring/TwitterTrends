@@ -251,6 +251,16 @@ protected void clickElem( final By loc )
 	clickElem(elem);
 }
 
+/**
+ * waits for an element to be enabled, clicks on a part of it with an offset from the center of the element
+ * and then tries to make sure the page finishes reloading or loading a new page
+ *
+ * @param elem            the element which should be clicked
+ * @param xOffsetFraction the fraction of the element's bounding box's width which should be used as a horizontal offset
+ *                        Offset is to right if positive or left if negative
+ * @param yOffsetFraction the fraction of the element's bounding box's height which should be used as a vertical offset
+ *                        Offset is down if positive or up if negative
+ */
 protected void clickElemWithOffset( final WebElement elem, final double xOffsetFraction, final double yOffsetFraction )
 {
 	waitForElementEnabled(elem);

@@ -179,8 +179,6 @@ public void houstonTrendDetailsLoadTest( )
 
 // todo click on a trend and verify that tweets with that trend showed up in the panel on the right
 
-//todo open one location & check its trends then open another location & check that its trends are different?
-
 @Test
 public void tucsonAtlantaDifferentTrendsTest( )
 { citiesTrendsDifferentTester(startPage, Locations.TUCSON, Locations.ATLANTA); }
