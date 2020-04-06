@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2 import pool
+import traceback
 
 import DataStructures
 
@@ -48,6 +49,7 @@ class DatabaseRequester:
             print(status)
         except psycopg2.DatabaseError as err:
             print("[ERROR] Database Connection Failed\n", err)
+            traceback.print_exc()
 
         return data
 

@@ -3,6 +3,8 @@ import threading
 import time
 import DataStructures
 
+import traceback
+
 class TemporalDataManager:
 
     # TODO: set up instance of algorithm manager (and anything else needed)
@@ -62,9 +64,26 @@ class TemporalDataManager:
         precsv = {}             # dictionary to be parsed into csv. contain date key and array of tweet volume values
         numTrendsRequested = len(trends)   # max amount of value for each dictionary entry
         tempdate = fromdate
+
+        num_tempdate_find_iter = 0
+
         while tempdate < todate:
             precsv[tempdate] = []
             tempdate += timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+
+            # todo strip debugging code from while loop
+            num_tempdate_find_iter += 1
+            if num_tempdate_find_iter > 10000:
+                print("while loop started to go infinite:\nARGUMENTS:\n",
+                      "trends= ", trends, "\nfromdate= ", fromdate, "\ntodate= ", todate,
+                      ";\n woeid= ", woeid, "\ndays= ", days, "\nhours= ", hours, "\nminutes= ", minutes, "\nseconds= ", seconds,
+                      ";\n\nVARIABLES:\n",
+                      "snapsres= ", snapsres, "\nprecsv= ", precsv, "\ntempdate= ", tempdate,
+                      "\nSTACK TRACE:\n")
+
+                traceback.print_stack()
+                raise Exception("got into infinite loop")
+
         for dateentry in precsv:
             for i in range(numTrendsRequested):
                 precsv[dateentry].append(0)

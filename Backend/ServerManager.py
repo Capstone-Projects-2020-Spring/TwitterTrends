@@ -2,6 +2,7 @@ import flask
 from flask import request, jsonify
 from flask_cors import CORS
 from datetime import datetime, timedelta
+import traceback
 
 from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
@@ -78,6 +79,7 @@ def api_toptweets():
                     print(type(e))
                     print(e.args)
                     print(e)
+                    traceback.print_exc()
             if tostr is not None:   # try parsing the todate argument
                 try:
                     todate = datetime.strptime(tostr, '%Y-%m-%d')
@@ -85,6 +87,7 @@ def api_toptweets():
                     print(type(e))
                     print(e.args)
                     print(e)
+                    traceback.print_exc()
             if sort is not None and (int(sort) == 0 or int(sort) == 1):
                 issort = int(sort)
             if latitude is not None and longitude is not None:
@@ -105,9 +108,12 @@ def api_toptweets():
             argstr = AlgorithmsManager.get_args_as_html_str(['query'],
                                             ['from', 'to', 'num', 'lat/latitude', 'lon/longitude', 'sort'])
             return "Error! arguments:<br><br>" + argstr
-    except:
+    except Exception as e:
+        errStr = str(e)
         print("ERROR ENDPOINT /toptweets")
-        return "ERROR ENDPOINT"
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return "ERROR ENDPOINT " + errStr
 
 
 @app.route('/toptrends', methods=['GET'])
@@ -147,9 +153,12 @@ def api_toptrends():
         else:
             argstr = AlgorithmsManager.get_args_as_html_str(['[woeid]  <b>OR</b>   [lat <b>AND</b> lon]'], ['num', 'sort'])
             return 'Error! arguments:<br><br>' + argstr
-    except:
+    except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /toptrends')
-        return 'ERROR ENDPOINT'
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
 
 @app.route('/getlocation', methods=['GET'])
 def api_getlocation():
@@ -176,9 +185,12 @@ def api_getlocation():
                                                         'address', 'latitude and longitude', 'woeid'], [])
 
         return 'Error! arguments:<br><br>' + argstr
-    except:
+    except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /getlocation')
-        return 'ERROR ENDPOINT'
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
 
 @app.route('/locations', methods=['GET'])
 def api_get_all_locations():
@@ -190,12 +202,19 @@ def api_get_trend_news():
     trend = request.args.get("trend")
     num_stories = request.args.get("num_stories")
 
-    print("/trend_news args: ", trend, num_stories)
-    if num_stories is None:
-        result = algo.get_trend_news(trend=trend)
-    else:
-        result = algo.get_trend_news(trend=trend, num_stories=num_stories)
-    result_json = jsonify(result)
+    try:
+        print("/trend_news args: ", trend, num_stories)
+        if num_stories is None:
+            result = algo.get_trend_news(trend=trend)
+        else:
+            result = algo.get_trend_news(trend=trend, num_stories=num_stories)
+        result_json = jsonify(result)
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /trend_news')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
     return result_json
 
 # TODO: endpoint that returns the CSV file of trends and their temporal data
@@ -209,7 +228,7 @@ def api_get_trends_snapshot():
     # args for the time step of each datapoint
     day = request.args.get("days")
     hour = request.args.get("hours")
-    min = request.args.get("minutes")
+    minutesString = request.args.get("minutes")
     sec = request.args.get("seconds")
 
     try:
@@ -231,35 +250,47 @@ def api_get_trends_snapshot():
                 # Final check to make sure since and until datetimes are valid
                 if since >= until:
                     since = until - timedelta(hours=12)
-            except:
+            except Exception as e:
                 print("/temporal -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default datetime")
+                print("Exception: ", e.__doc__, str(e))
+                traceback.print_exc()
 
             if loc is not None:
                 try:
                     woeid = int(loc)
-                except:
+                except Exception as e:
                     print("/temporal -- invalid woeid -- using default woeid")
+                    print("Exception: ", e.__doc__, str(e))
+                    traceback.print_exc()
 
             if day is not None:
                 try:
                     days = int(day)
-                except:
+                except Exception as e:
                     print("/temporal -- invalid day -- using default day")
+                    print("Exception: ", e.__doc__, str(e))
+                    traceback.print_exc()
             if hour is not None:
                 try:
                     hours = int(hour)
-                except:
+                except Exception as e:
                     print("/temporal -- invalid hour -- using default hour")
-            if min is not None:
+                    print("Exception: ", e.__doc__, str(e))
+                    traceback.print_exc()
+            if minutesString is not None:
                 try:
-                    minutes = int(min)
-                except:
+                    minutes = int(minutesString)
+                except Exception as e:
                     print("/temporal -- invalid minute -- using default minute")
+                    print("Exception: ", e.__doc__, str(e))
+                    traceback.print_exc()
             if sec is not None:
                 try:
                     seconds = int(sec)
-                except:
+                except Exception as e:
                     print("/temporal -- invalid second -- using default second")
+                    print("Exception: ", e.__doc__, str(e))
+                    traceback.print_exc()
 
             if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
                 hours = 3
@@ -271,10 +302,14 @@ def api_get_trends_snapshot():
             argstr = AlgorithmsManager.get_args_as_html_str(['trends'],
                                                             ['woeid', 'from', 'to'])
             return 'Error! arguments:<br><br>' + argstr
-    except:
+    except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /temporal')
-        return 'ERROR ENDPOINT'
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
 
+    #todo cut unreachable code?
     return str(trendsparsed)
 
 
@@ -297,9 +332,12 @@ def api_get_economic_data():
                                                         'state', 'city', 'woeid'], [])
 
         return 'Error! arguments:<br><br>' + argstr
-    except:
+    except Exception as e:
+        errStr = str(e)
         print('ERROR ENDPOINT /economics')
-        return 'ERROR ENDPOINT'
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
 
 
 @app.route('/test', methods=['GET'])
@@ -316,7 +354,7 @@ def api_test():
     #print(query.get_rows())
     #db.query("DELETE FROM trends_snapshot;")
     csv = timedata.get_trends_snapshot_as_csv(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
-    query = db.query("SELECT * FROM trends_snapshot;")
+    # query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     return csv
 

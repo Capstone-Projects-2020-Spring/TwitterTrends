@@ -9,6 +9,10 @@ from TwitterAPIManager import TwitterAPIManager
 # from flask import jsonify # pronbably not needed
 import DataStructures
 
+import traceback
+
+
+
 NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 
 # In charge of all algorithms needed by the backend server
@@ -395,10 +399,25 @@ class AlgorithmsManager:
             tempval = temp.tweet_volume
             k = l-1
 
+            num_trend_sort_iter = 0
+
             while k >= 0 and    (tempval if tempval is not None else 0) >= \
                                 (arr[k].tweet_volume if arr[k].tweet_volume is not None else 0):
                 arr[k+1] = arr[k]
                 k -= 1
+
+                # todo strip debugging code from while loop
+                num_trend_sort_iter +=1
+                if num_trend_sort_iter >= 10000:
+                    print("while loop started to go infinite:\nARGUMENTS:\n",
+                          "arr= ", arr,
+                          ";\n\nVARIABLES:\n",
+                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
+                          "\nSTACK TRACE:\n")
+
+                    traceback.print_stack()
+                    raise Exception("got into infinite loop")
+
             arr[k+1] = temp
 
 
@@ -410,10 +429,27 @@ class AlgorithmsManager:
             temp = arr[l]
             tempval = temp.retweets
             k = l - 1
+
+            num_tweet_sort_iter = 0
+
             while k >= 0 and (tempval if tempval is not None else 0) >= \
                     (arr[k].retweets if arr[k].retweets is not None else 0):
                 arr[k + 1] = arr[k]
                 k -= 1
+
+                #todo strip debugging code from while loop
+                num_tweet_sort_iter += 1
+                if num_tweet_sort_iter >= 10000:
+                    print("while loop started to go infinite:\nARGUMENTS:\n",
+                          "arr= ", arr,
+                          ";\n\nVARIABLES:\n",
+                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
+                          "\nSTACK TRACE:\n")
+
+                    traceback.print_stack()
+                    raise Exception("got into infinite loop")
+
+
             arr[k + 1] = temp
 
 
@@ -430,12 +466,30 @@ class AlgorithmsManager:
             for snap in snaps:
                 d = snap[6]
                 dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+
+                num_bucket_cap_search_iter = 0
+
                 while d >= dcap and d <= endtime:
                     if len(tempbucket[curtime]) == 0:
                         del tempbucket[curtime]
                     curtime = dcap
                     dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
                     tempbucket[curtime] = []
+
+                    # todo strip debugging code from while loop
+                    num_bucket_cap_search_iter += 1
+                    if num_bucket_cap_search_iter >= 10000:
+                        print("while loop started to go infinite:\nARGUMENTS:\n",
+                              "snaps= ", snaps, "\nstarttime= ", starttime, "\nendtime= ", endtime,
+                              "\n\ndays= ", days, "\nhours= ", hours, "\nminutes= ", minutes, "\nseconds= ", seconds,
+                              ";\n\nVARIABLES:\n",
+                              "tempbucket= ", tempbucket, "\ncurtime= ", curtime, "\nsnap= ", snap,
+                              "\nd= ", d, "\ndcap= ", dcap,
+                              "\nSTACK TRACE:\n")
+
+                        traceback.print_stack()
+                        raise Exception("got into infinite loop")
+
                 tempbucket[curtime].append(snap)
 
         return tempbucket

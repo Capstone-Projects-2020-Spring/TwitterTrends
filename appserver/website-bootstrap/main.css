@@ -152,7 +152,7 @@ body {
 	position: absolute;
 	background-color: #2e2e4d;
 	min-width: 160px;
-	z-index: 2;
+	z-index: 3;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	/*font-size: 25px;*/
 	line-height: 10px;
@@ -179,6 +179,7 @@ body {
 
 .col {
 	background: #515182;
+	z-index: 2;
 }
 
 #title {
@@ -210,15 +211,14 @@ body {
 }
 
 /* d3js style stuff */
-svg {
-	width: 1000px;
-	height: 600px;
+#svg-display {
+	width: 100%;
+	height: 100%;
 }
 
 #mapsvg {
-	width:100%;
+	width: 100%;
 	height: auto;
-	z-index: -1;
 	position: relative;
 	overflow: hidden;
 }
@@ -324,6 +324,7 @@ svg {
 	justify-content: center;
 	align-items: center;
 	display: none;
+	z-index: 1;
 }
 
 .modal-content {
@@ -473,10 +474,11 @@ form.temporal-search button:hover {
 
 .slider {
     -webkit-appearance: none;
+	background: #fff;
     background-color: #cccccc;
-    width: 100%;
+    width: 95%;
     height: 5px;
-    opacity: 5;
+    opacity: 0.7;
 	cursor: pointer;
 }
 
@@ -609,4 +611,45 @@ blockquote.twitter-tweet {
 #trend-tweets a:hover {
 	color: #bebeeb;
 	text-decoration: none;
+}
+
+
+/* Network Page Buttons */
+
+#user-inputs-network {
+	height: 45%;
+	margin: auto;
+}
+
+#search-network {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 10%
+}
+
+#drop-list-title {
+	background:transparent;
+	cursor: pointer;
+	color: white;
+	font-size: 20px;
+	padding: 0;
+	border: none;
+	visibility: visible;
+}
+
+#drop-list-network {
+	font-size: 18px;
+	max-height: 50px;
+    overflow: auto;
+	size: 5;
+	length: 5;
+}
+
+#update-graph-network {
+	text-align: center;
+	margin-top: 50%;
 }
