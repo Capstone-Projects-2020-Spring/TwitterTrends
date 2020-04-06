@@ -606,11 +606,11 @@ private boolean isAngularReady( )
 	return isAngReady;
 }
 
-private Object executeJs( final String jsCode )
+protected Object executeJs( final String jsCode, final Object... jsArgs )
 {
 	Object retVal = null;
 	JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-	retVal = jsExec.executeScript(jsCode);
+	retVal = jsExec.executeScript(jsCode, jsArgs);
 	return retVal;
 }
 

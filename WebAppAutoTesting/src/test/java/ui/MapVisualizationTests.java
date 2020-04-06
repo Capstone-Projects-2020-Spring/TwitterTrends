@@ -117,7 +117,6 @@ public void houstonTrendDetailsLoadTest( )
 {
 	TrendsDialog trendsPopup = cityTrendsLoadTester(startPage, Locations.HOUSTON);
 	List<String> houstonTrends = trendsPopup.getTopTrends();
-	List<String> cleanedHoustonTrends = trendsPopup.cleanTrends(houstonTrends);
 	trendsPopup.closeDialog();
 	
 	//todo after adding automation for right side of page
@@ -150,15 +149,13 @@ protected void citiesTrendsDifferentTester( final HomePage mapPage, final Locati
 {
 	TrendsDialog firstCityTrendsPopup = cityTrendsLoadTester(mapPage, city1);
 	List<String> firstCityTrends = firstCityTrendsPopup.getTopTrends();
-	List<String> cleanedFirstCityTrends = firstCityTrendsPopup.cleanTrends(firstCityTrends);
 	firstCityTrendsPopup.closeDialog();
 	
 	TrendsDialog secondCityTrendsPopup = cityTrendsLoadTester(mapPage, city2);
 	List<String> secondCityTrends = secondCityTrendsPopup.getTopTrends();
-	List<String> cleanedSecondCityTrends = secondCityTrendsPopup.cleanTrends(secondCityTrends);
 	secondCityTrendsPopup.closeDialog();
 	
-	assertNotEquals(cleanedFirstCityTrends, cleanedSecondCityTrends);
+	assertNotEquals(firstCityTrends, secondCityTrends);
 }
 
 /**
@@ -174,9 +171,8 @@ protected TrendsDialog cityTrendsLoadTester( final HomePage mapPage, final Locat
 	TrendsDialog trendsPopup = mapPage.clickLocationMarker(city);
 	trendsPopup.waitForTrendsLoaded();
 	List<String> cityTrends = trendsPopup.getTopTrends();
-	List<String> cleanedCityTrends = trendsPopup.cleanTrends(cityTrends);
-	assertNotNull(cleanedCityTrends);
-	System.out.println(cleanedCityTrends);
+	assertNotNull(cityTrends);
+	System.out.println(cityTrends);
 	return trendsPopup;
 }
 }

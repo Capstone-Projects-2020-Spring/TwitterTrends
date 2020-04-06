@@ -19,7 +19,7 @@ import java.nio.file.FileSystems;
  */
 public class BaseUiTest
 {
-static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/chromedriver.exe";
+static final String RELATIVE_CHROME_DRIVER_PATH = "src/main/java/ui/chromedriver.exe";
 static final String DOMAIN_NAME = "http://www.twittervisualtrends.com";
 
 private static ChromeDriverService service;

@@ -1,10 +1,10 @@
 package ui.components;
 
-import ui.components.base.BaseComponent;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import ui.components.base.BaseComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,16 @@ import java.util.List;
 public class TrendsDialog extends BaseComponent
 {
 
+public static final int MIN_TREND_ENTRY_INDEX = 1;
+public static final int MAX_TREND_ENTRY_INDEX = 5;
 final protected By popupContainerLoc = By.id("bg-modal");
 final protected By popupCloseButton = By.id("close");
 final protected By popupTitle = By.className("top-trends-title");
 final protected By popupTrendsList = By.className("top-trends-ul");
-final protected By trendEntry = By.tagName("li");
-final protected String trendEntryTemplate = "[1-5]\\. .+";
+final protected By trendEntry = By.tagName("span");
+
+final protected static String STYLE_ATTRIBUTE_NAME = "style";
+final protected static String HIDDEN_ELEMENT_STYLE_DISPLAY = "display: none";
 
 public TrendsDialog( final WebDriver driver )
 {
@@ -33,7 +37,14 @@ public TrendsDialog( final WebDriver driver )
 public void closeDialog( )
 {
 	clickElem(popupCloseButton);
-	// todo? add logic to make sure the dialog disappears? wait til not displayed?
+	waitForCond(webDriver ->
+	{
+		boolean isClosed = false;
+		WebElement dialogElem = getElement(popupContainerLoc);
+		String dialogStyle = getAttribute(dialogElem, STYLE_ATTRIBUTE_NAME);
+		isClosed = dialogStyle.isEmpty() || dialogStyle.contains(HIDDEN_ELEMENT_STYLE_DISPLAY);
+		return isClosed;
+	});
 }
 
 /**
@@ -52,8 +63,7 @@ public void waitForTrendsLoaded( final int timeout )
 	{
 		boolean areTrendsLoaded = true;
 		
-		List<String> trendLineStrs = getTopTrends();
-		List<String> trends = cleanTrends(trendLineStrs);
+		List<String> trends = getTopTrends();
 		if ( trends == null )
 		{
 			areTrendsLoaded = false;
@@ -122,35 +132,6 @@ public void clickTrend( final int trendIndex )
 }
 
 /**
- * strips the index off of the beginning of each trend in the given list of trends
- *
- * @param trendStrs a list of the texts for each line in the top trends dialog, including a trend index at the start
- *
- * @return a list of the trend strings themselves without the indexes at the beginning of each
- * returns null if one or more strings didn't have indices at the beginning
- */
-public List<String> cleanTrends( List<String> trendStrs )
-{
-	List<String> cleanedTrends = new ArrayList<>();
-	
-	for ( String trendStr : trendStrs )
-	{
-		if ( trendStr.matches(trendEntryTemplate) )
-		{
-			//cut out the starting template with the entry index
-			String trendText = trendStr.substring(3);
-			cleanedTrends.add(trendText);
-		} else
-		{
-			cleanedTrends = null;
-			break;
-		}
-	}
-	
-	return cleanedTrends;
-}
-
-/**
  * gets a locator for a particular entry in the list of top trends
  *
  * @param entryIndex the index of the top trend whose locator should be built
@@ -159,7 +140,7 @@ public List<String> cleanTrends( List<String> trendStrs )
  */
 protected By getPopupTrendEntryLoc( final int entryIndex )
 {
-	if ( entryIndex < 1 || entryIndex > 5 )
+	if ( entryIndex < MIN_TREND_ENTRY_INDEX || entryIndex > MAX_TREND_ENTRY_INDEX )
 	{
 		throw new IllegalArgumentException("there is never a trend entry with index " + entryIndex);
 	}

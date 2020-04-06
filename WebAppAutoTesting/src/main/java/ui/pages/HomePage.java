@@ -18,18 +18,20 @@ public class HomePage extends BasePage<HomePageNavBar>
 {
 protected TrendsDialog trendsDialog;
 
-final protected By mapContainerLoc = By.id("svg");//todo make this less atrocious!!!
+final protected By mapContainerLoc = By.id("mapsvg");
 final protected By statesList = By.className("states");
 final protected By stateEntry = By.tagName("path");
-final protected String stateNameAttribute = "stateName";
+final protected String stateNameAttribute = "state-name";
 
 final protected By locationsList = By.className("marker");
 final protected By locationEntry = By.tagName("circle");
-//final protected String locationNameAttribute = "cityName";
+final protected String locationNameAttribute = "city-name";
 final protected String woeidAttribute = "woeid";
 
 final protected By trendDetailsContainerLoc = null;//todo!!
 //todo add locators for tweets section & news section of trend details
+
+final protected static int MILLIS_WAIT_FOR_ZOOM_TRANSITION = 1250;
 
 public HomePage( final WebDriver driver )
 {
@@ -99,6 +101,7 @@ public void clickState( final States state )
 {
 	WebElement stateElem = getState(state);
 	clickElem(stateElem);
+	sleep(MILLIS_WAIT_FOR_ZOOM_TRANSITION);
 }
 
 /**
