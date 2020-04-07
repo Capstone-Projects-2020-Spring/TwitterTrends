@@ -1,4 +1,5 @@
 import wrappers.credentials as creds
+import tweepy as tw
 
 class standardAPI:
 
@@ -65,10 +66,12 @@ class standardAPI:
 
     # Get the followers of the specified user 
     #   return type: a list of twitter User objects
-    def get_followers(self, public_id):
+    def get_followers(self, public_id, max_num):
+        followerList = []
         try:
-            followers = self.tweepy.followers(screen_name=public_id)
-            return followers
+            for follower in tw.Cursor(self.tweepy.followers, screen_name=public_id).items(max_num):
+                followerList.append(follower)
+            return followerList
         except:
             return "EXCEPTION: Page does not exist"
 
@@ -88,4 +91,12 @@ if __name__ == "__main__":
 
     api = standardAPI()
 
-    #print(api.get_followers('ttclaire2'))
+    network = api.get_followers('realDonaldTrump', max_num=50)
+    count = 0
+
+    for each in network:
+        count += 1
+        #print(each, "\n")
+
+    print("Count: ", count)
+
