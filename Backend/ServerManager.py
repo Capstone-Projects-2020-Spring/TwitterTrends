@@ -36,12 +36,9 @@ timedata = TemporalDataManager(algo)
 # SETUP FLASK
 # Below are FLASK Endpoints
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 CORS(app)
 
-################
-# TODO: add proper end points. Most endpoints are currently broken
-################
 
 @app.route('/', methods=['GET'])
 def home():
@@ -60,6 +57,7 @@ def api_toptweets():
     longitude = request.args.get('longitude') or request.args.get('lon')
 
     try:
+        print("/toptweets args: ", query, fromstr, tostr, num, sort, latitude, longitude)
         if query is not None:
             querystr = "/toptweets{}{}-{}".format(query, latitude, longitude)
             # default optional args values
@@ -125,6 +123,7 @@ def api_toptrends():
     sort = request.args.get('sort')
 
     try:
+        print("/toptrends args: ", woeid, latitude, longitude, num, sort)
         # TODO fix error here
         if woeid is None and (latitude is not None and longitude is not None):
             woeid = str(algo.get_location_by_latlon(float(latitude), float(longitude)).woeid)
@@ -232,6 +231,8 @@ def api_get_trends_snapshot():
     sec = request.args.get("seconds")
 
     try:
+        print("/temporal args: ", trends, fromdate, todate, loc, day, hour, minutesString, sec)
+
         if trends is not None:
             trendsparsed = trends.split(",")
             until = datetime.now()
@@ -374,4 +375,5 @@ def page_not_found(e):
 
 
 # Run the Flask server
-app.run()
+if __name__ == "__main__":
+    app.run()
