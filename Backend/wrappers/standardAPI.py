@@ -1,4 +1,4 @@
-import wrappers.credentials as creds
+import credentials as creds
 import tweepy as tw
 
 class standardAPI:
@@ -87,6 +87,29 @@ class standardAPI:
         except:
             return "EXCEPTION: Page does not exist"
 
+    # Get a list of random retweets for a given tweet ID
+    #   args: tweet ID, count (max = 100)
+    #   return type: a list of Twitter status objects 
+    # Sometimes the number returned is less than input
+    def get_retweets_of_tweet(self, tweet_id, max_num=100):
+        # retweetList = []
+        try:
+            retweets = self.tweepy.retweets(id=tweet_id, count=max_num)
+            return retweets
+        
+        except:
+            return "EXCEPTION: Invalid Tweet ID"
+
+    # Get a list of random retweeters for a given tweet ID
+    #   return type: a list of Twitter user objects
+    def get_retweeters_of_tweet(self, tweet_id, max_num=100):
+        retweeters = []
+        retweets = self.get_retweets_of_tweet(tweet_id, max_num)
+        for tweet in retweets:
+            user = tweet.user #User object
+            retweeters.append(user)
+        return retweeters
+
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
         place = trendsResult['locations'][0]['name']
@@ -104,11 +127,16 @@ if __name__ == "__main__":
     api = standardAPI()
 
     timeline = api.get_user_timeline('realDonaldTrump', max_num=1)
+    status = timeline[0]
     count = 0
 
-    for each in timeline:
+    tweetID = status.id
+    print("Tweet ID: ", tweetID)
+    retweeters = api.get_retweeters_of_tweet(tweetID, max_num=30)
+    for each in retweeters:
         count += 1
-        print(each, "\n")
+        # print(each, "\n")
 
     print("Count: ", count)
+
 
