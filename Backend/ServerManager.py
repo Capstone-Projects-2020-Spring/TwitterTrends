@@ -323,8 +323,11 @@ def api_get_economic_data():
     try:
         print("\n/economics args: ", state, city, woeid, "\n")
 
-        if city is not None or woeid is not None:
-            return jsonify(algo.get_economic_data_by_city(city, woeid))
+        if city is not None:
+            return jsonify(algo.get_economic_data_by_city(city))
+
+        if woeid is not None:
+            return jsonify(algo.get_economic_data_by_woeid(woeid))
 
         if state is not None:
             return jsonify(algo.get_economic_data_by_state(state))

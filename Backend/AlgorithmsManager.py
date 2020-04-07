@@ -351,25 +351,35 @@ class AlgorithmsManager:
 
         return all_cities_data
 
-    # retrieves economic data for a city or woeid
-    #   arg: city (full name), woeid (either str or int)
+    # retrieves economic data for a city
+    #   arg: city (full name)
     #   return type: dict
-    def get_economic_data_by_city(self, city, woeid):
+    def get_economic_data_by_city(self, city):
         if city is not None:
-            hasWoeid=False
             queryres = self.database.query("SELECT * FROM all_city_social_data WHERE city = (%s);", city)
 
-        elif woeid is not None:
-            hasWoeid= True
+        resrows = queryres.get_rows()
+        city_data = self.parse_city_data(resrows[0], False)
+
+        return city_data
+
+    # retrieves economic data for a woeid
+    #   arg: woeid (either str or int)
+    #   return type: dict
+    def get_economic_data_by_woeid(self, woeid):
+       if woeid is not None:
             queryres = self.database.query("SELECT * FROM city_social_data WHERE woe_id = (%s);", woeid)
 
-        resrows = queryres.get_rows()
-        city_data = self.parse_city_data(resrows[0], hasWoeid)
+       resrows = queryres.get_rows()
+       city_data = self.parse_city_data(resrows[0], True)
 
-        return city_data  
+       return city_data
+
 
     # returns a city object (dict) for each city in the state
     # object contains socioeconomic data
+    # adjusts column indices based on whether it's processing data from the older/smaller
+    #table which has a woeid column or from the newer/larger table which doesn't
     def parse_city_data(self, entry, hasWoeid):
         city_data = {}
 
