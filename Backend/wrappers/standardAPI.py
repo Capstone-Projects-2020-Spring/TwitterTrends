@@ -1,4 +1,4 @@
-import credentials as creds
+import wrappers.credentials as creds
 import tweepy as tw
 
 class standardAPI:
