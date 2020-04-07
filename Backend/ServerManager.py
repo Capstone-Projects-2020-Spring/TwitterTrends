@@ -339,6 +339,30 @@ def api_get_economic_data():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
+@app.route('/user', methods=['GET'])
+def api_get_twitter_user():
+    username = request.args.get('username')
+
+    try:
+        if username is not None:
+            
+            user = algo.get_user_by_username(username)
+
+            if user is not None:
+                return jsonify(user)
+            else:
+                return "ERROR: Validation fails"
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have username'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /user')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
 
 @app.route('/test', methods=['GET'])
 def api_test():
