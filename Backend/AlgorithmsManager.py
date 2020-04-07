@@ -341,7 +341,7 @@ class AlgorithmsManager:
     #                   labor_force_participation, unemployment_rate, race_white
     #                   race_black, race_asian, race_native, race_pacific, race_other, race_multiple
     def get_economic_data_by_state(self, state):
-        queryres = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
+        queryres = self.database.query("SELECT * FROM all_city_social_data WHERE states = (%s);", state)
         resrows = queryres.get_rows()
         all_cities_data = []
 
@@ -356,7 +356,7 @@ class AlgorithmsManager:
     #   return type: dict
     def get_economic_data_by_city(self, city, woeid):
         if city is not None:
-            queryres = self.database.query("SELECT * FROM city_social_data WHERE city = (%s);", city)
+            queryres = self.database.query("SELECT * FROM all_city_social_data WHERE city = (%s);", city)
 
         elif woeid is not None:
             queryres = self.database.query("SELECT * FROM city_social_data WHERE woe_id = (%s);", woeid)
