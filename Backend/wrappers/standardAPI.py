@@ -75,6 +75,18 @@ class standardAPI:
         except:
             return "EXCEPTION: Page does not exist"
 
+    # Get the most recent tweets of the specified user
+    #   return: count passed as parameter, or the total number of available tweets
+    def get_user_timeline(self, public_id, max_num=30):
+        timeline = []
+        try:
+            for status in tw.Cursor(self.tweepy.user_timeline, screen_name=public_id).items(max_num):
+                timeline.append(status)
+            return timeline
+        
+        except:
+            return "EXCEPTION: Page does not exist"
+
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
         place = trendsResult['locations'][0]['name']
@@ -91,12 +103,12 @@ if __name__ == "__main__":
 
     api = standardAPI()
 
-    network = api.get_followers('realDonaldTrump', max_num=50)
+    timeline = api.get_user_timeline('realDonaldTrump', max_num=1)
     count = 0
 
-    for each in network:
+    for each in timeline:
         count += 1
-        #print(each, "\n")
+        print(each, "\n")
 
     print("Count: ", count)
 
