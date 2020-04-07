@@ -403,7 +403,7 @@ class AlgorithmsManager:
         # self.followers_count = folcount
         # self.friends_count = fricount
             ur = self.twitter.get_user(username)
-            user = DataStructures.User(None, ur.id, ur.screen_name, ur.created_at, ur.location,
+            user = DataStructures.User(None, ur.id, ur.screen_name, ur.name, ur.created_at, ur.location,
                                         ur.protected, ur.followers_count, ur.friends_count)
             res = []
             res.append(user.__dict__)
