@@ -445,6 +445,10 @@ class AlgorithmsManager:
                         break
                 res.append(dict)
 
+        # sort retweeters by retweets count
+        if sorted == 1:
+            AlgorithmsManager.sort_retweeters(res)
+
         return res
 
     # pass in array of Trend object and this will sort it using insertion sort
@@ -508,6 +512,36 @@ class AlgorithmsManager:
 
 
             arr[k + 1] = temp
+
+
+    @staticmethod
+    def sort_retweeters(arr):
+        length = len(arr)
+        for l in range(1, length):
+            temp = arr[l]
+            tempval = temp['retweets_count']
+            k = l-1
+
+            num_trend_sort_iter = 0
+
+            while k >= 0 and    (tempval if tempval is not None else 0) >= \
+                                (arr[k]['retweets_count'] if arr[k]['retweets_count'] is not None else 0):
+                arr[k+1] = arr[k]
+                k -= 1
+
+                # todo strip debugging code from while loop
+                num_trend_sort_iter +=1
+                if num_trend_sort_iter >= 10000:
+                    print("while loop started to go infinite:\nARGUMENTS:\n",
+                          "arr= ", arr,
+                          ";\n\nVARIABLES:\n",
+                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
+                          "\nSTACK TRACE:\n")
+
+                    traceback.print_stack()
+                    raise Exception("got into infinite loop")
+
+            arr[k+1] = temp
 
 
     # create a bucket grouped by date from an array of trendssnapshot tuples from database query
@@ -597,7 +631,7 @@ if __name__ == "__main__":
     # SETUP AlgorithmsManager
     algo = AlgorithmsManager(cache, db, twitter)
 
-    username = "realDonaldTrump"
+    username = "Drake"
 
-    res = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=50)
+    res = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=20)
     print(res)
