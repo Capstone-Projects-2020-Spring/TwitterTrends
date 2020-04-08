@@ -120,7 +120,7 @@ class AlgorithmsManager:
                 loc = DataStructures.Location(None, None, None, None, None, None, None)
                 qcount = 0   # number of quotes
                 rcount = 0   # number of replies
-
+                print(tweet)
                 # TODO: need changes to all the locations values. probably isn't accurate right now
                 if tweet['geo'] is not None:
                     if ('coordinates' in tweet['geo']) and tweet['geo']['coordinates']:
