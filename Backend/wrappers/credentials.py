@@ -1,6 +1,7 @@
 import os
 import searchtweets as st
 import tweepy
+import traceback
 
 import wrappers.TwitterCredentialManagement as tcm
 
@@ -33,7 +34,9 @@ def getStandardTweepyTwitterCreds():
     try:
         twitterStandardAPI.verify_credentials()
         print("Twitter credentials valid")
-    except:
+    except Exception as e:
         print("Tweepy unable to authenticate with Twitter")
+        print("Exception: ", e.__doc__, str(e))
+        traceback.print_exc()
 
     return twitterStandardAPI

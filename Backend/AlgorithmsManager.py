@@ -9,7 +9,6 @@ from TwitterAPIManager import TwitterAPIManager
 # from flask import jsonify # pronbably not needed
 import DataStructures
 
-import sys
 import traceback
 
 
@@ -342,52 +341,78 @@ class AlgorithmsManager:
     #                   labor_force_participation, unemployment_rate, race_white
     #                   race_black, race_asian, race_native, race_pacific, race_other, race_multiple
     def get_economic_data_by_state(self, state):
-        queryres = self.database.query("SELECT * FROM city_social_data WHERE states = (%s);", state)
+        queryres = self.database.query("SELECT * FROM all_city_social_data WHERE states = (%s);", state)
         resrows = queryres.get_rows()
         all_cities_data = []
 
         for entry in resrows:
-            city = self.parse_city_data(entry)
+            city = self.parse_city_data(entry, False)
             all_cities_data.append(city)
 
         return all_cities_data
 
-    # retrieves economic data for a city or woeid
-    #   arg: city (full name), woeid (either str or int)
+    # retrieves economic data for a city
+    #   arg: city (full name)
     #   return type: dict
-    def get_economic_data_by_city(self, city, woeid):
+    def get_economic_data_by_city(self, city):
         if city is not None:
-            queryres = self.database.query("SELECT * FROM city_social_data WHERE city = (%s);", city)
-
-        elif woeid is not None:
-            queryres = self.database.query("SELECT * FROM city_social_data WHERE woe_id = (%s);", woeid)
+            queryres = self.database.query("SELECT * FROM all_city_social_data WHERE city = (%s);", city)
 
         resrows = queryres.get_rows()
-        city_data = self.parse_city_data(resrows[0])
+        city_data = self.parse_city_data(resrows[0], False)
 
-        return city_data  
+        return city_data
+
+    # retrieves economic data for a woeid
+    #   arg: woeid (either str or int)
+    #   return type: dict
+    def get_economic_data_by_woeid(self, woeid):
+       if woeid is not None:
+            queryres = self.database.query("SELECT * FROM city_social_data WHERE woe_id = (%s);", woeid)
+
+       resrows = queryres.get_rows()
+       city_data = self.parse_city_data(resrows[0], True)
+
+       return city_data
+
 
     # returns a city object (dict) for each city in the state
     # object contains socioeconomic data
-    def parse_city_data(self, entry):
+    # adjusts column indices based on whether it's processing data from the older/smaller
+    #table which has a woeid column or from the newer/larger table which doesn't
+    def parse_city_data(self, entry, hasWoeid):
         city_data = {}
-        city_data["woe_id"] = entry[1]; city_data["city"] = entry[2]
-        city_data["state"] = entry[3]; city_data["lat"] = entry[4]
-        city_data["long"] = entry[5]; city_data["population"] = entry[7]
-        city_data["density"] = entry[8]; city_data["ranking"] = entry[9]
-        city_data["age_median"] = entry[10]; city_data["male"] = entry[11]
-        city_data["female"] = entry[12]; city_data["married"] = entry[13]
-        city_data["family_size"] = entry[14]
-        city_data["income_household_median"] = entry[15]
-        city_data["income_six_figure_percent"] = entry[16]; city_data["home_ownership"] = entry[17]
-        city_data["home_value"] = entry[18]; city_data["rent_median"] = entry[19]
-        city_data["education_college_or_above"] = entry[20]
-        city_data["labor_force_participation"] = entry[21]
-        city_data["unemployment_rate"] = entry[22]
-        city_data["race_white"] = entry[23]; city_data["race_black"] = entry[24]
-        city_data["race_asian"] = entry[25]; city_data["race_native"] = entry[26]
-        city_data["race_pacific"] = entry[27]; city_data["race_other"] = entry[28]
-        city_data["race_multiple"] = entry[29]
+
+        if hasWoeid:
+            city_data["woe_id"] = entry[1]
+        indexAdjustment = 1 if hasWoeid else 0
+        city_data["city"] = entry[1 + indexAdjustment]
+        city_data["state"] = entry[2 + indexAdjustment]
+        city_data["lat"] = entry[3 + indexAdjustment]
+        city_data["long"] = entry[4 + indexAdjustment]
+        city_data["population"] = entry[6 + indexAdjustment]
+        city_data["density"] = entry[7 + indexAdjustment]
+        city_data["ranking"] = entry[8 + indexAdjustment]
+        city_data["age_median"] = entry[9 + indexAdjustment]
+        city_data["male"] = entry[10 + indexAdjustment]
+        city_data["female"] = entry[11 + indexAdjustment]
+        city_data["married"] = entry[12 + indexAdjustment]
+        city_data["family_size"] = entry[13 + indexAdjustment]
+        city_data["income_household_median"] = entry[14 + indexAdjustment]
+        city_data["income_six_figure_percent"] = entry[15 + indexAdjustment]
+        city_data["home_ownership"] = entry[16 + indexAdjustment]
+        city_data["home_value"] = entry[17 + indexAdjustment]
+        city_data["rent_median"] = entry[18 + indexAdjustment]
+        city_data["education_college_or_above"] = entry[19 + indexAdjustment]
+        city_data["labor_force_participation"] = entry[20 + indexAdjustment]
+        city_data["unemployment_rate"] = entry[21 + indexAdjustment]
+        city_data["race_white"] = entry[22 + indexAdjustment]
+        city_data["race_black"] = entry[23 + indexAdjustment]
+        city_data["race_asian"] = entry[24 + indexAdjustment]
+        city_data["race_native"] = entry[25 + indexAdjustment]
+        city_data["race_pacific"] = entry[26 + indexAdjustment]
+        city_data["race_other"] = entry[27 + indexAdjustment]
+        city_data["race_multiple"] = entry[28 + indexAdjustment]
 
         return city_data
 
@@ -416,8 +441,7 @@ class AlgorithmsManager:
                           "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
                           "\nSTACK TRACE:\n")
 
-                    currStackTrace = sys.last_traceback
-                    traceback.print_tb(currStackTrace)
+                    traceback.print_stack()
                     raise Exception("got into infinite loop")
 
             arr[k+1] = temp
@@ -448,8 +472,7 @@ class AlgorithmsManager:
                           "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
                           "\nSTACK TRACE:\n")
 
-                    currStackTrace = sys.last_traceback
-                    traceback.print_tb(currStackTrace)
+                    traceback.print_stack()
                     raise Exception("got into infinite loop")
 
 
@@ -490,8 +513,7 @@ class AlgorithmsManager:
                               "\nd= ", d, "\ndcap= ", dcap,
                               "\nSTACK TRACE:\n")
 
-                        currStackTrace = sys.last_traceback
-                        traceback.print_tb(currStackTrace)
+                        traceback.print_stack()
                         raise Exception("got into infinite loop")
 
                 tempbucket[curtime].append(snap)
