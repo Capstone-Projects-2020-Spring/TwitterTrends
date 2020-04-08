@@ -223,6 +223,45 @@ body {
 	overflow: hidden;
 }
 
+#map-buttons {
+	position: absolute;
+	top: 2%;
+	right: 1%;
+}
+
+.tooltip-button {
+	float: right;
+}
+
+.tooltip-button span {
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+#us_button {
+	border: none;
+  	cursor: pointer;
+  	border-radius: 5px;
+	padding: 5px;
+}
+
+#us_button img {
+	width: auto;
+	height: 25px;
+}
+
+#world_button {
+	border: none;
+  	cursor: pointer;
+  	border-radius: 5px;
+	padding: 5px;
+}
+
+#world_button img {
+	width: auto;
+	height: 25px;
+}
+
 .states {
   fill: #fff;
   stroke: #000;
@@ -248,9 +287,7 @@ body {
 
 .tooltip {
 	background-color: #b1e6d3;
-	border: solid;
-	border-color: #000;
-	border-width: 2px;
+	border: solid #000 2px;
 	border-radius: 5px;
 	padding: 5px;
 	font-weight: 500;

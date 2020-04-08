@@ -149,6 +149,21 @@ $(document).ready(function(){
 		document.getElementById('trend-4').innerText = '';
 		document.getElementById('trend-5').innerText = '';
 	});
+
+	document.querySelector("#us_button").addEventListener('click', function() {
+		document.querySelector('#bg-modal').style.display = 'flex';
+		document.querySelector('.top-trends-title').innerHTML = "Top Trends for the United States";
+		let usUrl = "http://18.214.197.203:5000/toptrends?woeid=23424977";
+		trend_data = retrieveTrends(usUrl);
+	});
+
+	document.querySelector("#world_button").addEventListener('click', function() {
+		document.querySelector('#bg-modal').style.display = 'flex';
+		document.querySelector('.top-trends-title').innerHTML = "Top Trends for the World";
+		let worldUrl = "http://18.214.197.203:5000/toptrends?woeid=23424775";
+		trend_data = retrieveTrends(worldUrl);
+	});
+
 	getStartingNews();
 });
 
@@ -172,9 +187,13 @@ function retrieveTrends(trendUrl) {
 }
 
 function getMoreInfo() {
-    let trend = encodeURIComponent(this.innerHTML);
+	let trend = this.innerHTML;
+	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2');
+	alert(news_trend);
+	news_trend = encodeURIComponent(news_trend);
+	let tweet_trend = encodeURIComponent(trend);
     let trend_news = null;
-    let newsURL = "http://18.214.197.203:5000/trend_news?trend=" + trend;
+    let newsURL = "http://18.214.197.203:5000/trend_news?trend=" + news_trend;
     $.getJSON(newsURL, function (news) {
         trend_news = news;
 
@@ -186,15 +205,15 @@ function getMoreInfo() {
 			document.getElementById('article-url-1').setAttribute("href", trend_news[0].link_url);
 			document.getElementById('article-url-1').innerText = 'Read More!';
 		} else {
-			document.getElementById('article-title-1').innerHTML = "";
+			document.getElementById('article-title-1').innerHTML = "Sorry! No news was found about " + trend + "!";
 			document.getElementById('article-blurb-1').innerHTML ="";
 			document.getElementById('article-url-1').setAttribute("href", "");
 			document.getElementById('article-url-1').innerText = "";
 		}
 
-        if (news.length > 1) {
+        if(news.length > 1) {
 			document.getElementById('article-title-2').innerHTML = trend_news[1].title;
-			blurb = trend_news[1].description;
+			let blurb = trend_news[1].description;
 			blurb = blurb.slice(0, 150) + '...';
 			document.getElementById('article-blurb-2').innerHTML = blurb;
 			document.getElementById('article-url-2').setAttribute("href", trend_news[1].link_url);
@@ -208,7 +227,7 @@ function getMoreInfo() {
 
         if(news.length > 2) {
 			document.getElementById('article-title-3').innerHTML = trend_news[2].title;
-			blurb = trend_news[2].description;
+			let blurb = trend_news[2].description;
 			blurb = blurb.slice(0, 150) + '...';
 			document.getElementById('article-blurb-3').innerHTML = blurb;
 			document.getElementById('article-url-3').setAttribute("href", trend_news[2].link_url);
@@ -222,7 +241,7 @@ function getMoreInfo() {
     });
 
     //alert("about to fetch example tweets")
-    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + trend;
+    let tweetsURL = "http://18.214.197.203:5000/toptweets?query=" + tweet_trend;
     $.getJSON(tweetsURL, function (tweets) {
     	//alert("fetched example tweets")
 		//alert(tweets.length)
@@ -273,7 +292,7 @@ function getMoreInfo() {
 }
 
 function getStartingNews() {
-	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=1";
+	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=23424775";
 	let world_news_url = "http://18.214.197.203:5000/trend_news?trend=";
 	let world_trends = null;
 	let top_world_trend = null;
