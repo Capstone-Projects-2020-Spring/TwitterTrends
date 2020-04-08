@@ -101,19 +101,15 @@ class TemporalDataManager:
             for date in snapsbucket.keys():
                 snaps = snapsbucket[date]
                 totalvol = 0
+                maxvol = 0
                 for snap in snaps:
                     totalvol += snap[4]
-                precsv[date][i] = totalvol    # updating the tweet volume value normally with just totalvol
 
-                # code comment below is for saving previous totalvol value.
-                # if new value is 0 then reuse the previous totalvol value
-                """
-                if totalvol == 0:
-                    precsv[date][i] = prevval
-                else:
-                    precsv[date][i] = totalvol
-                    prevval = totalvol
-                """
+                    # storing extra value for maximum volume in the tweet_volume set
+                    if snap[4] > maxvol:
+                        maxvol = snap[4]
+                precsv[date][i] = int(totalvol/len(snaps))   # Update using AVERAGE tweet volume value instead
+
             i += 1  # increment the trend index
             print()
 
@@ -128,14 +124,19 @@ class TemporalDataManager:
                 csv += ","
         csv += "\n"
 
+        prevval = [0] * numTrendsRequested
         for key in precsv:
             csv += "{},".format(key)
 
             vals = precsv[key]
             valcounter = 0
             for val in vals:
+                newval = val
+                if val == 0:
+                    newval = prevval[valcounter]
+                prevval[valcounter] = newval
+                csv += str(newval)
                 valcounter += 1
-                csv += str(val)
                 if valcounter != numTrendsRequested:
                     csv += ","
 
