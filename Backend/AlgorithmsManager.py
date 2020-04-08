@@ -120,7 +120,8 @@ class AlgorithmsManager:
                 loc = DataStructures.Location(None, None, None, None, None, None, None)
                 qcount = 0   # number of quotes
                 rcount = 0   # number of replies
-                print(tweet)
+                url = None   # Tweets url
+                # print(tweet)
                 # TODO: need changes to all the locations values. probably isn't accurate right now
                 if tweet['geo'] is not None:
                     if ('coordinates' in tweet['geo']) and tweet['geo']['coordinates']:
@@ -135,6 +136,16 @@ class AlgorithmsManager:
                     # store tweet['reply_count'] in rcount
                     rcount = tweet['reply_count']
 
+
+                if 'entities' in tweet:
+                    ents = tweet['entities']
+
+                    if 'urls' in ents:
+                        urls = ents['urls']
+                        if len(urls) > 0:
+                            url = urls[0]['expanded_url']
+
+
                 # TODO: need changes to all the locations values. probably isn't accurate right now
                 temptweet = DataStructures.Tweet(id=i,
                                                  ids=tweet['id'],
@@ -145,7 +156,8 @@ class AlgorithmsManager:
                                                  quotes=qcount,
                                                  rtweets=tweet['retweet_count'],
                                                  repl=rcount,
-                                                 date=tweet['created_at'])
+                                                 date=tweet['created_at'],
+                                                 url=url)
                 tweets.append(temptweet)
                 i += 1
 
