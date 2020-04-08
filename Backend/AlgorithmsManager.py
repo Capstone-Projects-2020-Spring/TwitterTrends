@@ -389,7 +389,7 @@ class AlgorithmsManager:
         city_data["race_multiple"] = entry[29]
 
         return city_data
-
+        
     def get_user_by_username(self, username):
         print("\nValidating user")
         try:
@@ -413,6 +413,39 @@ class AlgorithmsManager:
         except:
             print("Validation fails")
             return []
+
+    # this function returns a list of retweeters
+    #   args:   username
+    #           num_tweets (optional): how many recent tweets to search through
+    #           num_retweets (optional): how many retweeters per tweet
+    #           sorted (optional): value of 1 sorts the list by number of retweets 
+    #   return: a list of dictionary
+    def get_most_frequent_retweeters(self, username, num_tweets=20, num_retweets=20, sorted=1):
+
+        retweetData = self.twitter.most_recent_retweeters(username, num_tweets=num_tweets, num_retweets=num_retweets)
+        
+        # get the list of all retweeters
+        retweeter_history = []
+        for tweet in retweetData:
+            innerList = tweet['retweeters']
+            for username in innerList:
+                retweeter_history.append(username)
+
+        # count the number of retweets
+        res = []
+        for user_id in retweeter_history:
+            dict = {'username': user_id, 'retweets_count': 1}
+
+            if len(res) == 0:
+                res.append(dict)
+            else:
+                for entry in res:
+                    if entry['username'] == user_id:
+                        entry['retweets_count'] += 1
+                        break
+                res.append(dict)
+
+        return res
 
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
@@ -564,4 +597,7 @@ if __name__ == "__main__":
     # SETUP AlgorithmsManager
     algo = AlgorithmsManager(cache, db, twitter)
 
-    print(algo.get_economic_data_by_city(None, "2459115"))
+    username = "realDonaldTrump"
+
+    res = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=50)
+    print(res)
