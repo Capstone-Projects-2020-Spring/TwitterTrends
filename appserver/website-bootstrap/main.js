@@ -1,3 +1,6 @@
+window.econVars = []
+window.statesEconData = {}
+
 $(document).ready(function(){
 	$('.header').height($(window).height());
 	/*
@@ -68,10 +71,10 @@ $(document).ready(function(){
 		.defer(d3.json, locationsUrl)
 		.await(function (error, states, cities, locations) {
 			let path = d3.geo.path();
-			let projection = d3.geo.albersUsa()
+			window.SvgMapProjection = d3.geo.albersUsa()
 				.translate([width / 2, height / 2])
 				.scale([1200]);
-			path.projection(projection);
+			path.projection(window.SvgMapProjection);
 
 			let us_state = mapsvg.append("g")
 				.attr("class", "states")
@@ -94,11 +97,22 @@ $(document).ready(function(){
 						x = (bounds[1][0] + bounds[0][0]) / 2;
 						y = ((bounds[1][1] + bounds[0][1]) / 2);
 						centered = d;
+
+						displayStateEconData(d)
 					} else {
 						x = width / 2;
 						y = height / 2;
 						z = 1;
 						centered = null;
+
+						//todo? possible bug if someone zooms into state then zooms out before api call for that state's econ data returns and is displayed
+
+						//todo hide smaller cities/towns
+						let stateName = d.properties.name;//?
+
+						citiesEconData = window.statesEconData[stateName];
+
+
 					}
 
 					us_state.selectAll("path")
@@ -110,14 +124,15 @@ $(document).ready(function(){
 					us_state.transition()
 						.duration(1000)
 						.attr("transform",
-							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
+							"translate(" + window.SvgMapProjection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
 						.style("stroke-width", 1 / z + "px");
 
 					us_cities.transition()
 						.duration(1000)
 						.attr("transform",
-							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
+							"translate(" + window.SvgMapProjection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
 						.style("stroke-width", 1 / z + "px");
+
 				});
 
 			let us_cities = mapsvg.append("g")
@@ -129,7 +144,7 @@ $(document).ready(function(){
 				.attr('cityName', function(d){return d.city_id;})
 				.attr('woeid', function(d){return d.woeid;})
 				.each(function (d) {
-					let location = projection([d.longitude, d.latitude]);
+					let location = window.SvgMapProjection([d.longitude, d.latitude]);
 					d3.select(this).attr({
 						cx: location[0], cy: location[1],
 						r: 5
@@ -335,4 +350,54 @@ function getStartingNews() {
 			});
 		}
 	});
+}
+
+
+function displayStateEconData(stateElem) {
+	var stateName = stateElem.properties.name;
+
+	if (window.statesEconData.hasOwnProperty(stateName)) {
+		//todo make that state's cities visible
+
+	} else {
+		stateName = encodeURIComponent(stateName);
+		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateName;
+		$.getJSON(stateEconDataUrl, function (stateEconData) {
+			if (stateEconData.length > 0) {
+				const nonEconDataKeys = ["city", "lat", "long", "state"];
+
+				let econDataKeys = Object.keys(stateEconData[0]);
+				econDataKeys = econDataKeys.filter(function(value, index, arr) {
+					return !(nonEconDataKeys.includes(value));
+				});
+				window.econVars = econDataKeys;
+
+				window.statesEconData[stateName] = {};
+
+				let mapContainerElem = document.getElementById("mapsvg");
+				let mapSvgElems = mapContainerElem.getElementsByTagName("svg");
+				if (mapSvgElems.length !== 1) {
+					throw "there isn't exactly 1 svg element for the map";
+				}
+				let mapSvgElem = mapSvgElems[0];
+				let econCityElemsContainer = d3.select(mapSvgElem).append("g").attr("class", "econ-cities");
+
+				for (let cityData of stateEconData) {
+					let cityElem = econCityElemsContainer.append("circle");
+
+					cityElem.attr("cityName", cityData.city);
+
+					let location = window.SvgMapProjection([cityData.long, cityData.lat]);
+					cityElem.attr({
+						cx: location[0], cy: location[1],
+						r: 2
+					});
+
+					window.statesEconData[stateName][cityElem] = cityData;
+				}
+			} else {
+				console.log("couldn't find any additional cities' economic data for state " + stateName);
+			}
+		});
+	}
 }
