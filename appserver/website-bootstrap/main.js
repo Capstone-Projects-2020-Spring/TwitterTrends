@@ -8,7 +8,7 @@ $(document).ready(function(){
     ** CORS proxy:
     ** https://cors-anywhere.herokuapp.com/
     */
-	let trend_data, centered;
+	let trend_data, centered, zoomed = 0;
 	const width = 1000, height = 600;
 
 	const Tooltip = d3.select(".row")
@@ -23,7 +23,12 @@ $(document).ready(function(){
 		Tooltip
 			.html(d.city_id + "<br>" + "long: " + d.longitude + "<br>" + "lat: " + d.latitude)
 			.style("left", (d3.mouse(this)[0] + 50) + "px")
-			.style("top", (d3.mouse(this)[1]) + "px")
+			.style("top", (d3.mouse(this)[1]) + "px");
+		/*Test
+		if (zoomed > 0) {
+			Tooltip
+				.html(d.city_id);
+		}*/
 	};
 
 	const mouseout = function(d){
@@ -94,11 +99,13 @@ $(document).ready(function(){
 						x = (bounds[1][0] + bounds[0][0]) / 2;
 						y = ((bounds[1][1] + bounds[0][1]) / 2);
 						centered = d;
+						zoomed = 1;
 					} else {
 						x = width / 2;
 						y = height / 2;
 						z = 1;
 						centered = null;
+						zoomed = 0;
 					}
 
 					us_state.selectAll("path")
@@ -164,7 +171,7 @@ $(document).ready(function(){
 		trend_data = retrieveTrends(worldUrl);
 	});
 
-	getStartingNews();
+	//getStartingInfo();
 });
 
 function retrieveTrends(trendUrl) {
@@ -184,12 +191,12 @@ function retrieveTrends(trendUrl) {
 	    document.getElementById('trend-5').addEventListener('click', getMoreInfo);
 
 	});
+
 }
 
 function getMoreInfo() {
 	let trend = this.innerHTML;
 	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2');
-	alert(news_trend);
 	news_trend = encodeURIComponent(news_trend);
 	let tweet_trend = encodeURIComponent(trend);
     let trend_news = null;
@@ -278,6 +285,8 @@ function getMoreInfo() {
 			document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
 			document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
 			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+
+			document.getElementById('tweets').style.display='inline-block';
 		} else {
 			document.getElementById("pop-tweet-header-1").innerHTML = "";
 			document.getElementById('tweet-content-1').innerHTML = "";
@@ -286,72 +295,24 @@ function getMoreInfo() {
 			document.getElementById("pop-tweet-header-2").innerHTML = "";
 			document.getElementById('tweet-content-2').innerHTML = "";
 			document.getElementById("tweet-date-2").innerHTML = "";
+
+			document.getElementById('tweets').style.display='none';
 		}
 	});
 
 }
-
-function getStartingNews() {
+/*
+function getStartingInfo() {
 	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=23424775";
-	let world_news_url = "http://18.214.197.203:5000/trend_news?trend=";
 	let world_trends = null;
 	let top_world_trend = null;
-	let world_news = null;
 
 	$.getJSON(world_trend_url, function(data){
 		world_trends = data;
 	}).then(function() {
 		if (world_trends.length > 0) {
 			top_world_trend = world_trends[0].trend_content;
-			if (top_world_trend.startsWith('#')){
-				top_world_trend = top_world_trend.substring(1);
-			}
-			world_news_url = world_news_url + top_world_trend;
-			$.getJSON(world_news_url, function (news) {
-				world_news = news;
-
-				if(world_news.length > 0) {
-					document.getElementById('article-title-1').innerHTML = world_news[0].title;
-					let blurb = world_news[0].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-1').innerHTML = blurb;
-					document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
-					document.getElementById('article-url-1').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-1').innerHTML = "";
-					document.getElementById('article-blurb-1').innerHTML ="";
-					document.getElementById('article-url-1').setAttribute("href", "");
-					document.getElementById('article-url-1').innerText = "";
-				}
-
-				if(world_news.length > 1) {
-					document.getElementById('article-title-2').innerHTML = world_news[1].title;
-					blurb = world_news[1].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-2').innerHTML = blurb;
-					document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
-					document.getElementById('article-url-2').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-2').innerHTML = "";
-					document.getElementById('article-blurb-2').innerHTML ="";
-					document.getElementById('article-url-2').setAttribute("href", "");
-					document.getElementById('article-url-2').innerText = "";
-				}
-
-				if (world_news.length > 2) {
-					document.getElementById('article-title-3').innerHTML = world_news[2].title;
-					blurb = world_news[2].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-3').innerHTML = blurb;
-					document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
-					document.getElementById('article-url-3').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-3').innerHTML = "";
-					document.getElementById('article-blurb-3').innerHTML ="";
-					document.getElementById('article-url-3').setAttribute("href", "");
-					document.getElementById('article-url-3').innerText = "";
-				}
-			});
+			getMoreInfo(top_world_trend);
 		}
 	});
-}
+}*/
