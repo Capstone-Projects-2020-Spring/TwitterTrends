@@ -1,6 +1,9 @@
 window.econVars = []
 window.statesEconData = {}
 
+window.zoomTransitionTime = 1000
+
+
 $(document).ready(function(){
 	$('.header').height($(window).height());
 	/*
@@ -71,10 +74,10 @@ $(document).ready(function(){
 		.defer(d3.json, locationsUrl)
 		.await(function (error, states, cities, locations) {
 			let path = d3.geo.path();
-			window.SvgMapProjection = d3.geo.albersUsa()
+			mapProjection = d3.geo.albersUsa()
 				.translate([width / 2, height / 2])
 				.scale([1200]);
-			path.projection(window.SvgMapProjection);
+			path.projection(mapProjection);
 
 			let us_state = mapsvg.append("g")
 				.attr("class", "states")
@@ -98,7 +101,7 @@ $(document).ready(function(){
 						y = ((bounds[1][1] + bounds[0][1]) / 2);
 						centered = d;
 
-						displayStateEconData(d)
+						displayStateEconData(d, centered, mapProjection, x, y, z);
 					} else {
 						x = width / 2;
 						y = height / 2;
@@ -118,20 +121,11 @@ $(document).ready(function(){
 					us_state.selectAll("path")
 						.classed("active", centered && function(d) { return d === centered; });
 
-					us_cities.selectAll("path")
-						.classed("active", centered && function(d) { return d === centered; });
+					// us_cities.selectAll("path")
+					// 	.classed("active", centered && function(d) { return d === centered; });
 
-					us_state.transition()
-						.duration(1000)
-						.attr("transform",
-							"translate(" + window.SvgMapProjection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
-						.style("stroke-width", 1 / z + "px");
-
-					us_cities.transition()
-						.duration(1000)
-						.attr("transform",
-							"translate(" + window.SvgMapProjection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
-						.style("stroke-width", 1 / z + "px");
+					zoomTransformElements(us_state, window.zoomTransitionTime, mapProjection.translate(), x, y, z);
+					zoomTransformElements(us_cities, window.zoomTransitionTime, mapProjection.translate(), x, y, z);
 
 				});
 
@@ -144,7 +138,7 @@ $(document).ready(function(){
 				.attr('cityName', function(d){return d.city_id;})
 				.attr('woeid', function(d){return d.woeid;})
 				.each(function (d) {
-					let location = window.SvgMapProjection([d.longitude, d.latitude]);
+					let location = mapProjection([d.longitude, d.latitude]);
 					d3.select(this).attr({
 						cx: location[0], cy: location[1],
 						r: 5
@@ -166,6 +160,15 @@ $(document).ready(function(){
 	});
 	getStartingNews();
 });
+
+function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, x, y, z) {
+	d3ElementsSelection.transition()
+		.duration(transitionTime)
+		.attr("transform",
+			"translate(" + projectionTranslation + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
+		.style("stroke-width", 1 / z + "px");
+}
+
 
 function retrieveTrends(trendUrl) {
 	let trends = null;
@@ -353,7 +356,7 @@ function getStartingNews() {
 }
 
 
-function displayStateEconData(stateElem) {
+function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY, newZ) {
 	var stateName = stateElem.properties.name;
 
 	if (window.statesEconData.hasOwnProperty(stateName)) {
@@ -382,19 +385,24 @@ function displayStateEconData(stateElem) {
 				let mapSvgElem = mapSvgElems[0];
 				let econCityElemsContainer = d3.select(mapSvgElem).append("g").attr("class", "econ-cities");
 
+				zoomTransformElements(econCityElemsContainer,window.zoomTransitionTime/2, projectionObj.translate(), newX, newY, newZ);
+
+
 				for (let cityData of stateEconData) {
 					let cityElem = econCityElemsContainer.append("circle");
 
 					cityElem.attr("cityName", cityData.city);
 
-					let location = window.SvgMapProjection([cityData.long, cityData.lat]);
+					let location = projectionObj([cityData.long, cityData.lat]);
 					cityElem.attr({
 						cx: location[0], cy: location[1],
-						r: 2
+						r: 1
 					});
 
+					//todo!!! this is bad, no objects as dictionary keys, must fix!!!
 					window.statesEconData[stateName][cityElem] = cityData;
 				}
+
 			} else {
 				console.log("couldn't find any additional cities' economic data for state " + stateName);
 			}
