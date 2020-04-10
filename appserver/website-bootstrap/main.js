@@ -1,3 +1,45 @@
+window.statesEconData = {}
+window.currZoomedState = null;
+
+window.zoomTransitionTime = 1000
+
+function colorCitiesByEconData() {
+		let econDropdownElem = document.getElementById("econVarDropdown");
+		let chosenEconVar = econDropdownElem.value;
+
+		if(chosenEconVar !== "None" && window.currZoomedState) {
+			let citiesEconData = window.statesEconData[window.currZoomedState];
+			if(citiesEconData) {
+				let minEconVarVal = Number.MAX_VALUE;
+				let maxEconVarVal = -Number.MAX_VALUE;
+
+				for (const cityData of citiesEconData) {
+					let currVal = cityData[chosenEconVar];
+
+					if (currVal < minEconVarVal) { minEconVarVal = currVal; }
+					if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
+				}
+
+				let lowColor = d3.hsl("purple");
+				let highColor = d3.hsl("yellow");
+
+				let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
+
+				for (const cityData of citiesEconData) {
+					let cityElem = cityData["cityElement"];
+					let cityEconVarVal = cityData[chosenEconVar];
+
+					let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
+					let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
+
+					cityElem.style["fill"] = cityColor;
+				}
+			}
+		}
+	}
+
+
+
 $(document).ready(function(){
 	$('.header').height($(window).height());
 	/*
@@ -68,10 +110,10 @@ $(document).ready(function(){
 		.defer(d3.json, locationsUrl)
 		.await(function (error, states, cities, locations) {
 			let path = d3.geo.path();
-			let projection = d3.geo.albersUsa()
+			let mapProjection = d3.geo.albersUsa()
 				.translate([width / 2, height / 2])
 				.scale([1200]);
-			path.projection(projection);
+			path.projection(mapProjection);
 
 			let us_state = mapsvg.append("g")
 				.attr("class", "states")
@@ -84,40 +126,50 @@ $(document).ready(function(){
 				.attr('cursor', 'pointer')
 				.on('click', function clicked(d)
 				{
-					let x, y, z;
+					let xTranslation, yTranslation, scalingFactor;
+
+					if(window.currZoomedState) {
+						let citiesEconData = window.statesEconData[window.currZoomedState];
+
+						if(citiesEconData) {
+							for (let cityData of citiesEconData) {
+								cityElem = cityData["cityElement"];
+								cityElem.remove();
+								cityData["cityElement"] = null;
+							}
+						}
+						window.currZoomedState = null;
+					}
 
 					if (d && centered !== d) {
 						let bounds = path.bounds(d);
 						let w_scale = (bounds[1][0] - bounds[0][0]) / width;
 						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
-						z = .85 / Math.max(w_scale, h_scale);
-						x = (bounds[1][0] + bounds[0][0]) / 2;
-						y = ((bounds[1][1] + bounds[0][1]) / 2);
+						scalingFactor = .85 / Math.max(w_scale, h_scale);
+						xTranslation = (bounds[1][0] + bounds[0][0]) / 2;
+						yTranslation = ((bounds[1][1] + bounds[0][1]) / 2);
 						centered = d;
+
+						displayStateEconData(d,mapProjection);
 					} else {
-						x = width / 2;
-						y = height / 2;
-						z = 1;
+						xTranslation = width / 2;
+						yTranslation = height / 2;
+						scalingFactor = 1;
 						centered = null;
+
+
+						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
 					us_state.selectAll("path")
 						.classed("active", centered && function(d) { return d === centered; });
 
-					us_cities.selectAll("path")
-						.classed("active", centered && function(d) { return d === centered; });
 
-					us_state.transition()
-						.duration(1000)
-						.attr("transform",
-							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
-						.style("stroke-width", 1 / z + "px");
+					zoomTransformElements(us_state, window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
+					zoomTransformElements(us_cities, window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
 
-					us_cities.transition()
-						.duration(1000)
-						.attr("transform",
-							"translate(" + projection.translate() + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
-						.style("stroke-width", 1 / z + "px");
+					zoomTransformElements(econCityElemsContainer,window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
+
 				});
 
 			let us_cities = mapsvg.append("g")
@@ -129,7 +181,7 @@ $(document).ready(function(){
 				.attr('city-name', function(d){return d.city_id;})
 				.attr('woeid', function(d){return d.woeid;})
 				.each(function (d) {
-					let location = projection([d.longitude, d.latitude]);
+					let location = mapProjection([d.longitude, d.latitude]);
 					d3.select(this).attr({
 						cx: location[0], cy: location[1],
 						r: 5
@@ -138,7 +190,9 @@ $(document).ready(function(){
 				.on('mouseover', mouseover)
 				.on('mousemove', mousemove)
 				.on('mouseout', mouseout)
-				.on('click', handleClick)
+				.on('click', handleClick);
+
+			let econCityElemsContainer = mapsvg.append("g").attr("id", "econ-cities");
 		});
 
 	document.querySelector('#close').addEventListener('click', function() {
@@ -149,8 +203,27 @@ $(document).ready(function(){
 		document.getElementById('trend-4').innerText = '';
 		document.getElementById('trend-5').innerText = '';
 	});
+
+
+	$("#econVarDropdown").change(colorCitiesByEconData);
+
+
+
 	getStartingNews();
 });
+
+function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, xOffset, yOffset, scaleFactor) {
+	d3ElementsSelection.transition()
+		.duration(transitionTime)
+		.attr("transform",
+			"translate(" + projectionTranslation + ")scale(" + scaleFactor + ")translate(-" + xOffset + ",-" + yOffset + ")")
+		.style("stroke-width", 1 / scaleFactor + "px");
+}
+
+
+
+
+
 
 function retrieveTrends(trendUrl) {
 	let trends = null;
@@ -335,4 +408,72 @@ function getStartingNews() {
 			});
 		}
 	});
+}
+
+
+function displayStateEconData(stateElem, projectionObject) {
+	var stateName = stateElem.properties.name;
+	window.currZoomedState = stateName;
+
+	if (window.statesEconData.hasOwnProperty(stateName)) {
+		createEconCityElements(projectionObject);
+	} else {
+		stateName = encodeURIComponent(stateName);
+		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateName;
+
+		$.getJSON(stateEconDataUrl, function (stateEconData) {
+			if (window.currZoomedState === stateName && stateEconData.length > 0) {
+
+				let econDropdownElem = document.getElementById("econVarDropdown");
+				let econDropdownOptions = econDropdownElem.getElementsByTagName("option");
+				if (econDropdownOptions.length === 1) {
+					const nonEconDataKeys = ["city", "lat", "long", "state"];
+
+					let econDataKeys = Object.keys(stateEconData[0]);
+					econDataKeys = econDataKeys.filter(function(value, index, arr) {
+						return !(nonEconDataKeys.includes(value));
+					});
+					let econVars = econDataKeys;
+
+					for(let econVar of econVars) {
+						let optionElem = document.createElement("option");
+						optionElem.text=econVar;
+						optionElem.value=econVar;
+						econDropdownElem.add(optionElem);
+					}
+				}
+
+				window.statesEconData[stateName] = stateEconData;
+
+				createEconCityElements(projectionObject);
+			} else if(stateEconData.length <= 0) {
+				console.log("couldn't find any additional cities' economic data for state " + stateName);
+			}
+		});
+	}
+}
+
+function createEconCityElements(projectionObj) {
+	let econCityElemsContainer = d3.select("#econ-cities");
+
+	let citiesEconData = window.statesEconData[window.currZoomedState];
+	for (let cityData of citiesEconData) {
+		let cityElem = econCityElemsContainer.append("circle");
+		//todo figure out why econCityElemsContainer.append("circle") returns
+		// an array which contains an array which contains the <html> element as well as the <circle>
+
+		cityElem.attr("cityName", cityData.city);
+
+		let location = projectionObj([cityData.long, cityData.lat]);
+		cityElem.attr({
+			cx: location[0], cy: location[1],
+			r: 0.85
+		});
+
+		cityElem = cityElem[0][0];
+
+		cityData["cityElement"] = cityElem;
+	}
+
+	colorCitiesByEconData();
 }
