@@ -115,6 +115,13 @@ $(document).ready(function(){
 						citiesEconData = window.statesEconData[stateName];
 
 
+						for (let cityData of citiesEconData) {
+							cityElem = cityData["cityElement"];
+							cityElem.remove();
+							cityData["cityElement"] = null;
+						}
+
+
 					}
 
 					us_state.selectAll("path")
@@ -384,7 +391,7 @@ function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY
 					}
 				}
 
-				window.statesEconData[stateName] = {};
+				window.statesEconData[stateName] = [];
 
 				let mapContainerElem = document.getElementById("mapsvg");
 				let mapSvgElems = mapContainerElem.getElementsByTagName("svg");
@@ -399,17 +406,22 @@ function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY
 
 				for (let cityData of stateEconData) {
 					let cityElem = econCityElemsContainer.append("circle");
+					//todo figure out why econCityElemsContainer.append("circle") returns
+					// an array which contains an array which contains the <html> element as well as the <circle>
 
 					cityElem.attr("cityName", cityData.city);
 
 					let location = projectionObj([cityData.long, cityData.lat]);
 					cityElem.attr({
 						cx: location[0], cy: location[1],
-						r: 1
+						r: 0.75
 					});
 
-					//todo!!! this is bad, no objects as dictionary keys, must fix!!!
-					window.statesEconData[stateName][cityElem] = cityData;
+					cityElem = cityElem[0][0];
+
+					cityData["cityElement"] = cityElem;
+
+					window.statesEconData[stateName].push(cityData);
 				}
 
 			} else {
