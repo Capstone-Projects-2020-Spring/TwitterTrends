@@ -92,16 +92,15 @@ $(document).ready(function(){
 				{
 					let xTranslation, yTranslation, scalingFactor;
 
-					//todo? minor bug if someone zooms into state then zooms out
-					// before api call for that state's econ data returns and is displayed-
-					// the cities will still be displayed while zoomed out until the next time a state is clicked on
 					if(window.currZoomedState) {
 						let citiesEconData = window.statesEconData[window.currZoomedState];
 
-						for (let cityData of citiesEconData) {
-							cityElem = cityData["cityElement"];
-							cityElem.remove();
-							cityData["cityElement"] = null;
+						if(citiesEconData) {
+							for (let cityData of citiesEconData) {
+								cityElem = cityData["cityElement"];
+								cityElem.remove();
+								cityData["cityElement"] = null;
+							}
 						}
 						window.currZoomedState = null;
 					}
@@ -368,15 +367,16 @@ function getStartingNews() {
 
 function displayStateEconData(stateElem, projectionObject) {
 	var stateName = stateElem.properties.name;
+	window.currZoomedState = stateName;
 
 	if (window.statesEconData.hasOwnProperty(stateName)) {
-		window.currZoomedState = stateName;
 		createEconCityElements(projectionObject);
 	} else {
 		stateName = encodeURIComponent(stateName);
 		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateName;
+
 		$.getJSON(stateEconDataUrl, function (stateEconData) {
-			if (stateEconData.length > 0) {
+			if (window.currZoomedState === stateName && stateEconData.length > 0) {
 
 				let econDropdownElem = document.getElementById("econVarDropdown");
 				let econDropdownOptions = econDropdownElem.getElementsByTagName("option");
@@ -398,10 +398,9 @@ function displayStateEconData(stateElem, projectionObject) {
 				}
 
 				window.statesEconData[stateName] = stateEconData;
-				window.currZoomedState = stateName;
 
 				createEconCityElements(projectionObject);
-			} else {
+			} else if(stateEconData.length <= 0) {
 				console.log("couldn't find any additional cities' economic data for state " + stateName);
 			}
 		});
