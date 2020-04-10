@@ -121,7 +121,7 @@ $(document).ready(function(){
 				.data(states.features)
 				.enter()
 				.append('path')
-				.attr('stateName', function(d){return d.properties.name;})
+				.attr('state-name', function(d){return d.properties.name;})
 				.attr('d', path)
 				.attr('cursor', 'pointer')
 				.on('click', function clicked(d)
@@ -178,7 +178,7 @@ $(document).ready(function(){
 				.data(locations)
 				.enter()
 				.append('circle')
-				.attr('cityName', function(d){return d.city_id;})
+				.attr('city-name', function(d){return d.city_id;})
 				.attr('woeid', function(d){return d.woeid;})
 				.each(function (d) {
 					let location = mapProjection([d.longitude, d.latitude]);
