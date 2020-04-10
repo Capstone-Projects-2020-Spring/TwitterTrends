@@ -1,4 +1,5 @@
 window.statesEconData = {}
+window.currZoomedState = null;
 
 window.zoomTransitionTime = 1000
 
@@ -89,49 +90,50 @@ $(document).ready(function(){
 				.attr('cursor', 'pointer')
 				.on('click', function clicked(d)
 				{
-					let x, y, z;
+					let xTranslation, yTranslation, scalingFactor;
 
-					if (d && centered !== d) {
-						let bounds = path.bounds(d);
-						let w_scale = (bounds[1][0] - bounds[0][0]) / width;
-						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
-						z = .85 / Math.max(w_scale, h_scale);
-						x = (bounds[1][0] + bounds[0][0]) / 2;
-						y = ((bounds[1][1] + bounds[0][1]) / 2);
-						centered = d;
-
-						displayStateEconData(d, centered, mapProjection, x, y, z);
-					} else {
-						x = width / 2;
-						y = height / 2;
-						z = 1;
-						centered = null;
-
-						//todo? possible bug if someone zooms into state then zooms out before api call for that state's econ data returns and is displayed
-
-						//todo hide smaller cities/towns
-						let stateName = d.properties.name;//?
-
-						citiesEconData = window.statesEconData[stateName];
-
+					//todo? minor bug if someone zooms into state then zooms out
+					// before api call for that state's econ data returns and is displayed-
+					// the cities will still be displayed while zoomed out until the next time a state is clicked on
+					if(window.currZoomedState) {
+						let citiesEconData = window.statesEconData[window.currZoomedState];
 
 						for (let cityData of citiesEconData) {
 							cityElem = cityData["cityElement"];
 							cityElem.remove();
 							cityData["cityElement"] = null;
 						}
+						window.currZoomedState = null;
+					}
+
+					if (d && centered !== d) {
+						let bounds = path.bounds(d);
+						let w_scale = (bounds[1][0] - bounds[0][0]) / width;
+						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
+						scalingFactor = .85 / Math.max(w_scale, h_scale);
+						xTranslation = (bounds[1][0] + bounds[0][0]) / 2;
+						yTranslation = ((bounds[1][1] + bounds[0][1]) / 2);
+						centered = d;
+
+						displayStateEconData(d,mapProjection);
+					} else {
+						xTranslation = width / 2;
+						yTranslation = height / 2;
+						scalingFactor = 1;
+						centered = null;
 
 
+						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
 					us_state.selectAll("path")
 						.classed("active", centered && function(d) { return d === centered; });
 
-					// us_cities.selectAll("path")
-					// 	.classed("active", centered && function(d) { return d === centered; });
 
-					zoomTransformElements(us_state, window.zoomTransitionTime, mapProjection.translate(), x, y, z);
-					zoomTransformElements(us_cities, window.zoomTransitionTime, mapProjection.translate(), x, y, z);
+					zoomTransformElements(us_state, window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
+					zoomTransformElements(us_cities, window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
+
+					zoomTransformElements(econCityElemsContainer,window.zoomTransitionTime, mapProjection.translate(), xTranslation, yTranslation, scalingFactor);
 
 				});
 
@@ -153,7 +155,9 @@ $(document).ready(function(){
 				.on('mouseover', mouseover)
 				.on('mousemove', mousemove)
 				.on('mouseout', mouseout)
-				.on('click', handleClick)
+				.on('click', handleClick);
+
+			let econCityElemsContainer = mapsvg.append("g").attr("id", "econ-cities");
 		});
 
 	document.querySelector('#close').addEventListener('click', function() {
@@ -167,12 +171,12 @@ $(document).ready(function(){
 	getStartingNews();
 });
 
-function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, x, y, z) {
+function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, xOffset, yOffset, scaleFactor) {
 	d3ElementsSelection.transition()
 		.duration(transitionTime)
 		.attr("transform",
-			"translate(" + projectionTranslation + ")scale(" + z + ")translate(-" + x + ",-" + y + ")")
-		.style("stroke-width", 1 / z + "px");
+			"translate(" + projectionTranslation + ")scale(" + scaleFactor + ")translate(-" + xOffset + ",-" + yOffset + ")")
+		.style("stroke-width", 1 / scaleFactor + "px");
 }
 
 
@@ -362,27 +366,29 @@ function getStartingNews() {
 }
 
 
-function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY, newZ) {
+function displayStateEconData(stateElem, projectionObject) {
 	var stateName = stateElem.properties.name;
 
 	if (window.statesEconData.hasOwnProperty(stateName)) {
-		//todo make that state's cities visible
-
+		window.currZoomedState = stateName;
+		createEconCityElements(projectionObject);
 	} else {
 		stateName = encodeURIComponent(stateName);
 		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateName;
 		$.getJSON(stateEconDataUrl, function (stateEconData) {
 			if (stateEconData.length > 0) {
-				const nonEconDataKeys = ["city", "lat", "long", "state"];
 
-				let econDataKeys = Object.keys(stateEconData[0]);
-				econDataKeys = econDataKeys.filter(function(value, index, arr) {
-					return !(nonEconDataKeys.includes(value));
-				});
-				let econVars = econDataKeys;
 				let econDropdownElem = document.getElementById("econVarDropdown");
 				let econDropdownOptions = econDropdownElem.getElementsByTagName("option");
 				if (econDropdownOptions.length === 1) {
+					const nonEconDataKeys = ["city", "lat", "long", "state"];
+
+					let econDataKeys = Object.keys(stateEconData[0]);
+					econDataKeys = econDataKeys.filter(function(value, index, arr) {
+						return !(nonEconDataKeys.includes(value));
+					});
+					let econVars = econDataKeys;
+
 					for(let econVar of econVars) {
 						let optionElem = document.createElement("option");
 						optionElem.text=econVar;
@@ -391,42 +397,36 @@ function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY
 					}
 				}
 
-				window.statesEconData[stateName] = [];
+				window.statesEconData[stateName] = stateEconData;
+				window.currZoomedState = stateName;
 
-				let mapContainerElem = document.getElementById("mapsvg");
-				let mapSvgElems = mapContainerElem.getElementsByTagName("svg");
-				if (mapSvgElems.length !== 1) {
-					throw "there isn't exactly 1 svg element for the map";
-				}
-				let mapSvgElem = mapSvgElems[0];
-				let econCityElemsContainer = d3.select(mapSvgElem).append("g").attr("class", "econ-cities");
-
-				zoomTransformElements(econCityElemsContainer,window.zoomTransitionTime/2, projectionObj.translate(), newX, newY, newZ);
-
-
-				for (let cityData of stateEconData) {
-					let cityElem = econCityElemsContainer.append("circle");
-					//todo figure out why econCityElemsContainer.append("circle") returns
-					// an array which contains an array which contains the <html> element as well as the <circle>
-
-					cityElem.attr("cityName", cityData.city);
-
-					let location = projectionObj([cityData.long, cityData.lat]);
-					cityElem.attr({
-						cx: location[0], cy: location[1],
-						r: 0.75
-					});
-
-					cityElem = cityElem[0][0];
-
-					cityData["cityElement"] = cityElem;
-
-					window.statesEconData[stateName].push(cityData);
-				}
-
+				createEconCityElements(projectionObject);
 			} else {
 				console.log("couldn't find any additional cities' economic data for state " + stateName);
 			}
 		});
+	}
+}
+
+function createEconCityElements(projectionObj) {
+	let econCityElemsContainer = d3.select("#econ-cities");
+
+	let citiesEconData = window.statesEconData[window.currZoomedState];
+	for (let cityData of citiesEconData) {
+		let cityElem = econCityElemsContainer.append("circle");
+		//todo figure out why econCityElemsContainer.append("circle") returns
+		// an array which contains an array which contains the <html> element as well as the <circle>
+
+		cityElem.attr("cityName", cityData.city);
+
+		let location = projectionObj([cityData.long, cityData.lat]);
+		cityElem.attr({
+			cx: location[0], cy: location[1],
+			r: 0.75
+		});
+
+		cityElem = cityElem[0][0];
+
+		cityData["cityElement"] = cityElem;
 	}
 }
