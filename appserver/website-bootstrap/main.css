@@ -84,7 +84,24 @@ body {
 	vertical-align: middle;
 }
 
-/*search bar */
+/* economic variable dropdown todo fix vertical and horizontal alignment */
+
+label[for="econVarDropdown"] {
+	font-size: 16px;
+	color: white;
+	display: inline-block;
+	vertical-align: middle;
+	margin: auto;
+}
+
+#econVarDropdown {
+	font-size: 14px;
+	display: inline-block;
+	vertical-align: middle;
+	margin: auto;
+}
+
+/*search bar todo delete this obsolete section? */
 
 #trend-search-box{
 	position: absolute;
