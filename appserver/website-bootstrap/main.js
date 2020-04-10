@@ -3,6 +3,42 @@ window.currZoomedState = null;
 
 window.zoomTransitionTime = 1000
 
+function colorCitiesByEconData() {
+		let econDropdownElem = document.getElementById("econVarDropdown");
+		let chosenEconVar = econDropdownElem.value;
+
+		if(chosenEconVar !== "None" && window.currZoomedState) {
+			let citiesEconData = window.statesEconData[window.currZoomedState];
+			if(citiesEconData) {
+				let minEconVarVal = Number.MAX_VALUE;
+				let maxEconVarVal = -Number.MAX_VALUE;
+
+				for (const cityData of citiesEconData) {
+					let currVal = cityData[chosenEconVar];
+
+					if (currVal < minEconVarVal) { minEconVarVal = currVal; }
+					if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
+				}
+
+				let lowColor = d3.hsl("purple");
+				let highColor = d3.hsl("yellow");
+
+				let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
+
+				for (const cityData of citiesEconData) {
+					let cityElem = cityData["cityElement"];
+					let cityEconVarVal = cityData[chosenEconVar];
+
+					let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
+					let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
+
+					cityElem.style["fill"] = cityColor;
+				}
+			}
+		}
+	}
+
+
 
 $(document).ready(function(){
 	$('.header').height($(window).height());
@@ -74,7 +110,7 @@ $(document).ready(function(){
 		.defer(d3.json, locationsUrl)
 		.await(function (error, states, cities, locations) {
 			let path = d3.geo.path();
-			mapProjection = d3.geo.albersUsa()
+			let mapProjection = d3.geo.albersUsa()
 				.translate([width / 2, height / 2])
 				.scale([1200]);
 			path.projection(mapProjection);
@@ -167,6 +203,12 @@ $(document).ready(function(){
 		document.getElementById('trend-4').innerText = '';
 		document.getElementById('trend-5').innerText = '';
 	});
+
+
+	$("#econVarDropdown").change(colorCitiesByEconData);
+
+
+
 	getStartingNews();
 });
 
@@ -177,6 +219,10 @@ function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTr
 			"translate(" + projectionTranslation + ")scale(" + scaleFactor + ")translate(-" + xOffset + ",-" + yOffset + ")")
 		.style("stroke-width", 1 / scaleFactor + "px");
 }
+
+
+
+
 
 
 function retrieveTrends(trendUrl) {
@@ -421,11 +467,13 @@ function createEconCityElements(projectionObj) {
 		let location = projectionObj([cityData.long, cityData.lat]);
 		cityElem.attr({
 			cx: location[0], cy: location[1],
-			r: 0.75
+			r: 0.85
 		});
 
 		cityElem = cityElem[0][0];
 
 		cityData["cityElement"] = cityElem;
 	}
+
+	colorCitiesByEconData();
 }
