@@ -1,4 +1,3 @@
-window.econVars = []
 window.statesEconData = {}
 
 window.zoomTransitionTime = 1000
@@ -373,7 +372,17 @@ function displayStateEconData(stateElem, centeredElem, projectionObj, newX, newY
 				econDataKeys = econDataKeys.filter(function(value, index, arr) {
 					return !(nonEconDataKeys.includes(value));
 				});
-				window.econVars = econDataKeys;
+				let econVars = econDataKeys;
+				let econDropdownElem = document.getElementById("econVarDropdown");
+				let econDropdownOptions = econDropdownElem.getElementsByTagName("option");
+				if (econDropdownOptions.length === 1) {
+					for(let econVar of econVars) {
+						let optionElem = document.createElement("option");
+						optionElem.text=econVar;
+						optionElem.value=econVar;
+						econDropdownElem.add(optionElem);
+					}
+				}
 
 				window.statesEconData[stateName] = {};
 
