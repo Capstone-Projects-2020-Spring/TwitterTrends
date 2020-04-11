@@ -86,7 +86,7 @@ class standardAPI:
             return timeline
         
         except:
-            return "EXCEPTION: Page does not exist"
+            return "EXCEPTION: Failed to validate the user"
 
     # Get a list of random retweets for a given tweet ID
     #   args: tweet ID, count (max = 100)
