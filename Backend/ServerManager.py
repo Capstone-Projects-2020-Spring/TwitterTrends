@@ -364,6 +364,64 @@ def api_get_twitter_user():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
+# TODO: handling exceptions: RateLimitError, user has no retweeters
+@app.route('/retweeters', methods=['GET'])
+def api_get_most_frequent_retweeters():
+    username = request.args.get('username')
+    count = request.args.get('count')
+
+    try:
+        print("\n/retweeters args: ", username, count, "\n")
+
+        if username is None and count is not None:
+            #error msg: lack arg "username"
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have username'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        if count is None and username is not None:
+            #error msg: lack arg "count"
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have count parameter'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        # Default: search through 5 most recent tweets and 50 retweeters per tweet
+        # The server goes through these default parameters or the availability limit, whichever is smaller
+
+        if username is not None and int(count) > 0:
+
+            # Serious EXCEPTION: when the given user has no tweeters => return object type
+            retweeters = algo.get_most_frequent_retweeters(username, num_tweets=5, num_retweets=50, sorted=1)
+
+            if int(count) < len(retweeters):
+                #return the TOP count entries
+                shortList = []
+                k = 0
+                while k < int(count):
+                    shortList.append(retweeters[k])
+                    k += 1
+                return jsonify(shortList)
+
+            if int(count) >= len(list):
+                #return the entire list
+                return jsonify(retweeters)
+        
+        if username is not None and int(count) == 0:
+
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>count parameter must be larger than zero'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have two arguments</b>',
+                                                        'username', 'count'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /retweeters')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
+            
+
 @app.route('/test', methods=['GET'])
 def api_test():
     #query = db.query("insert into trends_snapshot(id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date) "
