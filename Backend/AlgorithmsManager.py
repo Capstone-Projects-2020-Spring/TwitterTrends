@@ -514,7 +514,7 @@ class AlgorithmsManager:
             tempval = temp['retweets_count']
             k = l-1
 
-            num_trend_sort_iter = 0
+            num_retweeters_sort_iter = 0
 
             while k >= 0 and    (tempval if tempval is not None else 0) >= \
                                 (arr[k]['retweets_count'] if arr[k]['retweets_count'] is not None else 0):
@@ -522,8 +522,8 @@ class AlgorithmsManager:
                 k -= 1
 
                 # todo strip debugging code from while loop
-                num_trend_sort_iter +=1
-                if num_trend_sort_iter >= 10000:
+                num_retweeters_sort_iter +=1
+                if num_retweeters_sort_iter >= 10000:
                     print("while loop started to go infinite:\nARGUMENTS:\n",
                           "arr= ", arr,
                           ";\n\nVARIABLES:\n",
