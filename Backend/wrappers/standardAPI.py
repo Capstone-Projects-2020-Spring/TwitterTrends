@@ -66,6 +66,7 @@ class standardAPI:
 
     # Get the followers of the specified user 
     #   return type: a list of twitter User objects
+    # TODO: handling exception Tweepy.Error and RateLimitError
     def get_followers(self, public_id, max_num):
         followerList = []
         try:
@@ -73,7 +74,7 @@ class standardAPI:
                 followerList.append(follower)
             return followerList
         except:
-            return "EXCEPTION: Page does not exist"
+            return "EXCEPTION: API failed to retrieve user's followers"
 
     # Get the most recent tweets of the specified user
     #   return: count passed as parameter, or the total number of available tweets
