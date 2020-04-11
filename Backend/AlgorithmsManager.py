@@ -412,7 +412,7 @@ class AlgorithmsManager:
         
         except:
             print("Validation fails")
-            return []
+            return None
 
     # this function returns a list of retweeters
     #   args:   username
