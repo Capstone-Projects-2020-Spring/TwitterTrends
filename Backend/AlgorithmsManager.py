@@ -393,15 +393,6 @@ class AlgorithmsManager:
     def get_user_by_username(self, username):
         print("\nValidating user")
         try:
-        # def __init__(self, id, ids, uname, signup, loc, protected, folcount, fricount):
-        # self.user_PK = id
-        # self.user_id = ids
-        # self.username = uname
-        # self.signup_date = signup
-        # self.location_id = loc
-        # self.protected = protected
-        # self.followers_count = folcount
-        # self.friends_count = fricount
             ur = self.twitter.get_user(username)
             user = DataStructures.User(None, ur.id, ur.screen_name, ur.name, ur.created_at, ur.location,
                                         ur.protected, ur.followers_count, ur.friends_count)
