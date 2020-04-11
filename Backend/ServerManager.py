@@ -383,27 +383,27 @@ def api_get_most_frequent_retweeters():
             argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have count parameter'], [])
             return 'Error! arguments:<br><br>' + argstr
 
-        # Default: search through 5 most recent tweets and 50 retweeters per tweet
+        # Default: search through 20 most recent tweets and 20 retweeters per tweet
         # The server goes through these default parameters or the availability limit, whichever is smaller
 
         if username is not None and int(count) > 0:
 
             num = int(count)
             # Serious EXCEPTION: when the given user has no tweeters => return object type
-            retweeters = algo.get_most_frequent_retweeters(username, num_tweets=5, num_retweets=50, sorted=1)
+            retweeters_dict = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=20)
+            max_len = len(retweeters_dict)
 
-            if num < len(retweeters):
-                #return the TOP count entries
-                shortList = []
-                k = 0
-                while k < num:
-                    shortList.append(retweeters[k])
-                    k += 1
+            if num < max_len:
+                #return the sorted short list
+                shortList = algo.sort_retweeters(retweeters_dict, num)
+                print(shortList)
                 return jsonify(shortList)
 
-            if num >= len(retweeters):
-                #return the entire list
-                return jsonify(retweeters)
+            if num >= max_len:
+                #return the entire sorted list
+                sortedList = algo.sort_retweeters(retweeters_dict, max_len)
+                print(sortedList)
+                return jsonify(sortedList)
         
         if username is not None and int(count) == 0:
 
