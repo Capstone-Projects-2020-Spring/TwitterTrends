@@ -1,7 +1,14 @@
 from datetime import datetime, timedelta
 from wrappers.geocode import geocoding
 from newsapi import NewsApiClient
+
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+import numpy
+from PIL import Image
+
 import os
+from os import path
 
 from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
@@ -10,8 +17,6 @@ from TwitterAPIManager import TwitterAPIManager
 import DataStructures
 
 import traceback
-
-
 
 NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 
@@ -556,6 +561,21 @@ class AlgorithmsManager:
                 htmlstr += "["+arg+"]<br>"
         return htmlstr
 
+
+    @staticmethod
+    def create_wordcloud_image():
+        workingdir = os.path.dirname(__file__)
+        stopwords = set(STOPWORDS)
+        maskfilename = "mask.png"
+        cloudfilename = "cloud.png"
+        mask = numpy.array(Image.open(os.path.join(workingdir, maskfilename)))
+        cloud = WordCloud(mask=mask, stopwords=stopwords)
+        cloud.generate("hello hello fight")
+        cloud.to_file(os.path.join(workingdir, cloudfilename))
+        if path.exists(os.path.join(workingdir, cloudfilename)):
+            return cloudfilename
+        else:
+            return None
 
 if __name__ == "__main__":
     #algos = AlgorithmsManager(None, None, None)
