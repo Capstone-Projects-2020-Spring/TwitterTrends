@@ -495,7 +495,7 @@ class AlgorithmsManager:
     # pass in a dictionary and the length of the returned shortlist
     # return a list of tuples, sorted by the retweet count
     @staticmethod
-    def sort_retweeters(dict, count):
+    def list_top_retweeters(dict, count):
         sorted_list = []
         keyList = list(dict)
 
@@ -605,5 +605,5 @@ if __name__ == "__main__":
     res = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=20)
     # print(res)
 
-    sortedList = algo.sort_retweeters(res, 10)
+    sortedList = algo.list_top_retweeters(res, 10)
     print(sortedList)

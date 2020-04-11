@@ -395,13 +395,13 @@ def api_get_most_frequent_retweeters():
 
             if num < max_len:
                 #return the sorted short list
-                shortList = algo.sort_retweeters(retweeters_dict, num)
+                shortList = algo.list_top_retweeters(retweeters_dict, num)
                 print(shortList)
                 return jsonify(shortList)
 
             if num >= max_len:
                 #return the entire sorted list
-                sortedList = algo.sort_retweeters(retweeters_dict, max_len)
+                sortedList = algo.list_top_retweeters(retweeters_dict, max_len)
                 print(sortedList)
                 return jsonify(sortedList)
         
