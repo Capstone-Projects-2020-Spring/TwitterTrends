@@ -404,13 +404,12 @@ class AlgorithmsManager:
             print("EXCEPTION: Fetching the description of a user failed")
             return None
 
-    # this function returns a list of retweeters
+    # this function returns a dictionary of retweeters
     #   args:   username
     #           num_tweets (optional): how many recent tweets to search through
     #           num_retweets (optional): how many retweeters per tweet
-    #           sorted (optional): value of 1 sorts the list by number of retweets 
-    #   return: a list of dictionary
-    def get_most_frequent_retweeters(self, username, num_tweets=20, num_retweets=20, sorted=1):
+    #   return: a dictionary
+    def get_most_frequent_retweeters(self, username, num_tweets=20, num_retweets=20):
 
         retweetData = self.twitter.most_recent_retweeters(username, num_tweets=num_tweets, num_retweets=num_retweets)
         
@@ -422,22 +421,12 @@ class AlgorithmsManager:
                 retweeter_history.append(username)
 
         # count the number of retweets
-        res = []
+        res = {}
         for user_id in retweeter_history:
-            dict = {'username': user_id, 'retweets_count': 1}
-
-            if len(res) == 0:
-                res.append(dict)
+            if res.get(user_id) is None:
+                res[user_id] = 1
             else:
-                for entry in res:
-                    if entry['username'] == user_id:
-                        entry['retweets_count'] += 1
-                        break
-                res.append(dict)
-
-        # sort retweeters by retweets count
-        if sorted == 1:
-            AlgorithmsManager.sort_retweeters(res)
+                res[user_id] += 1
 
         return res
 
@@ -503,36 +492,26 @@ class AlgorithmsManager:
 
             arr[k + 1] = temp
 
-
+    # pass in a dictionary and the length of the returned shortlist
+    # return a list of tuples, sorted by the retweet count
     @staticmethod
-    def sort_retweeters(arr):
-        length = len(arr)
-        for l in range(1, length):
-            temp = arr[l]
-            tempval = temp['retweets_count']
-            k = l-1
+    def sort_retweeters(dict, count):
+        sorted_list = []
+        keyList = list(dict)
 
-            num_retweeters_sort_iter = 0
+        for k in range(count):
+            temp_key = keyList[0]
+            temp_val = dict[temp_key]
+            for iter_key in keyList:
+                if dict[iter_key] >= temp_val:
+                    temp_key = iter_key
+                    temp_val = dict[iter_key]
+            
+            user = {"username": temp_key, "retweet_count": temp_val}
+            sorted_list.append(user)
+            dict[temp_key] = -1
 
-            while k >= 0 and    (tempval if tempval is not None else 0) >= \
-                                (arr[k]['retweets_count'] if arr[k]['retweets_count'] is not None else 0):
-                arr[k+1] = arr[k]
-                k -= 1
-
-                # todo strip debugging code from while loop
-                num_retweeters_sort_iter +=1
-                if num_retweeters_sort_iter >= 10000:
-                    print("while loop started to go infinite:\nARGUMENTS:\n",
-                          "arr= ", arr,
-                          ";\n\nVARIABLES:\n",
-                          "temp= ", temp, "\ntempval= ", tempval, "\nk= ", k,
-                          "\nSTACK TRACE:\n")
-
-                    traceback.print_stack()
-                    raise Exception("got into infinite loop")
-
-            arr[k+1] = temp
-
+        return sorted_list
 
     # create a bucket grouped by date from an array of trendssnapshot tuples from database query
     # array element format: id, woe_id, trend_content, query_term, tweet_volume, is_hashtag, created_date
@@ -621,7 +600,10 @@ if __name__ == "__main__":
     # SETUP AlgorithmsManager
     algo = AlgorithmsManager(cache, db, twitter)
 
-    username = "Drake"
+    username = "MSNBC"
 
     res = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=20)
-    print(res)
+    # print(res)
+
+    sortedList = algo.sort_retweeters(res, 10)
+    print(sortedList)
