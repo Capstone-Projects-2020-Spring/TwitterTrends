@@ -388,19 +388,20 @@ def api_get_most_frequent_retweeters():
 
         if username is not None and int(count) > 0:
 
+            num = int(count)
             # Serious EXCEPTION: when the given user has no tweeters => return object type
             retweeters = algo.get_most_frequent_retweeters(username, num_tweets=5, num_retweets=50, sorted=1)
 
-            if int(count) < len(retweeters):
+            if num < len(retweeters):
                 #return the TOP count entries
                 shortList = []
                 k = 0
-                while k < int(count):
+                while k < num:
                     shortList.append(retweeters[k])
                     k += 1
                 return jsonify(shortList)
 
-            if int(count) >= len(list):
+            if num >= len(retweeters):
                 #return the entire list
                 return jsonify(retweeters)
         
