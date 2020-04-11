@@ -569,8 +569,8 @@ class AlgorithmsManager:
         maskfilename = "mask.png"
         cloudfilename = "cloud.png"
         mask = numpy.array(Image.open(os.path.join(workingdir, maskfilename)))
-        cloud = WordCloud(mask=mask, stopwords=stopwords)
-        cloud.generate("hello hello fight")
+        cloud = WordCloud(background_color="white", mask=mask, stopwords=stopwords)
+        cloud.generate("hello hello fight hello we are danny tranny catty patty hatty nartty utty itty oppa tooa dds dijjdiwd wdw jidw dw iwd wd wdwjiwd wd wdwd wd wd wd wd")
         cloud.to_file(os.path.join(workingdir, cloudfilename))
         if path.exists(os.path.join(workingdir, cloudfilename)):
             return cloudfilename

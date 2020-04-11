@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import traceback
@@ -343,6 +343,9 @@ def api_get_economic_data():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
+@app.route('/wordcloud', methods=['GET'])
+def api_get_wordcloud():
+    return send_file(AlgorithmsManager.create_wordcloud_image(), mimetype='image/png')
 
 @app.route('/test', methods=['GET'])
 def api_test():
