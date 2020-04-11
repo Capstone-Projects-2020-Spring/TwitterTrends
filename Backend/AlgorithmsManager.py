@@ -402,7 +402,8 @@ class AlgorithmsManager:
             return res
         
         except:
-            print("Validation fails")
+            # TODO: A more general and reliably-accurate error message
+            print("EXCEPTION: Fetching the description of a user failed")
             return None
 
     # this function returns a list of retweeters
