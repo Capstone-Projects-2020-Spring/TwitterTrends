@@ -92,6 +92,9 @@ class standardAPI:
     #   args: tweet ID, count (max = 100)
     #   return type: a list of Twitter status objects 
     # Sometimes the number returned is less than input
+
+    # TODO: handling exception Tweepy.Error and RateLimitError
+    
     def get_retweets_of_tweet(self, tweet_id, max_num=100):
         # retweetList = []
         try:
@@ -99,7 +102,7 @@ class standardAPI:
             return retweets
         
         except:
-            return "EXCEPTION: Invalid Tweet ID"
+            return "EXCEPTION: API failed to retrieve retweeters of the tweet ID"
 
     # Get a list of random retweeters for a given tweet ID
     #   return type: a list of Twitter user objects
