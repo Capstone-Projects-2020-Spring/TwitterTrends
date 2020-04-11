@@ -573,7 +573,7 @@ class AlgorithmsManager:
         cloud.generate("hello hello fight hello we are danny tranny catty patty hatty nartty utty itty oppa tooa dds dijjdiwd wdw jidw dw iwd wd wdwjiwd wd wdwd wd wd wd wd")
         cloud.to_file(os.path.join(workingdir, cloudfilename))
         if path.exists(os.path.join(workingdir, cloudfilename)):
-            return cloudfilename
+            return os.path.join(workingdir, cloudfilename)
         else:
             return None
 
