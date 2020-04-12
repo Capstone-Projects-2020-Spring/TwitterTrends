@@ -1,4 +1,47 @@
+const network_svg_id= "network-svg";
+
 $(document).ready(function(){
+
+    document.getElementById('update-graph-btn').addEventListener('click', function () {
+        // example URL /retweeters?username=Drake&count=20
+        const svgPresent = !! document.getElementById(network_svg_id);
+        if (svgPresent) { d3.select("#" + network_svg_id).remove(); }
+        let retweetNetworkURL = 'http://18.214.197.203:5000/retweeters?username=';
+        let uname = document.getElementById('search-network').value;
+        let retweets = document.getElementById('drop-list-network').value;
+        let networkData = {};
+        let nodes = [];
+        let links = [];
+        if (!uname || uname === ''){
+            alert("Must enter a Username!")
+        } else {
+            let rootnode = {};
+            rootnode.id = uname;
+            nodes.push(rootnode);
+            alert(JSON.stringify(nodes));
+            retweetNetworkURL += uname + '&count=' + retweets;
+            // alert(retweetNetworkURL); // check that the url is correct
+            $.getJSON(retweetNetworkURL, function(data){
+                let network = data;
+                // alert(JSON.stringify(network)); // check that network data is returned
+                let i = 0;
+                for(i; i < retweets.valueOf(); i++){
+                    let node = {};
+                    let link = {};
+                    node.id = network[i].username;
+                    nodes.push(node);
+                    link.source = uname;
+                    link.target = network[i].username;
+                    link.value = network[i].retweet_count;
+                    links.push(link);
+                }
+                networkData.nodes = nodes;
+                networkData.links = links;
+                alert(JSON.stringify(networkData)); // check that data was correctly parsed
+                graphNetwork(networkData)
+            });
+        }
+    });
 
     const graphData = {
         "nodes": [
@@ -58,6 +101,8 @@ function graphNetwork(data) {
     const width = 900, height = 600;
 
     let svg = d3.select("#network")
+        .append("svg")
+        .attr("id", network_svg_id)
         .attr("width", width)
         .attr("height", height);
 
