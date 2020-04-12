@@ -54,6 +54,46 @@ class standardAPI:
 
             return tweetsparsed
 
+    def getUsernameFromID(self, id2):
+        user = self.tweepy.get_user(id2)
+        return user._json['screen_name']
+
+    # get list of recent tweets from a user
+    def getTweetsFromUser(self, id2, username, count=20):
+        # get tweets from user ID
+        queryusertweets = []
+        try:
+            if username is not None:
+                queryusertweets = self.tweepy.user_timeline(screen_name=username, count=count)
+            elif id2 > 0:
+                queryusertweets = self.tweepy.user_timeline(id=id2, count=count, page=0)
+            else:
+                return queryusertweets
+        except:
+            print("Can't access user timeline")
+
+        texts = []
+        for status in queryusertweets:
+            texts.append(status._json['text'])
+        return texts
+
+    # get list of userID in a user's follow list
+    def getFollowersID(self, id2, username, count=20):
+        queryfriends_ids = []
+        if username is not None:
+            queryfriends_ids = self.tweepy.friends_ids(screen_name=username)
+        elif id2 > 0:
+            queryfriends_ids = self.tweepy.friends_ids(id=id2)
+        else:
+            return queryfriends_ids
+
+        trimmedids = []
+        # only check up to first 3 of the followers id
+        # initial implementation to speed up word cloud generation time
+        for i in range(0, min(3, len(queryfriends_ids))):
+            trimmedids.append(queryfriends_ids[i])
+        return trimmedids
+
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
         place = trendsResult['locations'][0]['name']

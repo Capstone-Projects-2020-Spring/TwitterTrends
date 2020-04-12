@@ -433,6 +433,64 @@ class AlgorithmsManager:
 
         return city_data
 
+    def get_network_tweets_text(self, id2, username, count, depth):
+        textsStr = ""
+        if id2 > 0 or username is not None:
+            # get bunch of tweets starting with the user of given id
+            n = depth  # goes depth level deep
+            # array of tweet texts
+            texts = []
+            self.append_texts_recursive(texts, count, n, 0, id2, username)
+
+            for text in texts:
+                splittext = text.split(' ')
+                for split in splittext:
+                    if not split.startswith('http'):
+                        textsStr += (split + " ")
+        return textsStr
+
+    def append_texts_recursive(self, texts, count, n, i, id2, username):
+        tweets = self.twitter.getTweetsFromUser(id2, username, count)
+        for text in tweets:
+            texts.append(text)
+        if i < n:
+            followsids = self.twitter.getFollowersID(id2, username, count)
+            for id3 in followsids:
+                screen_name = self.twitter.get_username_from_id(id3)
+                self.append_texts_recursive(texts, n, count, i+1, id3, screen_name)
+
+    def create_wordcloud_image(self, id2=0, username=None, count=20, depth=1, querystr=None, c_time = 15):
+        if querystr is None:
+            querystr = "/wordcloud{}{}".format(id2, username)
+
+        cachetime = c_time  # n minutes cache time check
+
+        if self.cache.should_update(querystr, cachetime):
+            words = self.get_network_tweets_text(id2, username, count, depth)
+            if words != "":
+                workingdir = os.path.dirname(__file__)
+                stopwords = set(STOPWORDS)
+                stopwords.add('RT')
+                stopwords.add('https')
+                maskfilename = "mask.png"
+                cloudfilename = "cloud.png"
+                mask = numpy.array(Image.open(os.path.join(workingdir, maskfilename)))
+                cloud = WordCloud(background_color="white", mask=mask, stopwords=stopwords)
+                cloud.generate(words)
+                cloud.to_file(os.path.join(workingdir, cloudfilename))
+                if path.exists(os.path.join(workingdir, cloudfilename)):
+                    returnPath = os.path.join(workingdir, cloudfilename)
+                    self.cache.add(querystr, returnPath, cachetime)
+                    return returnPath
+                else:
+                    return None
+            else:
+                return None
+        else:
+            print("\nReturning [", querystr, "] from cache\n")
+            words = self.cache.retrieve(querystr)
+            return words
+
     # pass in array of Trend object and this will sort it using insertion sort
     @staticmethod
     def sort_trends(arr):
@@ -560,22 +618,6 @@ class AlgorithmsManager:
             for arg in optional:
                 htmlstr += "["+arg+"]<br>"
         return htmlstr
-
-
-    @staticmethod
-    def create_wordcloud_image():
-        workingdir = os.path.dirname(__file__)
-        stopwords = set(STOPWORDS)
-        maskfilename = "mask.png"
-        cloudfilename = "cloud.png"
-        mask = numpy.array(Image.open(os.path.join(workingdir, maskfilename)))
-        cloud = WordCloud(background_color="white", mask=mask, stopwords=stopwords)
-        cloud.generate("hello hello fight hello we are danny tranny catty patty hatty nartty utty itty oppa tooa dds dijjdiwd wdw jidw dw iwd wd wdwjiwd wd wdwd wd wd wd wd")
-        cloud.to_file(os.path.join(workingdir, cloudfilename))
-        if path.exists(os.path.join(workingdir, cloudfilename)):
-            return os.path.join(workingdir, cloudfilename)
-        else:
-            return None
 
 if __name__ == "__main__":
     #algos = AlgorithmsManager(None, None, None)

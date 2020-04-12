@@ -51,6 +51,15 @@ class TwitterAPIManager:
             print("USING PREMIUM TWEET")
             return self.premiumAPI.getTweets(trend, timefrom, timeto, num, location)
 
+    def getTweetsFromUser(self, id2, username, count):
+        return self.standardAPI.getTweetsFromUser(id2, username)
+
+    def getFollowersID(self, id2, username, count):
+        return self.standardAPI.getFollowersID(id2, username)
+
+    def get_username_from_id(self, id2):
+        return self.standardAPI.getUsernameFromID(id2)
+
     # sample tweet function that returns a tweet based on a given search query
     def sample_tweet(self, trend):
         sample_tweet = self.premiumAPI.getSampleTweet(trend)

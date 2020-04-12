@@ -345,7 +345,38 @@ def api_get_economic_data():
 
 @app.route('/wordcloud', methods=['GET'])
 def api_get_wordcloud():
-    return send_file(AlgorithmsManager.create_wordcloud_image(), mimetype='image/png')
+    #testID = 942781891714932738
+    #username = "KisukiTsuo"
+
+    userid = request.args.get('id')
+    username = request.args.get('username')
+    countstr = request.args.get('count')
+    depthstr = request.args.get('depth')
+
+    id2 = 0
+    count = 20
+    depth = 1
+    try:
+        if userid is not None:
+            id2 = int(userid)
+        if countstr is not None:
+            count = int(countstr)
+        if depthstr is not None:
+            depth = int(depthstr)
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /wordcloud')
+        print('Exception: ', e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
+
+    print("\n/wordcloud args: ", id2, username, count, depth, "\n")
+
+    wordcloudpath = algo.create_wordcloud_image(id2, username, count, depth)
+    if wordcloudpath is None:
+        return "Invalid user id or screen name"
+    return send_file(wordcloudpath, mimetype='image/png')
 
 @app.route('/test', methods=['GET'])
 def api_test():
@@ -360,10 +391,15 @@ def api_test():
     #query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
     #db.query("DELETE FROM trends_snapshot;")
-    csv = timedata.get_trends_snapshot_as_csv(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
+    #csv = timedata.get_trends_snapshot_as_csv(['a', 'adad'], datetime.now()-timedelta(hours=12), datetime.now())
     # query = db.query("SELECT * FROM trends_snapshot;")
     #print(query.get_rows())
-    return csv
+
+    #return csv
+    testID = 942781891714932738
+    username = "KisukiTsuo"
+    tweets_str = algo.get_network_tweets_text(testID, username)
+    return tweets_str
 
 
 # dont use this endpoint too outdated. kept for reference.
