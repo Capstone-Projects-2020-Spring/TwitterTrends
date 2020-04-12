@@ -64,3 +64,41 @@ class TwitterAPIManager:
     def sample_tweet(self, trend):
         sample_tweet = self.premiumAPI.getSampleTweet(trend)
         return sample_tweet
+
+    # get a Twitter user object
+    def get_user(self, username):
+        user = self.standardAPI.get_user(username)
+        return user
+
+    # get the follower network
+    #   return: a list of Twitter user objects
+    def followers(self, username, count):
+        network = self.standardAPI.get_followers(username, count)
+        return network
+
+    # retrieves a list of retweeters by going through the most recent tweets by user
+    #   args:   num_tweets (optional/default): the number of tweets to search
+    #   return: a list of dictionary
+    def most_recent_retweeters(self, username, num_tweets=20, num_retweets=100):
+        retweetData = []
+        recentTweets = self.standardAPI.get_user_timeline(username, num_tweets)
+
+        for tweet in recentTweets:
+            tweet_id = tweet.id 
+            # print("Tweet ID: ", tweet_id)
+
+            # get up to 100 random retweeters of each status
+            retweeterList = self.standardAPI.get_retweeters_of_tweet(tweet_id, num_retweets)
+            usernames = []
+            for retweeter in retweeterList:
+                usernames.append(retweeter.screen_name)
+
+            # define the dictionary
+            status = {}
+            status['tweet_id'] = tweet_id
+            status['retweeters_count'] = len(usernames)
+            status['retweeters'] = usernames 
+
+            retweetData.append(status)
+
+        return retweetData

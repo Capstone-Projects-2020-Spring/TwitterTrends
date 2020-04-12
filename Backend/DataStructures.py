@@ -28,12 +28,13 @@ class Tweet:
 # [User class]
 class User:
 
-    def __init__(self, id, ids, uname, signup, loc, protected, folcount, fricount):
+    def __init__(self, id, ids, uname, name, signup, loc, protected, folcount, fricount):
         self.user_PK = id
         self.user_id = ids
         self.username = uname
+        self.name = name
         self.signup_date = signup
-        self.location_id = loc
+        self.location = loc
         self.protected = protected
         self.followers_count = folcount
         self.friends_count = fricount

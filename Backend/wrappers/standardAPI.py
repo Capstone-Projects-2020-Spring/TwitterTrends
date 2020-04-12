@@ -1,4 +1,5 @@
 import wrappers.credentials as creds
+import tweepy as tw
 
 class standardAPI:
 
@@ -94,6 +95,65 @@ class standardAPI:
             trimmedids.append(queryfriends_ids[i])
         return trimmedids
 
+    # Get twitter user profile with screen_name (e.g. @ttclaire2)
+    #   return type: a twitter User object
+    def get_user(self, public_id):
+        try:
+            user_object = self.tweepy.get_user(id=None, user_id=None, screen_name=public_id)
+            return user_object
+        except:
+            return "EXCEPTION: Twitter user cannot be found"
+
+    # Get the followers of the specified user 
+    #   return type: a list of twitter User objects
+    # TODO: handling exception Tweepy.Error and RateLimitError
+    def get_followers(self, public_id, max_num):
+        followerList = []
+        try:
+            for follower in tw.Cursor(self.tweepy.followers, screen_name=public_id).items(max_num):
+                followerList.append(follower)
+            return followerList
+        except:
+            return "EXCEPTION: API failed to retrieve user's followers"
+
+    # Get the most recent tweets of the specified user
+    #   return: count passed as parameter, or the total number of available tweets
+    def get_user_timeline(self, public_id, max_num=30):
+        timeline = []
+        try:
+            for status in tw.Cursor(self.tweepy.user_timeline, screen_name=public_id).items(max_num):
+                timeline.append(status)
+            return timeline
+        
+        except:
+            return "EXCEPTION: Failed to validate the user"
+
+    # Get a list of random retweets for a given tweet ID
+    #   args: tweet ID, count (max = 100)
+    #   return type: a list of Twitter status objects 
+    # Sometimes the number returned is less than input
+
+    # TODO: handling exception Tweepy.Error and RateLimitError
+    
+    def get_retweets_of_tweet(self, tweet_id, max_num=100):
+        # retweetList = []
+        try:
+            retweets = self.tweepy.retweets(id=tweet_id, count=max_num)
+            return retweets
+        
+        except:
+            return "EXCEPTION: API failed to retrieve retweeters of the tweet ID"
+
+    # Get a list of random retweeters for a given tweet ID
+    #   return type: a list of Twitter user objects
+    def get_retweeters_of_tweet(self, tweet_id, max_num=100):
+        retweeters = []
+        retweets = self.get_retweets_of_tweet(tweet_id, max_num)
+        for tweet in retweets:
+            user = tweet.user #User object
+            retweeters.append(user)
+        return retweeters
+
     def query_transform(self, json_result, woeid, num):
         trendsResult = json_result[0]
         place = trendsResult['locations'][0]['name']
@@ -105,3 +165,22 @@ class standardAPI:
 
         trends_dict = {'location': place, 'woeid': woeid, 'trends': trends, 'time': timestamp}
         return trends_dict
+
+if __name__ == "__main__":
+
+    api = standardAPI()
+
+    timeline = api.get_user_timeline('realDonaldTrump', max_num=1)
+    status = timeline[0]
+    count = 0
+
+    tweetID = status.id
+    print("Tweet ID: ", tweetID)
+    retweeters = api.get_retweeters_of_tweet(tweetID, max_num=30)
+    for each in retweeters:
+        count += 1
+        # print(each, "\n")
+
+    print("Count: ", count)
+
+
