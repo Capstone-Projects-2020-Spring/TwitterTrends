@@ -512,8 +512,8 @@ class AlgorithmsManager:
                 stopwords = set(STOPWORDS)
                 stopwords.add('RT')
                 stopwords.add('https')
-                maskfilename = "mask.png"
-                cloudfilename = "cloud.png"
+                maskfilename = "wordcloud/mask.png"
+                cloudfilename = "wordcloud/cloud.png"
                 mask = numpy.array(Image.open(os.path.join(workingdir, maskfilename)))
                 cloud = WordCloud(background_color="white", mask=mask, stopwords=stopwords)
                 cloud.generate(words)
