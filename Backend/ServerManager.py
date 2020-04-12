@@ -343,6 +343,89 @@ def api_get_economic_data():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
+@app.route('/user', methods=['GET'])
+def api_get_twitter_user():
+    username = request.args.get('username')
+
+    try:
+        if username is not None:
+            
+            user = algo.get_user_by_username(username)
+
+            if user is not None:
+                return jsonify(user)
+            else:
+                return "ERROR: Validation fails"
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have username'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /user')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
+
+# TODO: handling exceptions: RateLimitError, user has no retweeters
+@app.route('/retweeters', methods=['GET'])
+def api_get_most_frequent_retweeters():
+    username = request.args.get('username')
+    count = request.args.get('count')
+
+    try:
+        print("\n/retweeters args: ", username, count, "\n")
+
+        if username is None and count is not None:
+            #error msg: lack arg "username"
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have username'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        if count is None and username is not None:
+            #error msg: lack arg "count"
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have count parameter'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        # Default: search through 20 most recent tweets and 20 retweeters per tweet
+        # The server goes through these default parameters or the availability limit, whichever is smaller
+
+        if username is not None and int(count) > 0:
+
+            num = int(count)
+            # Serious EXCEPTION: when the given user has no tweeters => return object type
+            retweeters_dict = algo.get_most_frequent_retweeters(username, num_tweets=20, num_retweets=20)
+            max_len = len(retweeters_dict)
+
+            if num < max_len:
+                #return the sorted short list
+                shortList = algo.list_top_retweeters(retweeters_dict, num)
+                print(shortList)
+                return jsonify(shortList)
+
+            if num >= max_len:
+                #return the entire sorted list
+                sortedList = algo.list_top_retweeters(retweeters_dict, max_len)
+                print(sortedList)
+                return jsonify(sortedList)
+        
+        if username is not None and int(count) == 0:
+
+            argstr = AlgorithmsManager.get_args_as_html_str(['<b>count parameter must be larger than zero'], [])
+            return 'Error! arguments:<br><br>' + argstr
+
+        argstr = AlgorithmsManager.get_args_as_html_str(['<b>Must have two arguments</b>',
+                                                        'username', 'count'], [])
+
+        return 'Error! arguments:<br><br>' + argstr
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /retweeters')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
+            
 
 @app.route('/test', methods=['GET'])
 def api_test():
