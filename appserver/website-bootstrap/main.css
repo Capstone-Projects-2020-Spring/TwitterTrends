@@ -16,7 +16,7 @@ time, mark, audio, video {
     border: 0;
     font-size: 100%;
     font: inherit;
-    vertical-align: baseline;
+    /*vertical-align: baseline;*/
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -194,9 +194,19 @@ label[for="econVarDropdown"] {
 	display: block;
 }
 
+.col-md-10 {
+	padding: 0;
+}
+
+.container-fluid {
+	padding: 0;
+}
+
 .col {
 	background: #515182;
 	z-index: 2;
+	max-height: 600px;
+	overflow: scroll;
 }
 
 #title {
@@ -211,10 +221,9 @@ label[for="econVarDropdown"] {
 /*--- header ---*/
 
 .header {
-	background-color: #dfdfed; /*url('images/header-background.jpg');*/
-	background-size: cover;
+	background-color: #dfdfed;
 	background-position: center;
-	width: 102%;
+	width: 100%;
 	
 }
 
@@ -238,6 +247,47 @@ label[for="econVarDropdown"] {
 	height: auto;
 	position: relative;
 	overflow: hidden;
+}
+
+#map-buttons {
+	position: absolute;
+	top: 2%;
+	right: 1%;
+}
+
+.tooltip-button {
+	float: right;
+}
+
+.tooltip-button span {
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+#us_button {
+	border: none;
+  	cursor: pointer;
+  	border-radius: 5px;
+	padding: 5px;
+	background: white;
+}
+
+#us_button img {
+	width: auto;
+	height: 25px;
+}
+
+#world_button {
+	border: none;
+  	cursor: pointer;
+  	border-radius: 5px;
+	padding: 5px;
+	background: white;
+}
+
+#world_button img {
+	width: auto;
+	height: 25px;
 }
 
 .states {
@@ -265,9 +315,7 @@ label[for="econVarDropdown"] {
 
 .tooltip {
 	background-color: #b1e6d3;
-	border: solid;
-	border-color: #000;
-	border-width: 2px;
+	border: solid #000 2px;
 	border-radius: 5px;
 	padding: 5px;
 	font-weight: 500;
@@ -337,7 +385,6 @@ label[for="econVarDropdown"] {
 	background-color: rgba(0, 0, 0, 0.7);
 	position: absolute;
 	top: 0;
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	display: none;
@@ -585,12 +632,7 @@ form.temporal-search button:hover {
 }
 
 /* Trend Tweets */
-/*
-blockquote.twitter-tweet {
-	width: 100px !important;
-	height: auto !important;
-}
- */
+
 #trend-tweets {
 	padding-top: 20px;
 }
@@ -630,6 +672,42 @@ blockquote.twitter-tweet {
 	text-decoration: none;
 }
 
+#tweets {
+	display: none;
+}
+
+blockquote.tweet {
+	display: inline-block;
+	font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 16px;
+	border-color: #eee #ddd #bbb;
+	border-radius: 5px;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	margin: 10px 5px;
+	padding: 0 16px;
+	max-width: 468px;
+
+}
+
+blockquote.tweet p {
+  font-weight: normal;
+}
+
+blockquote.tweet a {
+  color: inherit;
+  font-weight: normal;
+  text-decoration: none;
+  outline: 0 none;
+}
+
+blockquote.tweet a:hover,
+blockquote.tweet a:focus {
+  text-decoration: underline;
+}
 
 /* Network Page Buttons */
 
