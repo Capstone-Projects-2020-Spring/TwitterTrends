@@ -110,8 +110,8 @@ function graphNetwork(data) {
         .force("link", d3.forceLink().id(function(d) { return d.id; }))
         .force("charge", d3.forceManyBody()
                 .strength(-300)
-                .theta(0.8)
-                .distanceMax(150)
+                //.theta(0.8)
+                //.distanceMax(150)
         )
         .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -123,17 +123,41 @@ function graphNetwork(data) {
         .append("line")
         .style("stroke-width", function(d) {return Math.sqrt(d.value);});
 
+		//tooltip stuff
+        let Tooltip = d3.select("#network")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip");
+
+        let mouseover = function(d) {
+            Tooltip
+                .style("opacity", 1)
+        };
+        let mousemove = function(d) {
+            Tooltip
+                .html("ID: " + d.id)
+                .style("left", (d3.mouse(this)[0]+50) + "px")
+                .style("top", (d3.mouse(this)[1]-40) + "px")
+        };
+        let mouseleave = function(d) {
+            Tooltip
+                .style("opacity", 0)
+        };
+
     let node = svg.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(data.nodes)
         .enter()
         .append("circle")
-        //.attr("r", 4)
-        .call(d3.drag(simulation)
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended));
+		//also removing the dragging stuff because that wasn't great
+        //.call(d3.drag(simulation)
+            //.on("start", dragstarted)
+            //.on("drag", dragged)
+            //.on("end", dragended));
+		.on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave);
 
     let label = svg.append("g")
         .attr("class", "labels")
@@ -164,10 +188,11 @@ function graphNetwork(data) {
             .style("stroke-width", "1px")
             .attr("cx", function (d) { return d.x+5; })
             .attr("cy", function(d) { return d.y-3; });
-        label
-            .attr("x", function(d) { return d.x; })
-            .attr("y", function (d) { return d.y; })
-            .style("font-size", "12px").style("fill", "#000000");
+        //removing the node labels because they get messy when the labels are long 
+		//label
+            //.attr("x", function(d) { return d.x; })
+            //.attr("y", function (d) { return d.y; })
+            //.style("font-size", "12px").style("fill", "#000000");
     }
 }
 
