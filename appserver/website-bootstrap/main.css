@@ -749,6 +749,52 @@ blockquote.tweet a:focus {
 	margin-top: 50%;
 }
 
+/* Word Cloud */
+#cloud-div {
+	width: 1000px;
+	height: 600px;
+	text-align: center;
+}
+
+#word-cloud {
+	width: 1000px;
+	height: 600px;
+}
+
+#user-inputs-cloud {
+	height: 45%;
+	margin: auto;
+}
+
+#search-cloud {
+	padding: 10px;
+  	font-size: 17px;
+  	border: 1px solid grey;
+	width: 80%;
+  	background-color:#cccccc;
+  	color: #000000;
+  	margin-top: 10%
+}
+
+#drop-list-cloud {
+	font-size: 18px;
+	max-height: 50px;
+    overflow: auto;
+	size: 5;
+	length: 5;
+}
+
+#update-graph-cloud {
+	text-align: center;
+	margin-top: 50%;
+}
+
+#cloud-intro {
+	font-weight: 900;
+	font-size: 25px;
+	padding: 200px 0;
+}
+
 /* Explore Page Buttons */
 
 * { box-sizing: border-box; }
@@ -843,7 +889,7 @@ th, td {
 	margin-bottom: 5px;
 	color: black;
 	margin-left: 20px;
-	
+
 }
 
 
