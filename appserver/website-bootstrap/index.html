@@ -60,7 +60,7 @@
         <div class="row">
 
 		    <!-- First column -->
-		    <div class="col-12 col-md-10">
+		    <div class="col-md-10">
 	            <header class="page-header header container-fluid">
                     <div id="bg-modal">
                         <div class="modal-content">
@@ -75,35 +75,56 @@
                             </ul>
                         </div>
                     </div>
-		            <!-- Temple Logo(delete after d3.js done*maybe*) -->
+
 			        <!-- d3js map stuff -->
 			        <div id="svg-display">
-				        <div id="mapsvg"></div>
+				        <div id="mapsvg">
+                            <div id="map-buttons">
+                                <div class="tooltip-button">
+                                    <span class="tooltiptext">World Trends</span>
+                                    <button id="world_button"><img src="images/world.png"></button>
+                                </div>
+                                <div class="tooltip-button">
+                                    <span class="tooltiptext">U.S. Trends</span>
+                                    <button id="us_button"><img src="images/usa.png"></button>
+                                </div>
+                            </div>
+                        </div>
 			        </div>
                 </header>
 		    </div>
 
             <!-- Second column -->
 		    <div class="col">
+
+                <!-- Tweets -->
                 <div id="trend-tweets">
-                    <h3 class="side-title">Top Tweets</h3>
-                    <div class="trend-pop-retweet">
-                        <!-- <h6 id="tweet-author-1"></h6> -->
-                        <h6 id="pop-tweet-header-1"></h6>
-                        <p id="tweet-content-1"></p>
-                        <span id="tweet-date-1"></span>
-                        <!-- <a id="tweet-url-1" href="" target="_blank"></a> -->
-                    </div>
-                    <div class="trend-pop-likes">
-                        <!-- <h6 id="tweet-author-2"></h6> -->
-                        <h6 id="pop-tweet-header-2"></h6>
-                        <p id="tweet-content-2"></p>
-                        <span id="tweet-date-2"></span>
-                        <!-- <a id="tweet-url-2" href="" target="_blank"></a> -->
+                    <h3 class="side-title">Recent Tweets</h3>
+                    <div id="tweets">
+                        <blockquote class="tweet">
+                            <div class="trend-pop-retweet">
+                                <!-- <h6 id="tweet-author-1"></h6> -->
+                                <h6 id="pop-tweet-header-1"></h6>
+                                <p id="tweet-content-1"></p>
+                                <span id="tweet-date-1"></span>
+                                <!-- <a id="tweet-url-1" href="" target="_blank"></a> -->
+                            </div>
+                        </blockquote>
+                        <blockquote class="tweet">
+                            <div class="trend-pop-likes">
+                                <!-- <h6 id="tweet-author-2"></h6> -->
+                                <h6 id="pop-tweet-header-2"></h6>
+                                <p id="tweet-content-2"></p>
+                                <span id="tweet-date-2"></span>
+                                <!-- <a id="tweet-url-2" href="" target="_blank"></a> -->
+                            </div>
+                        </blockquote>
                     </div>
                 </div>
+
+                <!-- News -->
                 <div id="trend-news">
-                    <h3 class="side-title">Top News</h3>
+                    <h3 class="side-title">Recent News</h3>
                     <div class="trend-news-article">
                         <h6 id="article-title-1"></h6>
                         <p id="article-blurb-1"></p>
@@ -122,6 +143,8 @@
                 </div>
             </div>
 	    </div>
+
+        <!-- Footer -->
         <footer class="page-footer footer container-fluid">
             <ul class="team-members">
                 <li>Jennifer Chao</li>
