@@ -18,7 +18,7 @@ $(document).ready(function(){
             let rootnode = {};
             rootnode.id = uname;
             nodes.push(rootnode);
-            alert(JSON.stringify(nodes));
+            // alert(JSON.stringify(nodes));
             retweetNetworkURL += uname + '&count=' + retweets;
             // alert(retweetNetworkURL); // check that the url is correct
             $.getJSON(retweetNetworkURL, function(data){
@@ -37,7 +37,7 @@ $(document).ready(function(){
                 }
                 networkData.nodes = nodes;
                 networkData.links = links;
-                alert(JSON.stringify(networkData)); // check that data was correctly parsed
+                // alert(JSON.stringify(networkData)); // check that data was correctly parsed
                 graphNetwork(networkData)
             });
         }
