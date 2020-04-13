@@ -3,12 +3,20 @@
 <html lang="en">
     <head>
         <title>Analyze Network</title>
-
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+         <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+        </script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <script src="cloud.js"></script>
 	
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="main.css">
@@ -37,6 +45,7 @@
                         <a href="index.html">Location</a>
                         <a href="time.html">Time</a>
 						<a href="network.html">Network</a>
+						<a href="explore.html">Tweets/Trends</a>
                     </div>
                 </div>
             </div>
@@ -45,61 +54,50 @@
         <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
         <div class="row">
             <!-- First column -->
-            <div class="col-12 col-md-10">
-
-
-
+            <div id="cloud-div" class="col-12 col-md-10">
+                <h1 id="cloud-intro">Please enter a Twitter username and the number of users within their network that you
+                    would like to use to generate a word cloud</h1>
             </div>
             <!-- Second column -->
             <div class="col">
+                <!-- Search bar -->
+                <div id="user-inputs-cloud">
+                    <input type="text" placeholder="Search User" autocomplete="off" id="search-cloud" name="search-cloud">
+                </div>
+			
+			    <!-- Drop-down menu -->
+			    <label id="drop-list-title" for="drop-list-cloud">Number of network:</label>
+                <select id="drop-list-cloud" autocomplete="off" >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                </select>
 
-
-			<!-- Search bar -->
-		    <div id="user-inputs-network">
-                <input type="text" placeholder="Search User" autocomplete="off" id="search-network" name="search-network">
+                <!-- Update graph button -->
+                <div id="update-graph-cloud">
+                    <button id="update-graph-btn">
+                        Update Graph
+                    </button>
+                </div>
             </div>
-			
-			<!-- Drop-down menu -->
-			 <label id="drop-list-title" for="drop-list-network">Number of network:</label>
-			<select id="drop-list-network" autocomplete="off" >
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-				<option value="11">11</option>
-				<option value="12">12</option>
-				<option value="13">13</option>
-				<option value="14">14</option>
-				<option value="15">15</option>
-				<option value="16">16</option>
-				<option value="17">17</option>
-				<option value="18">18</option>
-				<option value="19">19</option>
-				<option value="20">20</option>
-			</select> 
-
-			
-
-			
-			<!-- Update graph button -->
-			<div id="update-graph-network">
-                <button id="update-graph-btn">
-				    Update Graph
-			    </button>
-		    </div>
-			
-			
-            </div>
-
-		
-		
-            </div>
+        </div>
 			        
         <footer class="page-footer footer container-fluid">
             <ul class="team-members">

@@ -68,7 +68,7 @@ $(document).ready(function(){
         temporalURL += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
         //alert(temporalURL);
 
-        const svgPresent = !! document.getElementById(time_svg_id)
+        const svgPresent = !! document.getElementById(time_svg_id);
         if (svgPresent) { d3.select("#" + time_svg_id).remove(); }
 
 
