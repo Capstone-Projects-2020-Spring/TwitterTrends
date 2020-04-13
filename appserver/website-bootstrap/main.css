@@ -711,6 +711,12 @@ blockquote.tweet a:focus {
 
 /* Network Page Buttons */
 
+#network {
+	width: 1000px;
+	height: 600px;
+	text-align: center;
+}
+
 #user-inputs-network {
 	height: 45%;
 	margin: auto;
