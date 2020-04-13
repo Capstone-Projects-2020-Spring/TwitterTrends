@@ -79,7 +79,7 @@ class standardAPI:
         return texts
 
     # get list of userID in a user's follow list
-    def getFollowersID(self, id2, username, count=20):
+    def getFriendsID(self, id2, username, count=20):
         queryfriends_ids = []
         if username is not None:
             queryfriends_ids = self.tweepy.friends_ids(screen_name=username)

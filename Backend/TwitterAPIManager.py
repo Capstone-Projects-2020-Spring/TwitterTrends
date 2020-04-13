@@ -54,8 +54,8 @@ class TwitterAPIManager:
     def getTweetsFromUser(self, id2, username, count):
         return self.standardAPI.getTweetsFromUser(id2, username)
 
-    def getFollowersID(self, id2, username, count):
-        return self.standardAPI.getFollowersID(id2, username)
+    def getFriendsID(self, id2, username, count):
+        return self.standardAPI.getFriendsID(id2, username)
 
     def get_username_from_id(self, id2):
         return self.standardAPI.getUsernameFromID(id2)

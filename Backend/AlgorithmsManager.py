@@ -494,8 +494,8 @@ class AlgorithmsManager:
         for text in tweets:
             texts.append(text)
         if i < n:
-            followsids = self.twitter.getFollowersID(id2, username, count)
-            for id3 in followsids:
+            friendsid = self.twitter.getFriendsID(id2, username, count)
+            for id3 in friendsid:
                 screen_name = self.twitter.get_username_from_id(id3)
                 self.append_texts_recursive(texts, n, count, i+1, id3, screen_name)
 
