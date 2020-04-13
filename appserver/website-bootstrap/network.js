@@ -8,7 +8,7 @@ $(document).ready(function(){
         if (svgPresent) { d3.select("#" + network_svg_id).remove(); }
         let retweetNetworkURL = 'http://18.214.197.203:5000/retweeters?username=';
         let uname = document.getElementById('search-network').value;
-        let retweets = document.getElementById('drop-list-network').value;
+        let retweeter_count = document.getElementById('drop-list-network').value;
         let networkData = {};
         let nodes = [];
         let links = [];
@@ -19,13 +19,13 @@ $(document).ready(function(){
             rootnode.id = uname;
             nodes.push(rootnode);
             // alert(JSON.stringify(nodes));
-            retweetNetworkURL += uname + '&count=' + retweets;
+            retweetNetworkURL += uname + '&count=' + retweeter_count;
             // alert(retweetNetworkURL); // check that the url is correct
             $.getJSON(retweetNetworkURL, function(data){
                 let network = data;
                 // alert(JSON.stringify(network)); // check that network data is returned
                 let i = 0;
-                for(i; i < retweets.valueOf(); i++){
+                for(i; i < retweeter_count.valueOf(); i++){
                     let node = {};
                     let link = {};
                     node.id = network[i].username;
