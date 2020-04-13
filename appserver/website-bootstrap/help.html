@@ -2,81 +2,89 @@
 
 <html lang="en">
   <head>
+        <title>Help Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Help Page</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
-	
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="static/main.css">
+	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
   </head>
-<body>
+  <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="#"><img src="images/logo2.png"></a>
+            </div>
 
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Help Page</h3>
+		        </div>
 
-	<!-- Navigation bar -->
-	
-	<!-- Logo -->
-	<nav class="navbar navbar-expand-md">
-		<a class="navbar-brand" href="index.html">Logo</a>  
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                    <i class="fas fa-caret-down"></i>
+                    </button>
 
-		<div id="title">
-			Help Page
-		</div>
-		
-		<!-- Drop down menu -->
-		<div id="pages-drop-box">
-			<button id="pages-drop-btn" type="reset">ANALYZE
-			<i class="fas fa-caret-down"></i>
-			</button>
-			
-			<div id="pages-dropdown-menu">
-				<a href="index.html">Location</a>
-				<a href="time.html">Time</a>
-				<a href="network.html">Network</a>
-				<a href="cloud.html">Word Cloud</a>
-				<a href="explore.html">Tweets/Trends</a>
-			</div> 
-		</div>	
-		
-	</nav>
+                    <div id="pages-dropdown-menu">
+                        <a href="time.html">Time</a>
+                        <a href="network.html">Network</a>
+						<a href="cloud.html">Word Cloud</a>
+						<a href="explore.html">Tweets/Trends</a>
+                        <a href="help.html">Help</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
+        <div id="help-page">
+            <div class="help-content">
+                <h1>About Twitter Trends</h1>
+                <p>Twitter Trends is a web application that allows users to visualize and explore pertinent topics
+                    on the social media platform Twitter. The user can access an interface that offers options of
+                    fun and interactive visualizations and can switch between these views, including Locations, Time,
+                    and Network. When chosen, each view will present real time Twitter data with the focus on different
+                    aspects. The user does not need their own Twitter account to use this product; however, they have
+                    the option to input their Twitter account name to connect the application to their own account.
+                    With this, they can view more personalized data, such as data only including their network of
+                    followers that is located within the Network Pages.</p>
+            </div>
+            <div class="help-content">
+                <h2>Helpful Tips</h2>
 
-     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-	<div class="row">
-        
-		<!-- First column -->
-		<div class="col-12 col-md-10">
-	<header class="page-header header container-fluid">
-			
-	</header>
-		</div>
-	
-		<!-- Second column -->
-		<div class="col" style="background-color: #470a0a"> <!-- Second column background color -->
-		
-			
-		
-		</div>
-	</div>
+                <h3>Locations</h3>
+                <p>Zooming into the Map Visualization: Within the Locations analysis page you can zoom in on an
+                    individual U.S state by clicking on it. Clicking again will zoom back out to the whole map. </p>
 
-	<h2>About Twitter Trends</h2>
+                <h3>Time</h3>
+                <p>Analyzing Trends Over Time: Within the Time analysis page you can add different trending hashtags
+                    within the selections pane. You may add up to five different trends. You can also select a given
+                    time interval in Days. Clicking update will update the graph and reveal the visualization.</p>
 
-<p>Twitter Trends is a web application that allows users to visualize and explore pertinent topics on the social media platform Twitter. The user can access an interface that offers options of fun and interactive visualizations and can switch between these views, including Locations, Time, and Network. When chosen, each view will present real time Twitter data with the focus on different aspects. The user does not need their own Twitter account to use this product; however, they have the option to input their Twitter account name to connect the application to their own account. With this, they can view more personalized data, such as data only including their network of followers that is located within the Network Pages.</p>
-
-<h2>Helpful Tips</h2>
-
-<h3>Locations</h3>
-<p>Zooming into the Map Visualization: Within the Locations analysis page you can zoom in on an individual U.S state by clicking on it. Clicking again will zoom back out to the whole map. </p>
-<h3>Time</h3>
-	<p>Analyzing Trends Over Time: Within the Time analysis page you can add different trending hashtags within the selections pane. You may add up to five different trends. You can also select a given time interval in Days. Clicking update will update the graph and reveal the visualization.</p>
-<h3>Network</h3>
-	<p>Analyzing a Users Network: The Word CLoud page analyzes a given users network for trending keywords and topics. Enter a users twitter account, then select the number of accounts that you wish to search within that users network and then click update graph. </p>
-
-
-<script src="static/jquery-3.3.1.min.js"></script>
-<script src="static/bootstrap/js/bootstrap.min.js"></script>
-<script src="static/main.js"></script>
-</body>
+                <h3>Network</h3>
+                <p>Analyzing a Users Network: The Word CLoud page analyzes a given users network for trending keywords
+                    and topics. Enter a users twitter account, then select the number of accounts that you wish to search
+                    within that users network and then click update graph. </p>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="page-footer footer container-fluid">
+            <ul class="team-members">
+                <li>Jennifer Chao</li>
+                <li>Conor Kennedy</li>
+                <li>Mike Lauw</li>
+                <li>Chris Nelson</li>
+                <li>Scott Salisbury</li>
+                <li>Dan Tran</li>
+                <li>Thanh Tran</li>
+            </ul>
+        </footer>
+    </body>
 </html>
