@@ -7,10 +7,11 @@
 # [Tweet class]
 class Tweet:
 
-    def __init__(self, id, ids, uid, cont, lat, lon, locid, likes, quotes, rtweets, repl, date, url):
+    def __init__(self, id, ids, uid, uname, cont, lat, lon, locid, likes, quotes, rtweets, repl, date, url):
         self.tweet_PK = id
         self.tweet_id_str = ids
         self.userid = uid
+        self.username = uname
         self.content = cont
         self.latitude = lat
         self.longitude = lon
