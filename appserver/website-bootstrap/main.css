@@ -88,10 +88,11 @@ body {
 
 label[for="econVarDropdown"] {
 	font-size: 16px;
-	color: white;
+	color: black;
 	display: inline-block;
 	vertical-align: middle;
 	margin: auto;
+	opacity: 0;
 }
 
 #econVarDropdown {
@@ -99,6 +100,7 @@ label[for="econVarDropdown"] {
 	display: inline-block;
 	vertical-align: middle;
 	margin: auto;
+	opacity: 0;
 }
 
 /*search bar todo delete this obsolete section? */
@@ -255,11 +257,11 @@ label[for="econVarDropdown"] {
 	right: 1%;
 }
 
-.tooltip-button {
+.button-div {
 	float: right;
 }
 
-.tooltip-button span {
+.button-div span {
 	font-size: 20px;
 	padding-left: 10px;
 }
@@ -288,6 +290,12 @@ label[for="econVarDropdown"] {
 #world_button img {
 	width: auto;
 	height: 25px;
+}
+
+#econ-dropdown {
+	position: absolute;
+	top: 2%;
+	right: 1%;
 }
 
 .states {

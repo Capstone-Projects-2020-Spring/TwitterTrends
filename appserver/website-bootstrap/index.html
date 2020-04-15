@@ -35,12 +35,6 @@
                     <h3>Analyze Location</h3>
 		        </div>
 
-                <label for="econVarDropdown">Choose an economic variable to visualize:</label>
-                <select id="econVarDropdown">
-                    <option value="None">None</option>
-                </select>
-
-
                 <!-- Drop down menu -->
                 <div id="pages-drop-box">
                     <button id="pages-drop-btn" type="reset">ANALYZE
@@ -82,14 +76,20 @@
 			        <div id="svg-display">
 				        <div id="mapsvg">
                             <div id="map-buttons">
-                                <div class="tooltip-button">
-                                    <span class="tooltiptext">World Trends</span>
+                                <div class="button-div">
+                                    <span>World Trends</span>
                                     <button id="world_button"><img src="images/world.png"></button>
                                 </div>
-                                <div class="tooltip-button">
-                                    <span class="tooltiptext">U.S. Trends</span>
+                                <div class="button-div">
+                                    <span>U.S. Trends</span>
                                     <button id="us_button"><img src="images/usa.png"></button>
                                 </div>
+                            </div>
+                            <div id="econ-dropdown">
+                                <label for="econVarDropdown">Choose an economic variable to visualize:</label>
+                                <select id="econVarDropdown">
+                                    <option value="None">None</option>
+                                </select>
                             </div>
                         </div>
 			        </div>

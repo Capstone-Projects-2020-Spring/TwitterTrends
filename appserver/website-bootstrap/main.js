@@ -1,7 +1,7 @@
-window.statesEconData = {}
+window.statesEconData = {};
 window.currZoomedState = null;
 
-window.zoomTransitionTime = 1000
+window.zoomTransitionTime = 1000;
 
 function colorCitiesByEconData() {
 		let econDropdownElem = document.getElementById("econVarDropdown");
@@ -153,12 +153,18 @@ $(document).ready(function(){
 						centered = d;
 
 						displayStateEconData(d,mapProjection);
+						document.getElementById("map-buttons").style.opacity = "0";
+						document.getElementById("econVarDropdown").style.opacity = "1";
+						document.querySelector('label[for="econVarDropdown"]').style.opacity = "1";
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
 						scalingFactor = 1;
 						centered = null;
 
+						document.getElementById("map-buttons").style.opacity = "1";
+						document.getElementById("econVarDropdown").style.opacity = "0";
+						document.querySelector('label[for="econVarDropdown"]').style.opacity = "0";
 
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
