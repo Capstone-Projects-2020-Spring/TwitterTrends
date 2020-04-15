@@ -88,10 +88,11 @@ body {
 
 label[for="econVarDropdown"] {
 	font-size: 16px;
-	color: white;
+	color: black;
 	display: inline-block;
 	vertical-align: middle;
 	margin: auto;
+	opacity: 0;
 }
 
 #econVarDropdown {
@@ -99,6 +100,7 @@ label[for="econVarDropdown"] {
 	display: inline-block;
 	vertical-align: middle;
 	margin: auto;
+	opacity: 0;
 }
 
 /*search bar todo delete this obsolete section? */
@@ -255,11 +257,11 @@ label[for="econVarDropdown"] {
 	right: 1%;
 }
 
-.tooltip-button {
+.button-div {
 	float: right;
 }
 
-.tooltip-button span {
+.button-div span {
 	font-size: 20px;
 	padding-left: 10px;
 }
@@ -288,6 +290,12 @@ label[for="econVarDropdown"] {
 #world_button img {
 	width: auto;
 	height: 25px;
+}
+
+#econ-dropdown {
+	position: absolute;
+	top: 2%;
+	right: 1%;
 }
 
 .states {
@@ -641,15 +649,9 @@ form.temporal-search button:hover {
 	padding: 5px 0;
 }
 
-#pop-tweet-header-1, #pop-tweet-header-2 {
+#tweet-author-1, #tweet-author-2 {
 	padding-bottom: 5px;
 }
-
-/*
-#tweet-author-1, #tweet-author-2, #tweet-author-3 {
-	padding-bottom: 5px;
-}
- */
 
 #trend-tweets h6 {
 	font-size: 14px;
@@ -662,14 +664,14 @@ form.temporal-search button:hover {
 	color: white;
 }
 
-#trend-tweets a {
-	font-size: 11px;
-	color: #599680;
+#trend-tweets span {
+	color: lightgray;
+	text-decoration: none;
+	font-weight: lighter;
 }
 
-#trend-tweets a:hover {
-	color: #bebeeb;
-	text-decoration: none;
+#tweet:hover {
+	cursor: pointer;
 }
 
 #tweets {
@@ -695,18 +697,6 @@ blockquote.tweet {
 
 blockquote.tweet p {
   font-weight: normal;
-}
-
-blockquote.tweet a {
-  color: inherit;
-  font-weight: normal;
-  text-decoration: none;
-  outline: 0 none;
-}
-
-blockquote.tweet a:hover,
-blockquote.tweet a:focus {
-  text-decoration: underline;
 }
 
 /* Network Page Buttons */

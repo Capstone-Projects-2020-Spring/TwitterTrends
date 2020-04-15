@@ -1,7 +1,7 @@
-window.statesEconData = {}
+window.statesEconData = {};
 window.currZoomedState = null;
 
-window.zoomTransitionTime = 1000
+window.zoomTransitionTime = 1000;
 
 function colorCitiesByEconData() {
 		let econDropdownElem = document.getElementById("econVarDropdown");
@@ -58,7 +58,8 @@ $(document).ready(function(){
 		.attr("class", "tooltip");
 
 	const mouseover = function(d){
-		Tooltip.style("opacity", 1)
+		Tooltip.style("opacity", 1);
+		Tooltip.style("z-index", 1);
 	};
 
 	const mousemove = function(d) {
@@ -69,7 +70,8 @@ $(document).ready(function(){
 	};
 
 	const mouseout = function(d){
-		Tooltip.style("opacity", 0)
+		Tooltip.style("opacity", 0);
+		Tooltip.style("z-index", -1);
 	};
 
 	const handleClick = function(d) {  // Add interactivity
@@ -151,12 +153,18 @@ $(document).ready(function(){
 						centered = d;
 
 						displayStateEconData(d,mapProjection);
+						document.getElementById("map-buttons").style.opacity = "0";
+						document.getElementById("econVarDropdown").style.opacity = "1";
+						document.querySelector('label[for="econVarDropdown"]').style.opacity = "1";
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
 						scalingFactor = 1;
 						centered = null;
 
+						document.getElementById("map-buttons").style.opacity = "1";
+						document.getElementById("econVarDropdown").style.opacity = "0";
+						document.querySelector('label[for="econVarDropdown"]').style.opacity = "0";
 
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
@@ -336,28 +344,35 @@ function getMoreInfo() {
 				most_liked_tweet = second_most_liked_tweet;
 			}
 
-			document.getElementById("pop-tweet-header-1").innerHTML = "Tweet with " + max_retweets + " retweets:";
-			//todo? document.getElementById('tweet-author-1').innerHTML = "Author id" + most_retweeted_tweet.user_id;
+			document.getElementById("tweet-author-1").innerHTML = "@" + most_retweeted_tweet.username + ": ";
 			document.getElementById('tweet-content-1').innerHTML = most_retweeted_tweet.content;
-			document.getElementById("tweet-date-1").innerHTML = most_retweeted_tweet.tweet_date;
-			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+			document.getElementById("tweet-date-1").innerHTML = (most_retweeted_tweet.tweet_date).substring(0, 20);
+			if(most_retweeted_tweet.url !== null) {
+				document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.url);
+			}
 
-			document.getElementById("pop-tweet-header-2").innerHTML = "Tweet with " + max_likes + " likes:";
-			//todo? document.getElementById('tweet-author-2').innerHTML = "Author id" + most_liked_tweet.user_id;
+			document.getElementById("tweet-author-2").innerHTML = "@" + most_liked_tweet.username + ": ";
 			document.getElementById('tweet-content-2').innerHTML = most_liked_tweet.content;
-			document.getElementById("tweet-date-2").innerHTML = most_liked_tweet.tweet_date;
-			//todo? document.getElementById('tweet-url-1').setAttribute("href", most_retweeted_tweet.?);
+			document.getElementById("tweet-date-2").innerHTML = (most_liked_tweet.tweet_date).substring(0, 20);
+			if(most_liked_tweet.url !== null) {
+				document.getElementById('tweet-url-2').setAttribute("href", most_liked_tweet.url);
+			}
 
 			document.getElementById('tweets').style.display = 'inline-block';
 		} else {
-			document.getElementById("pop-tweet-header-1").innerHTML = "";
+			document.getElementById("tweet-author-1").innerHTML = "";
 			document.getElementById('tweet-content-1').innerHTML = "";
 			document.getElementById("tweet-date-1").innerHTML = "";
+			if(document.getElementById('tweet-url-1').hasAttribute('href')){
+				document.getElementById('tweet-url-1').removeAttribute('href');
+			}
 
-			document.getElementById("pop-tweet-header-2").innerHTML = "";
+			document.getElementById("tweet-author-2").innerHTML = "";
 			document.getElementById('tweet-content-2').innerHTML = "";
 			document.getElementById("tweet-date-2").innerHTML = "";
-
+			if(document.getElementById('tweet-url-2').hasAttribute('href')) {
+				document.getElementById('tweet-url-2').removeAttribute('href');
+			}
 			document.getElementById('tweets').style.display = 'none';
 		}
 	})
