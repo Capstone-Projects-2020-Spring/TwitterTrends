@@ -155,6 +155,7 @@ class AlgorithmsManager:
                 temptweet = DataStructures.Tweet(id=i,
                                                  ids=tweet['id'],
                                                  uid=tweet['user']['id'],
+                                                 uname=tweet['user']['screen_name'],
                                                  cont=tweet['text'],
                                                  lat=loc.latitude, lon=loc.longitude, locid=loc.woeid, # location isfound in tweet['geo']
                                                  likes=tweet['favorite_count'],
