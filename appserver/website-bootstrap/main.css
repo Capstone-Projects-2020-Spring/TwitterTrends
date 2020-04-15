@@ -103,50 +103,6 @@ label[for="econVarDropdown"] {
 	opacity: 0;
 }
 
-/*search bar todo delete this obsolete section? */
-
-#trend-search-box{
-	position: absolute;
-	float: right;
-	background: #9191c4;
-	height: 35px;
-	border-radius: 40px;
-	padding: 10px;
-}
-
-::placeholder {
-	color: #fff;
-}
-
-#trend-search-box:hover > #trend-search-txt{
-	width: 240px;
-	padding: 0 6px;
-	
-}
-
-#trend-search-btn{
-	color: #fff;
-	width: 15px;
-	height: 20px;
-	border-radius: 50%;
-	background: #9191c4;
-	transition: 0.4s;
-	
-}
-
-#trend-search-txt{
-	border: none;
-	background: none;
-	outline: none;
-	float: left;
-	padding: 1px;
-	color: #fff;
-	font-size: 16px;
-	transition: 0.4s;
-	width: 0px;
-	line-height: 20px;
-}
-
 /*drop-down button*/
 
 #pages-drop-btn{
@@ -255,6 +211,7 @@ label[for="econVarDropdown"] {
 	position: absolute;
 	top: 2%;
 	right: 1%;
+	z-index: 1;
 }
 
 .button-div {
@@ -296,6 +253,7 @@ label[for="econVarDropdown"] {
 	position: absolute;
 	top: 2%;
 	right: 1%;
+	z-index: -1;
 }
 
 .states {
@@ -376,15 +334,6 @@ label[for="econVarDropdown"] {
 	fill: #599680;
 }
 
-/*
-.features img {
-    -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-    margin-bottom: 16px;
-}
-*/
-
 /* trend notification pop-up styles */
 
 #bg-modal {
@@ -400,8 +349,8 @@ label[for="econVarDropdown"] {
 }
 
 .modal-content {
-	width: 510px;
-	height: 300px;
+	width: 520px;
+	height: 320px;
 	background-color: white;
 	border-radius: 4px;
 	padding: 20px;
@@ -672,6 +621,7 @@ form.temporal-search button:hover {
 
 #tweet:hover {
 	cursor: pointer;
+	text-decoration: none;
 }
 
 #tweets {
