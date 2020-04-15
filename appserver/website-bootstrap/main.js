@@ -154,8 +154,10 @@ $(document).ready(function(){
 
 						displayStateEconData(d,mapProjection);
 						document.getElementById("map-buttons").style.opacity = "0";
+						document.getElementById("map-buttons").style.zIndex = "-1";
 						document.getElementById("econVarDropdown").style.opacity = "1";
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "1";
+						document.getElementById('econ-dropdown').style.zIndex = "1";
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
@@ -163,8 +165,10 @@ $(document).ready(function(){
 						centered = null;
 
 						document.getElementById("map-buttons").style.opacity = "1";
+						document.getElementById("map-buttons").style.zIndex = "1";
 						document.getElementById("econVarDropdown").style.opacity = "0";
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "0";
+						document.getElementById('econ-dropdown').style.zIndex = "-1";
 
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
