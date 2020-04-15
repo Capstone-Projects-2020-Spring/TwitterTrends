@@ -448,8 +448,8 @@ function displayStateEconData(stateElem, projectionObject) {
 	if (window.statesEconData.hasOwnProperty(stateName)) {
 		createEconCityElements(projectionObject);
 	} else {
-		stateName = encodeURIComponent(stateName);
-		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateName;
+		let stateNameUri = encodeURIComponent(stateName);
+		let stateEconDataUrl = "http://18.214.197.203:5000/economics?state=" + stateNameUri;
 
 		$.getJSON(stateEconDataUrl, function (stateEconData) {
 			if (window.currZoomedState === stateName && stateEconData.length > 0) {
