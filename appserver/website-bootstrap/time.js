@@ -182,7 +182,7 @@ function removeSearch() {
 }
 
 function makeLineGraph(csv_url, trendGroup) {
-    let margin = {top: 10, right: 10, bottom: 10, left: 100},
+    let margin = {top: 20, right: 10, bottom: 10, left: 100},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -282,16 +282,18 @@ function makeLineGraph(csv_url, trendGroup) {
         let mouseover = function(d) {
             Tooltip
                 .style("opacity", 1)
+				.style("z-index", 1);
         };
         let mousemove = function(d) {
             Tooltip
                 .html("Value: " + d.value)
-                .style("left", (d3.mouse(this)[0]+100) + "px")
-                .style("top", (d3.mouse(this)[1]) + "px")
+                .style("left", (d3.mouse(this)[0]+30) + "px")
+                .style("top", (d3.mouse(this)[1]+40) + "px")
         };
         let mouseleave = function(d) {
             Tooltip
                 .style("opacity", 0)
+				.style("z-index", -1);
         };
 
         //points
