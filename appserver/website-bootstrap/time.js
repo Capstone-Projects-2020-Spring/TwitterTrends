@@ -242,7 +242,7 @@ function makeLineGraph(csv_url, trendGroup) {
 
         let myColor = d3.scaleOrdinal()
             .domain(trendGroup)
-            .range(d3.schemePaired); //changes color schemes, schemeSet2 is nice too
+            .range(d3.schemeSet2); //changes color schemes, schemePaired is nice too
 
         //x axis
         let x = d3.scaleLinear()
