@@ -158,6 +158,9 @@ $(document).ready(function(){
 						document.getElementById("econVarDropdown").style.opacity = "1";
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "1";
 						document.getElementById('econ-dropdown').style.zIndex = "1";
+
+						us_cities.attr("r", 1.5);
+
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
@@ -170,6 +173,7 @@ $(document).ready(function(){
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "0";
 						document.getElementById('econ-dropdown').style.zIndex = "-1";
 
+						us_cities.attr("r", 5);
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
@@ -184,7 +188,7 @@ $(document).ready(function(){
 
 				});
 
-			let us_cities = mapsvg.append("g")
+			const us_cities = mapsvg.append("g")
 				.attr("class", "marker")
 				.selectAll('myCircles')
 				.data(locations)
