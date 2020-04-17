@@ -132,6 +132,7 @@ function graphNetwork(data) {
         let mouseover = function(d) {
             Tooltip
                 .style("opacity", 1)
+				.style("z-index", 1);
         };
         let mousemove = function(d) {
             Tooltip
@@ -142,6 +143,7 @@ function graphNetwork(data) {
         let mouseleave = function(d) {
             Tooltip
                 .style("opacity", 0)
+				.style("z-index", -1);
         };
 
     let node = svg.append("g")
