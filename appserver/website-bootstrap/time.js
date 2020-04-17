@@ -182,7 +182,7 @@ function removeSearch() {
 }
 
 function makeLineGraph(csv_url, trendGroup) {
-    let margin = {top: 20, right: 10, bottom: 10, left: 100},
+    let margin = {top: 20, right: 10, bottom: 10, left: 150},
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -258,6 +258,25 @@ function makeLineGraph(csv_url, trendGroup) {
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
+
+
+		// text label for the x axis
+		svg.append("text")             
+			.attr("transform",
+				"translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+			.style("text-anchor", "middle")
+			.text("Time");
+
+		// text label for the y axis
+		svg.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - 100)
+			.attr("x",0 - (height / 2))
+			.attr("dy", "1em")
+			.style("text-anchor", "middle")
+			.text("Value");
+
 
         //lines
         let line = d3.line()
@@ -347,5 +366,9 @@ function makeLineGraph(csv_url, trendGroup) {
                 currentOpacity = d3.selectAll("." + d.name).style("opacity");
                 d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
             })
+			
+			
+		
+			
     });
 }
