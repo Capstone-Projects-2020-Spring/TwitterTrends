@@ -14,5 +14,5 @@ def get_lat_lon_by_address(address):
 
 if __name__ == '__main__':
     city = 'Philadelphia'
-    lat, lon = geocoding(city)
+    lat, lon = get_lat_lon_by_address(city)
     print(lat, lon)
