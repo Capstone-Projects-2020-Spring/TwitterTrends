@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from wrappers.geocode import geocoding
+import wrappers.geocode as geocode
 from newsapi import NewsApiClient
 
 from wordcloud import WordCloud, STOPWORDS
@@ -217,7 +217,7 @@ class AlgorithmsManager:
     # Example addrstr: "1801 N Broad St, Philadelphia, PA 19122"
     def get_location_by_address(self, address):
         # TODO: possibly access database to check for existing location
-        lat, lon = geocoding(address)
+        lat, lon = geocode.get_lat_lon_by_address(address)
         res = self.twitter.get_closest_location(lat, lon)
         return self.parse_location_json(res, lat, lon)
 

@@ -2,7 +2,7 @@
 # Contain the TwitterAPI Wrapper import
 from wrappers.premiumAPI import premiumAPI
 from wrappers.standardAPI import standardAPI
-from wrappers.geocode import geocoding
+import wrappers.geocode as geocode
 
 from datetime import datetime, timedelta
 import json
