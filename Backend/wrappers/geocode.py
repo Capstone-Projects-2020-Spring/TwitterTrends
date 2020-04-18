@@ -1,15 +1,18 @@
 from geopy.geocoders import Nominatim
-
-geolocator = Nominatim(user_agent="Twitter Trends")
+from geopy.exc import GeocoderTimedOut
 
 # Convert address to an object containing latitude, longitude
-def geocoding(address):
-    location = geolocator.geocode(address)
-    lat, long = int(location.latitude), int(location.longitude)
-    return lat, long
+def get_lat_lon_by_address(address):
+    geolocator = Nominatim(user_agent="Twitter Trends", scheme='http')
+    try:
+        location = geolocator.geocode(address, timeout=5)
+        lat, lon = location.latitude, location.longitude
+        return lat, lon
+    except GeocoderTimedOut as e:
+        print("Error: geocode failed on input %s with message %s" % (e.msg))
 
 
 if __name__ == '__main__':
     city = 'Philadelphia'
-    location = geocoding(city)
-    # print(location.raw['place_id'])
+    lat, lon = geocoding(city)
+    print(lat, lon)
