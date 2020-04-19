@@ -20,11 +20,13 @@ class standardAPI:
         self.backupTweepysQueue.append(exhaustedTweepy)
         numTweepyAccounts = len(self.backupTweepysQueue) + 1
         self.tweepyAccountIndex = (self.tweepyAccountIndex + 1) % numTweepyAccounts
+        print("previous twitter account hit rate limit, switching to account #", self.tweepyAccountIndex)
 
     def retrieve_trends(self, woeid):
         try:
             trends = self.tweepy.trends_place(woeid)
         except RateLimitError as rle:
+            print("hit rate limit while retrieving trends for a woeid ", woeid)
             self._rotate_tweepy_accounts()
             trends = self.tweepy.trends_place(woeid)
 
@@ -35,6 +37,7 @@ class standardAPI:
         try:
             location = self.tweepy.trends_closest(lat, long)
         except RateLimitError as rle:
+            print("hit rate limit while finding a location near lat-long coordinates ", lat, ", ", long)
             self._rotate_tweepy_accounts()
             location = self.tweepy.trends_closest(lat, long)
         return location
@@ -62,6 +65,7 @@ class standardAPI:
                                             count=num)
             except RateLimitError as rle:
                 self._rotate_tweepy_accounts()
+                print("hit rate limit while fetching tweets about ", keyword, " within a region")
                 tweets = self.tweepy.search(q=keyword, geocode=geocode, since=since, until=until, result_type='top',
                                             count=num)
 
@@ -77,6 +81,7 @@ class standardAPI:
                 tweets = self.tweepy.search(q=keyword, since=since, until=until, result_type='top', count=num)
             except RateLimitError as rle:
                 self._rotate_tweepy_accounts()
+                print("hit rate limit while fetching tweets about ", keyword)
                 tweets = self.tweepy.search(q=keyword, since=since, until=until, result_type='top', count=num)
 
             # # # Parsing tweepy output to our standardized format
@@ -92,6 +97,7 @@ class standardAPI:
             user = self.tweepy.get_user(id2)
         except RateLimitError as rle:
             self._rotate_tweepy_accounts()
+            print("hit rate limit while fetching the screen name of a user based on their user id ", id2)
             user = self.tweepy.get_user(id2)
 
         return user._json['screen_name']
@@ -106,12 +112,14 @@ class standardAPI:
                     queryusertweets = self.tweepy.user_timeline(screen_name=username, count=count)
                 except RateLimitError as rle:
                     self._rotate_tweepy_accounts()
+                    print("hit rate limit while fetching a user's recent tweets based on their screen name ", username)
                     queryusertweets = self.tweepy.user_timeline(screen_name=username, count=count)
             elif id2 > 0:
                 try:
                     queryusertweets = self.tweepy.user_timeline(id=id2, count=count, page=0)
                 except RateLimitError as rle:
                     self._rotate_tweepy_accounts()
+                    print("hit rate limit while fetching a user's recent tweets based on their user id ", id2)
                     queryusertweets = self.tweepy.user_timeline(id=id2, count=count, page=0)
             else:
                 return queryusertweets
@@ -131,6 +139,7 @@ class standardAPI:
                 queryfriends_ids = self.tweepy.friends_ids(screen_name=username)
             except RateLimitError as rle:
                 self._rotate_tweepy_accounts()
+                print("hit rate limit while fetching the friends of a user ", username)
                 queryfriends_ids = self.tweepy.friends_ids(screen_name=username)
         elif id2 > 0:
             try:
@@ -156,6 +165,7 @@ class standardAPI:
             user_object = self.tweepy.get_user(id=None, user_id=None, screen_name=public_id)
         except RateLimitError as rle:
             self._rotate_tweepy_accounts()
+            print("hit rate limit while getting a detailed description of a user ", public_id)
             user_object = self.tweepy.get_user(id=None, user_id=None, screen_name=public_id)
 
         return user_object
@@ -170,6 +180,7 @@ class standardAPI:
                 followerList.append(follower)
         except RateLimitError as rle:
             self._rotate_tweepy_accounts()
+            print("hit rate limit while fetching the followers of a user ", public_id)
             #resetting it because you can't know
             # how far the previous attempt got before hitting the rate limit
             followerList = []
@@ -188,6 +199,7 @@ class standardAPI:
                 timeline.append(status)
         except RateLimitError as rle:
             self._rotate_tweepy_accounts()
+            print("hit rate limit while fetching the full contents of the timeline of a user ", public_id)
             # resetting it because you can't know
             # how far the previous attempt got before hitting the rate limit
             timeline = []
@@ -209,6 +221,7 @@ class standardAPI:
             retweets = self.tweepy.retweets(id=tweet_id, count=max_num)
         except RateLimitError as rle:
             self._rotate_tweepy_accounts()
+            print("hit rate limit while loading the id's of the retweets of a tweet which had id ", tweet_id)
             retweets = self.tweepy.retweets(id=tweet_id, count=max_num)
 
         return retweets
