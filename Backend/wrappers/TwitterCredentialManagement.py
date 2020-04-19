@@ -8,7 +8,7 @@ ACCESS_TOKEN_SECRET_ENV_VAR_NAME = "TWITTER_TRENDS_{}_ACCESS_TOKEN_SECRET"
 missingEnvVarErrorStr = "{} environment variable {} is not defined"
 
 
-def fetchApiCredentials(accountInd = 0):
+def fetchApiCredentials(accountInd):
     """
     loads one Twitter developer account's standard api credentials
     from where they're stored in system environment variables

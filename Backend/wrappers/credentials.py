@@ -22,9 +22,9 @@ def getPremiumEndpointCreds(endpointType):
 
     return searchArgs
 
-def getStandardTweepyTwitterCreds():
+def getStandardTweepyTwitterCreds(accountInd= 0):
 
-    apiKey, apiSecretKey, accessToken, accessTokenSecret = tcm.fetchApiCredentials()
+    apiKey, apiSecretKey, accessToken, accessTokenSecret = tcm.fetchApiCredentials(accountInd)
 
     auth = tweepy.OAuthHandler(apiKey, apiSecretKey)
     auth.set_access_token(accessToken, accessTokenSecret)
@@ -33,9 +33,9 @@ def getStandardTweepyTwitterCreds():
 
     try:
         twitterStandardAPI.verify_credentials()
-        print("Twitter credentials valid")
+        print("Twitter credentials valid for account #", accountInd)
     except Exception as e:
-        print("Tweepy unable to authenticate with Twitter")
+        print("Tweepy unable to authenticate with Twitter when trying to access account #", accountInd)
         print("Exception: ", e.__doc__, str(e))
         traceback.print_exc()
 
