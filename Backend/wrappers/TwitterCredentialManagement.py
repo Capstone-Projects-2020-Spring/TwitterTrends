@@ -1,29 +1,37 @@
 import os
 
-API_KEY_ENV_VAR_NAME = "TWITTER_TRENDS_API_KEY"
-API_SECRET_KEY_ENV_VAR_NAME = "TWITTER_TRENDS_API_SECRET_KEY"
-ACCESS_TOKEN_ENV_VAR_NAME = "TWITTER_TRENDS_ACCESS_TOKEN"
-ACCESS_TOKEN_SECRET_ENV_VAR_NAME = "TWITTER_TRENDS_ACCESS_TOKEN_SECRET"
+API_KEY_ENV_VAR_NAME = "TWITTER_TRENDS_{}_API_KEY"
+API_SECRET_KEY_ENV_VAR_NAME = "TWITTER_TRENDS_{}_API_SECRET_KEY"
+ACCESS_TOKEN_ENV_VAR_NAME = "TWITTER_TRENDS_{}_ACCESS_TOKEN"
+ACCESS_TOKEN_SECRET_ENV_VAR_NAME = "TWITTER_TRENDS_{}_ACCESS_TOKEN_SECRET"
 
-missingEnvVarErrorStr = "{} environment variable is not defined"
+missingEnvVarErrorStr = "{} environment variable {} is not defined"
 
 
-def fetchApiCredentials():
+def fetchApiCredentials(accountInd = 0):
     """
-    loads standard api credentials from where they're stored in system environment variables
+    loads one Twitter developer account's standard api credentials
+    from where they're stored in system environment variables
+    :param accountInd: which twitter developer account's credentials to retrieve
     :return: credentials for the standard api
     """
 
-    apiKey = os.environ.get(API_KEY_ENV_VAR_NAME)
-    assert apiKey != None, missingEnvVarErrorStr.format("API Key")
+    accountIndStr = str(accountInd)
 
-    apiSecretKey = os.environ.get(API_SECRET_KEY_ENV_VAR_NAME)
-    assert apiSecretKey != None, missingEnvVarErrorStr.format("API Secret Key")
+    currApiKeyEnvVar = API_KEY_ENV_VAR_NAME.format(accountIndStr)
+    apiKey = os.environ.get(currApiKeyEnvVar)
+    assert apiKey != None, missingEnvVarErrorStr.format("API Key", accountIndStr)
 
-    accessToken = os.environ.get(ACCESS_TOKEN_ENV_VAR_NAME)
-    assert accessToken != None, missingEnvVarErrorStr.format("API Access Token")
+    currApiSecretKeyEnvVar = API_SECRET_KEY_ENV_VAR_NAME.format(accountIndStr)
+    apiSecretKey = os.environ.get(currApiSecretKeyEnvVar)
+    assert apiSecretKey != None, missingEnvVarErrorStr.format("API Secret Key", accountIndStr)
 
-    accessTokenSecret = os.environ.get(ACCESS_TOKEN_SECRET_ENV_VAR_NAME)
-    assert accessTokenSecret != None, missingEnvVarErrorStr.format("API Access Token Secret")
+    currAccessTokenEnvVar=  ACCESS_TOKEN_ENV_VAR_NAME.format(accountIndStr)
+    accessToken = os.environ.get(currAccessTokenEnvVar)
+    assert accessToken != None, missingEnvVarErrorStr.format("API Access Token", accountIndStr)
+
+    currAccessTokenSecretEnvVar = ACCESS_TOKEN_SECRET_ENV_VAR_NAME.format(accountIndStr)
+    accessTokenSecret = os.environ.get(currAccessTokenSecretEnvVar)
+    assert accessTokenSecret != None, missingEnvVarErrorStr.format("API Access Token Secret", accountIndStr)
 
     return apiKey, apiSecretKey, accessToken, accessTokenSecret

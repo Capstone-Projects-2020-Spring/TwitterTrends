@@ -5,6 +5,8 @@ class standardAPI:
 
     def __init__(self):
         self.tweepy = creds.getStandardTweepyTwitterCreds()
+        # interfaces to the twitter API using different developer account credentials (to get around rate limits)
+        self.backupTweepys = []
 
     def retrieve_trends(self, woeid):
         trends = self.tweepy.trends_place(woeid)
