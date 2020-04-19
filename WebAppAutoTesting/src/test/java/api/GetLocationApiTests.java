@@ -22,7 +22,7 @@ protected static final String LONG_ARG1 = "longitude";
 protected static final String LONG_ARG2 = "lon";
 protected static final String ADDR_ARG = "address";
 
-protected static final double LAT_LONG_COMPARISON_THRESHOLD = 0.5;
+protected static final double LAT_LONG_COMPARISON_THRESHOLD = 1;
 protected static final String API_ERROR_STRING = "ERROR ENDPOINT";
 protected static final String API_BAD_ARGS_ERROR_STRING = "Error! arguments:";
 
