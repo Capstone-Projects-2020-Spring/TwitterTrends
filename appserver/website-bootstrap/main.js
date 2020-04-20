@@ -160,6 +160,8 @@ $(document).ready(function(){
 						document.getElementById('econ-dropdown').style.zIndex = "1";
 
 						us_cities.attr("r", 1.5);
+						Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
+						.style("top", (d3.mouse(this)[1]) + "px")
 
 					} else {
 						xTranslation = width / 2;
@@ -174,6 +176,8 @@ $(document).ready(function(){
 						document.getElementById('econ-dropdown').style.zIndex = "-1";
 
 						us_cities.attr("r", 5);
+						Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
+						.style("top", (d3.mouse(this)[1]) + "px")
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
