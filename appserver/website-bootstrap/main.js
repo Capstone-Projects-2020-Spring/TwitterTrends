@@ -52,8 +52,9 @@ $(document).ready(function(){
     */
 	let trend_data, centered;
 	const width = 1000, height = 600;
+	let xZoomed = 0, yZoomed = 0;
 
-	const Tooltip = d3.select(".row")
+	let Tooltip = d3.select(".row")
 		.append("div")
 		.attr("class", "tooltip");
 
@@ -65,8 +66,14 @@ $(document).ready(function(){
 	const mousemove = function(d) {
 		Tooltip
 			.html(d.city_id + "<br>" + "long: " + d.longitude + "<br>" + "lat: " + d.latitude)
-			.style("left", (d3.mouse(this)[0] + 50) + "px")
-			.style("top", (d3.mouse(this)[1]) + "px")
+			if(window.currZoomedState){
+				Tooltip.style("left", (xZoomed) + "px")
+					.style("top", (yZoomed) + "px")
+			} else {
+				Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
+					.style("top", (d3.mouse(this)[1]) + "px")
+			}
+
 	};
 
 	const mouseout = function(d){
@@ -149,7 +156,9 @@ $(document).ready(function(){
 						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
 						scalingFactor = .85 / Math.max(w_scale, h_scale);
 						xTranslation = (bounds[1][0] + bounds[0][0]) / 2;
+						xZoomed = xTranslation/scalingFactor;
 						yTranslation = ((bounds[1][1] + bounds[0][1]) / 2);
+						yZoomed = yTranslation/scalingFactor;
 						centered = d;
 
 						displayStateEconData(d,mapProjection);
@@ -160,13 +169,13 @@ $(document).ready(function(){
 						document.getElementById('econ-dropdown').style.zIndex = "1";
 
 						us_cities.attr("r", 1.5);
-						Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
-						.style("top", (d3.mouse(this)[1]) + "px")
 
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
 						scalingFactor = 1;
+						xZoomed = xTranslation/scalingFactor;
+						yZoomed = yTranslation/scalingFactor;
 						centered = null;
 
 						document.getElementById("map-buttons").style.opacity = "1";
@@ -176,8 +185,6 @@ $(document).ready(function(){
 						document.getElementById('econ-dropdown').style.zIndex = "-1";
 
 						us_cities.attr("r", 5);
-						Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
-						.style("top", (d3.mouse(this)[1]) + "px")
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
