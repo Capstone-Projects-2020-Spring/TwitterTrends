@@ -116,5 +116,79 @@ $.getJSON(locationsUrl, function (cityObjects) {
     autocomplete(document.getElementById("myInput2"), citiesMap);
 });
 
+$(document).ready(function(){
+    document.querySelector("#trends-display-city").addEventListener('click', function() {
+        let cityTrendUrl = 'http://18.214.197.203:5000/toptrends?woeid=';
+        let city = document.getElementById('myInput').value;
+        let woeid = citiesMap.get(city);
+        if(woeid){
+            cityTrendUrl += woeid;
+            alert(cityTrendUrl);
+        } else {
+            alert("Please provide a valid city name!");
+        }
+
+    });
+
+    document.querySelector("#trends-display-tweets").addEventListener('click', function() {
+        let tweetTrendUrl = 'http://18.214.197.203:5000/toptweets?query=';
+        let trend = document.getElementById("tweet-trend").value;
+        if(trend){
+            tweetTrendUrl += trend;
+            alert(tweetTrendUrl);
+        } else {
+            alert("Please provide a trend!");
+        }
+    });
+
+    document.querySelector("#trends-display-city-time").addEventListener('click', function() {
+        let cityTrendUrl = 'http://18.214.197.203:5000/temporal?woeid=';
+        let city = document.getElementById('myInput2').value;
+        let woeid = citiesMap.get(city);
+        cityTrendUrl += woeid;
+
+        if(woeid){
+            cityTrendUrl += woeid;
+            let fromDate = document.getElementById('start').value;
+            let toDate = document.getElementById('end').value;
+            if(!fromDate || !toDate){
+                alert("Please provide start and ends dates!");
+            } else {
+                let startDate = new Date(fromDate);
+                let startBoundary = new Date("02/29/2020");
+                let endDate = new Date(toDate);
+                let endBoundary = Date.now();
+
+                if(startDate < startBoundary || endDate > endBoundary) {
+                    alert("Please enter valid  dates between March 1, 2020 and today!");
+                } else if(startDate > endDate){
+                    alert("Please make sure end date is after start date!");
+                } else {
+                    let startDateStr = startDate.toISOString();
+                    startDateStr = startDateStr.replace("T", " ");
+                    //cuts off the milliseconds and the 'Z' at the end of the string
+                    let millisPeriodIndex = startDateStr.lastIndexOf(".");
+                    startDateStr = startDateStr.substring(0, millisPeriodIndex);
+
+                    startDateStr = encodeURIComponent(startDateStr);
+                    cityTrendUrl += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
+
+                    let endDateStr = endDate.toISOString();
+                    endDateStr = endDateStr.replace("T", " ");
+                    //cuts off the milliseconds and the 'Z' at the end of the string
+                    millisPeriodIndex = endDateStr.lastIndexOf(".");
+                    endDateStr = endDateStr.substring(0, millisPeriodIndex);
+
+                    endDateStr = encodeURIComponent(endDateStr);
+                    cityTrendUrl += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
+
+                    alert(cityTrendUrl);
+                }
+            }
+        } else {
+            alert("Please provide a valid city name!");
+        }
+    });
+});
 
 

@@ -16,337 +16,277 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="main.css">
     </head>
-<body>
-    <!-- Navigation bar -->
-	<nav class="navbar navbar-expand-md">
-        <!-- Title and Logo -->
-        <div class="top-nav-left">
-            <a href="index.html#"><h1 class="site-title">TwitterTrends</h1></a>
-            <a class="logo" href="index.html#"><img src="images/logo2.png"></a>
-        </div>
-
-        <div class="top-nav-right">
-            <div id="title">
-                <h3>Analyze Tweets/Trends</h3>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="index.html#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="index.html#"><img src="images/logo2.png"></a>
             </div>
 
-            <!-- Drop down menu -->
-            <div id="pages-drop-box">
-                <button id="pages-drop-btn" type="reset">ANALYZE
-                    <i class="fas fa-caret-down"></i>
-                </button>
-
-                <div id="pages-dropdown-menu">
-                    <a href="index.html">Location</a>
-					<a href="time.html">Time</a>
-                    <a href="network.html">Network</a>
-					<a href="cloud.html">Word Cloud</a>
-                    <a href="help.html">Help</a>
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Analyze Tweets/Trends</h3>
                 </div>
+
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div id="pages-dropdown-menu">
+                        <a href="index.html">Location</a>
+                        <a href="time.html">Time</a>
+                        <a href="network.html">Network</a>
+                        <a href="cloud.html">Word Cloud</a>
+                        <a href="help.html">Help</a>
+                    </div>
+                </div>
+
+
             </div>
-			
-			
+        </nav>
+
+
+         <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+        <div class="row">
+            <header class="page-header header container-fluid">
+
+                <!-- Trends Display -->
+                <div class="explore-title-text">
+                     <h6> Trends Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input id="myInput" type="text" name="myCity" placeholder="City">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-city">Search</button>
+                </form>
+
+                <div class="table-style">
+                    <table>
+                        <tr>
+                          <th>Trend content</th>
+                          <th>Tweet volume</th>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <!-- Tweets Display -->
+                <div class="explore-title-text">
+                     <h6> Tweets Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input type="text" placeholder="Tweets" name="tweets" id="tweet-trend">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-tweets">Search</button>
+                </form>
+
+                <div class="table-style">
+                    <table>
+                        <tr>
+                            <th>Tweet content</th>
+                            <th>Author Username</th>
+                            <th>Posting Date/Time</th>
+                            <th>#Retweets</th>
+                            <th>#Likes</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Trends History Display -->
+                <div class="explore-title-text">
+                     <h6> Trends Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input id="myInput2" type="text" name="myCity2" placeholder="City">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-city-time">Search</button>
+                </form>
+
+                <div class="explore-title-text-sm">
+                    <span>From date: </span>
+                    <input type="date" id="start" name="date-start" autocomplete="off"
+                        min="2020-03-01" max="2020-04-27">
+
+                    <span>To date: </span>
+                    <input type="date" id="end" name="date-end" autocomplete="off"
+                        min="2020-03-01" max="2020-04-27">
+                </div>
+
+                <div class="table-style">
+                    <table>
+                        <tr>
+                            <th>Trend content</th>
+                            <th>Tweet volume</th>
+                            <th>Earliest Date</th>
+                            <th>Latest Date</th>
+                            <th>Max Volume</th>
+                            <th>Average Volume</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </header>
         </div>
-    </nav>
-
-
-     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-	<div class="row">
-	<header class="page-header header container-fluid">
-			
-			
-	<!-- Trends Display -->
-			
-			<div class="explore-title-text">
-			     <h6> Trends Display </h6>
-			</div>
-				
-			<form autocomplete="off" >
-				<div class="trends-display" style="width:300px;">
-				<input id="myInput" type="text" name="myCity" placeholder="City">
-				</div>
-				<button id="trends-display-button" type="reset">Search
-				
-                </button>
-			</form>
-			
-<div style="overflow-y:auto;">
-  <table>
-    <tr>
-      <th>Trend content</th>
-      <th>Tweet volume</th>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-    </tr>
-	
-  </table>
-</div>
-
-
-	
-	<!-- Tweets Display -->
-
-			<div class="explore-title-text">
-			     <h6> Tweets Display </h6>
-			</div>
-				
-			<form autocomplete="off" >
-				<div class="trends-display" style="width:300px;">
-				<input type="text" placeholder="Tweets">
-				</div>
-				<button id="trends-display-button" type="reset">Search
-				
-                </button>
-			</form>
-			
-<div style="overflow-y:auto;">
-  <table>
-    <tr>
-      <th>Tweet content</th>
-      <th>Author Username</th>
-	  <th>Posting Date/Time</th>
-	  <th>#Retweets</th>
-	  <th>#Likes</th>
-	  <th>#Quotes</th>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-  </table>
-</div>
-
-	<!-- Trends History Display -->
-			<div class="explore-title-text">
-			     <h6> Trends Display </h6>
-			</div>
-			
-			
-				
-			<form autocomplete="off" >
-				<div class="trends-display" style="width:300px;">
-				<input id="myInput2" type="text" placeholder="City">
-				</div>
-				<button id="trends-display-button" type="reset">Search
-				
-                </button>
-			</form>
-			
-			<div class="explore-title-text-sm">
-					From date:
-					<input type="date" id="start" name="date-start" autocomplete="off"
-					min="2018-01-01" max="2021-01-01">
-					
-					To date: 
-					<input type="date" id="end" name="date-end" autocomplete="off"
-					min="2018-01-01" max="2021-01-01">
-			</div>
-			
-			
-			
-<div style="overflow-y:auto;">
-  <table>
-    <tr>
-      <th>Trend content</th>
-      <th>Tweet volume</th>
-	  <th>Earliest Date</th>
-	  <th>Latest Date</th>
-	  <th>Max Volume</th>
-	  <th>Average Volume</th>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-    <tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-    </tr>
-	
-	<tr>
-      <td></td>
-	  <td></td>
-      <td></td>
-	  <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-	
-  </table>
-</div>
-	
-
-
-	</header>
-
-
-	</div>
-
-<script src="jquery-3.3.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="explore.js"></script>
-</body>
+    </body>
 </html>
