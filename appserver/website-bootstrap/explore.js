@@ -121,9 +121,22 @@ $(document).ready(function(){
         let cityTrendUrl = 'http://18.214.197.203:5000/toptrends?woeid=';
         let city = document.getElementById('myInput').value;
         let woeid = citiesMap.get(city);
+        let trends = null;
         if(woeid){
             cityTrendUrl += woeid;
-            alert(cityTrendUrl);
+            $.getJSON(cityTrendUrl, function(data){
+		        trends = data;
+	        }).then(function() {
+	            document.getElementById("city-title").innerHTML ="Top Trends for " + city;
+                let table = document.getElementById("display-trends-table");
+                for(let i = 0; i < trends.length; i++){
+                    let row = table.insertRow(i+1);
+                    let cell1 = row.insertCell(0);
+                    cell1.innerHTML = trends[i].trend_content;
+                    let cell2 = row.insertCell(1);
+                    cell2.innerHTML = trends[i].tweet_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // adds commas every third digit for numbers greater than 999
+                }
+            });
         } else {
             alert("Please provide a valid city name!");
         }
@@ -133,9 +146,31 @@ $(document).ready(function(){
     document.querySelector("#trends-display-tweets").addEventListener('click', function() {
         let tweetTrendUrl = 'http://18.214.197.203:5000/toptweets?query=';
         let trend = document.getElementById("tweet-trend").value;
+        let tweetTrend = encodeURIComponent(trend); // so we can search for trends with hashtags
+        let tweets = null;
         if(trend){
-            tweetTrendUrl += trend;
-            alert(tweetTrendUrl);
+            tweetTrendUrl += tweetTrend;
+            $.getJSON(tweetTrendUrl, function(data){
+		        tweets = data;
+	        }).then(function() {
+	            document.getElementById("tweets-title").innerHTML = "Recent Tweets for " + trend;
+                let table = document.getElementById("display-tweets-table");
+                for(let i = 0; i < tweets.length; i++){
+                    let row = table.insertRow(i+1);
+                    let cell1 = row.insertCell(0);
+                    cell1.innerHTML = tweets[i].content;
+                    let cell2 = row.insertCell(1);
+                    cell2.innerHTML = tweets[i].username;
+                    let cell3 = row.insertCell(2);
+                    let t_date = (tweets[i].tweet_date).substring(0, 20);
+                    cell3.innerHTML = t_date;
+                    let cell4 = row.insertCell(3);
+                    cell4.innerHTML = tweets[i].retweets.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // adds commas every third digit for numbers greater than 999
+                    let cell5 = row.insertCell(4);
+                    cell5.innerHTML = tweets[i].likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // adds commas every third digit for numbers greater than 999
+                }
+            });
+
         } else {
             alert("Please provide a trend!");
         }
