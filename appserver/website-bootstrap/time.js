@@ -265,7 +265,7 @@ function makeLineGraph(csv_url, trendGroup) {
 				"translate(" + (width/2) + " ," + 
                            (height + margin.top + 20) + ")")
 			.style("text-anchor", "middle")
-			.text("Hours");
+			.text("Time (Hours Prior to Present)");
 
 		// text label for the y axis
 		svg.append("text")
@@ -342,7 +342,7 @@ function makeLineGraph(csv_url, trendGroup) {
             .append("text")
             .attr("class", function(d){ return d.name })
             .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; }) // keep only the last value of each time series
-            .attr("transform", function(d) { return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
+            .attr("transform", function(d) { return "translate(" + x(-latestHourOffset+d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
             .attr("x", 12) // shift the text a bit more right
             .text(function(d) { return d.name; })
             .style("fill", function(d){ return myColor(d.name) })
