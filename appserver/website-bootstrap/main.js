@@ -4,52 +4,42 @@ window.currZoomedState = null;
 window.zoomTransitionTime = 1000;
 
 function colorCitiesByEconData() {
-		let econDropdownElem = document.getElementById("econVarDropdown");
-		let chosenEconVar = econDropdownElem.value;
+	let econDropdownElem = document.getElementById("econVarDropdown");
+	let chosenEconVar = econDropdownElem.value;
 
-		if(chosenEconVar !== "None" && window.currZoomedState) {
-			let citiesEconData = window.statesEconData[window.currZoomedState];
-			if(citiesEconData) {
-				let minEconVarVal = Number.MAX_VALUE;
-				let maxEconVarVal = -Number.MAX_VALUE;
+	if(chosenEconVar !== "None" && window.currZoomedState) {
+		let citiesEconData = window.statesEconData[window.currZoomedState];
+		if(citiesEconData) {
+			let minEconVarVal = Number.MAX_VALUE;
+			let maxEconVarVal = -Number.MAX_VALUE;
 
-				for (const cityData of citiesEconData) {
-					let currVal = cityData[chosenEconVar];
+			for (const cityData of citiesEconData) {
+				let currVal = cityData[chosenEconVar];
 
-					if (currVal < minEconVarVal) { minEconVarVal = currVal; }
-					if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
-				}
+				if (currVal < minEconVarVal) { minEconVarVal = currVal; }
+				if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
+			}
 
-				let lowColor = d3.hsl("purple");
-				let highColor = d3.hsl("yellow");
+			let lowColor = d3.hsl("purple");
+			let highColor = d3.hsl("yellow");
 
-				let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
+			let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
 
-				for (const cityData of citiesEconData) {
-					let cityElem = cityData["cityElement"];
-					let cityEconVarVal = cityData[chosenEconVar];
+			for (const cityData of citiesEconData) {
+				let cityElem = cityData["cityElement"];
+				let cityEconVarVal = cityData[chosenEconVar];
 
-					let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
-					let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
+				let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
+				let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
 
-					cityElem.style["fill"] = cityColor;
-				}
+				cityElem.style["fill"] = cityColor;
 			}
 		}
 	}
-
-
+}
 
 $(document).ready(function(){
-	$('.header').height($(window).height());
-	/*
-    ** Top Trends data from Philly:
-    ** http://18.214.197.203:5000/toptrends?woeid=247121
-    ** Locations data:
-    ** http://18.214.197.203:5000/locations
-    ** CORS proxy:
-    ** https://cors-anywhere.herokuapp.com/
-    */
+
 	let trend_data, centered;
 	const width = 1000, height = 600;
 	let xZoomed = 0, yZoomed = 0;
@@ -90,8 +80,8 @@ $(document).ready(function(){
 
 	const mapsvg = d3.select("#mapsvg")
 		.append("svg")
-		.attr("width", width)
-		.attr("height", height);
+		.attr("viewBox", "0 0 1000 600")
+		.classed("svg-content-responsive", true);
 
 
 	const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
@@ -485,3 +475,20 @@ function createEconCityElements(projectionObj) {
 
 	colorCitiesByEconData();
 }
+
+function setColMaxheight(){
+    let column = $(".col").first(),
+        mapHeight = $("#mapsvg").height();
+
+    column.css({
+        'max-height' : mapHeight + "px"
+    });
+}
+
+$(function(){
+    setColMaxheight();
+
+    $(window).resize(function(){
+        setColMaxheight();
+    });
+});
