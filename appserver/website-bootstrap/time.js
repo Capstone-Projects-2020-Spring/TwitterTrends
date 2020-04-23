@@ -246,7 +246,7 @@ function makeLineGraph(csv_url, trendGroup) {
 
         //x axis
         let x = d3.scaleLinear()
-            .domain([0,latestHourOffset])
+            .domain([-latestHourOffset,0])//0,latestHourOffset])
             .range([ 0, width ]);
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -259,14 +259,13 @@ function makeLineGraph(csv_url, trendGroup) {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-
 		// text label for the x axis
 		svg.append("text")             
 			.attr("transform",
 				"translate(" + (width/2) + " ," + 
                            (height + margin.top + 20) + ")")
 			.style("text-anchor", "middle")
-			.text("Time");
+			.text("Hours");
 
 		// text label for the y axis
 		svg.append("text")
@@ -280,7 +279,7 @@ function makeLineGraph(csv_url, trendGroup) {
 
         //lines
         let line = d3.line()
-            .x(function(d) { return x(+d.time) })
+            .x(function(d) { return x(-latestHourOffset+d.time) })
             .y(function(d) { return y(+d.value) })
         svg.selectAll("myLines")
             .data(dataReady)
@@ -327,7 +326,7 @@ function makeLineGraph(csv_url, trendGroup) {
             .data(function(d){ return d.values })
             .enter()
             .append("circle")
-            .attr("cx", function(d) { return x(d.time) } )
+            .attr("cx", function(d) { return x(-latestHourOffset+d.time) } )
             .attr("cy", function(d) { return y(d.value) } )
             .attr("r", 8)
             .on("mouseover", mouseover)
@@ -349,27 +348,23 @@ function makeLineGraph(csv_url, trendGroup) {
             .style("fill", function(d){ return myColor(d.name) })
             .style("font-size", 15);
 
-        //interactivity, line disappears on click of name in upper left
-        //the failsafe, just in case adding new trends doesn't work, can just get top however many trends up front and change opacity to fulfill that feature requirement
-        svg
-            .selectAll("myLegend")
-            .data(dataReady)
-            .enter()
-            .append('g')
-            .append("text")
-            .attr('x', function(d,i){ return 30 + i*60})
-            .attr('y', 30)
-            .text(function(d) { return d.name; })
-            .style("fill", function(d){ return myColor(d.name) })
-            .style("font-size", 17)
-            .on("click", function(d){
-                currentOpacity = d3.selectAll("." + d.name).style("opacity");
-                d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
-            })
-			
-			
-		
-			
+
+		//this is for the legend labels, don't really need it because each individual line is labeled.
+        //svg
+            //.selectAll("myLegend")
+            //.data(dataReady)
+            //.enter()
+            //.append('g')
+            //.append("text")
+            //.attr('x', function(d,i){return 30 + i*60})
+            //.attr('y', 30)
+            //.text(function(d) { return d.name; })
+            //.style("fill", function(d){ return myColor(d.name) })
+            //.style("font-size", 17)
+            //.on("click", function(d){
+             //   currentOpacity = d3.selectAll("." + d.name).style("opacity");
+            //    d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
+            //})
     });
 	
 
