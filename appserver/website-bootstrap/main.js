@@ -285,7 +285,8 @@ function retrieveTrends(trendUrl) {
 
 function getMoreInfo() {
 	let trend = this.innerHTML;
-	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2');
+	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2'); // put spaces between words in camelcase trends
+	news_trend = news_trend.replace(/_/g, " "); // replace underscores with spaces
 	news_trend = encodeURIComponent(news_trend);
 	let tweet_trend = encodeURIComponent(trend);
 	let trend_news = null;
