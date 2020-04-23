@@ -247,7 +247,7 @@ $(document).ready(function(){
 		trend_data = retrieveTrends(worldUrl);
 	});
 
-	//getStartingInfo();
+	getStartingInfo();
 });
 
 function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, xOffset, yOffset, scaleFactor) {
@@ -269,22 +269,32 @@ function retrieveTrends(trendUrl) {
 		trends = data;
 	}).then(function() {
 	    document.querySelector('#trend-1').innerHTML = trends[0].trend_content;
-        document.getElementById('trend-1').addEventListener('click', getMoreInfo);
+        document.getElementById('trend-1').addEventListener('click', function () {
+        	getMoreInfo(trends[0].trend_content);
+		});
 	    document.querySelector('#trend-2').innerHTML = trends[1].trend_content;
-	    document.getElementById('trend-2').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-2').addEventListener('click', function () {
+        	getMoreInfo(trends[1].trend_content);
+		});
 	    document.querySelector('#trend-3').innerHTML = trends[2].trend_content;
-	    document.getElementById('trend-3').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-3').addEventListener('click', function () {
+        	getMoreInfo(trends[2].trend_content);
+		});
 	    document.querySelector('#trend-4').innerHTML = trends[3].trend_content;
-	    document.getElementById('trend-4').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-4').addEventListener('click', function () {
+        	getMoreInfo(trends[3].trend_content);
+		});
 	    document.querySelector('#trend-5').innerHTML = trends[4].trend_content;
-	    document.getElementById('trend-5').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-5').addEventListener('click', function () {
+        	getMoreInfo(trends[4].trend_content);
+		});
 
 	});
 
 }
 
-function getMoreInfo() {
-	let trend = this.innerHTML;
+function getMoreInfo(trend) {
+	//let trend = this.innerHTML;
 	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2'); // put spaces between words in camelcase trends
 	news_trend = news_trend.replace(/_/g, " "); // replace underscores with spaces
 	news_trend = encodeURIComponent(news_trend);
@@ -397,69 +407,17 @@ function getMoreInfo() {
 		}
 	})
 }
-/*
+
 function getStartingInfo() {
 	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=23424775";
-	let world_trends = null;
-	let top_world_trend = null;
-
+	let trends = null;
 	$.getJSON(world_trend_url, function(data){
-		world_trends = data;
+		trends = data;
 	}).then(function() {
-		if (world_trends.length > 0) {
-			top_world_trend = world_trends[0].trend_content;
-			if (top_world_trend.startsWith('#')){
-				top_world_trend = top_world_trend.substring(1);
-			}
-			world_news_url = world_news_url + top_world_trend;
-			$.getJSON(world_news_url, function (news) {
-				world_news = news;
-
-				if(world_news.length > 0) {
-					document.getElementById('article-title-1').innerHTML = world_news[0].title;
-					let blurb = world_news[0].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-1').innerHTML = blurb;
-					document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
-					document.getElementById('article-url-1').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-1').innerHTML = "";
-					document.getElementById('article-blurb-1').innerHTML ="";
-					document.getElementById('article-url-1').setAttribute("href", "");
-					document.getElementById('article-url-1').innerText = "";
-				}
-
-				if(world_news.length > 1) {
-					document.getElementById('article-title-2').innerHTML = world_news[1].title;
-					blurb = world_news[1].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-2').innerHTML = blurb;
-					document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
-					document.getElementById('article-url-2').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-2').innerHTML = "";
-					document.getElementById('article-blurb-2').innerHTML ="";
-					document.getElementById('article-url-2').setAttribute("href", "");
-					document.getElementById('article-url-2').innerText = "";
-				}
-
-				if (world_news.length > 2) {
-					document.getElementById('article-title-3').innerHTML = world_news[2].title;
-					blurb = world_news[2].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-3').innerHTML = blurb;
-					document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
-					document.getElementById('article-url-3').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-3').innerHTML = "";
-					document.getElementById('article-blurb-3').innerHTML ="";
-					document.getElementById('article-url-3').setAttribute("href", "");
-					document.getElementById('article-url-3').innerText = "";
-				}
-			});
-		}
+		getMoreInfo(trends[0].trend_content);
 	});
-}*/
+
+}
 
 function displayStateEconData(stateElem, projectionObject) {
 	let stateName = stateElem.properties.name;
