@@ -146,10 +146,10 @@ $(document).ready(function(){
     document.querySelector("#trends-display-tweets").addEventListener('click', function() {
         let tweetTrendUrl = 'http://18.214.197.203:5000/toptweets?query=';
         let trend = document.getElementById("tweet-trend").value;
-        let tweetTrend = encodeURIComponent(trend); // so we can search for trends with hashtags
         let tweets = null;
         if(trend){
-            tweetTrendUrl += tweetTrend;
+            let tweetTrendUrlArg = encodeURIComponent(trend); // so we can search for trends with hashtags
+            tweetTrendUrl += tweetTrendUrlArg;
             $.getJSON(tweetTrendUrl, function(data){
 		        tweets = data;
 	        }).then(function() {
@@ -180,7 +180,6 @@ $(document).ready(function(){
         let cityTrendUrl = 'http://18.214.197.203:5000/temporal?woeid=';
         let city = document.getElementById('myInput2').value;
         let woeid = citiesMap.get(city);
-        cityTrendUrl += woeid;
         let trends = null;
         if(woeid){
             cityTrendUrl += woeid;

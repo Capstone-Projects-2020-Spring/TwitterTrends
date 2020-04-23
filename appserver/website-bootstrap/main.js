@@ -4,56 +4,47 @@ window.currZoomedState = null;
 window.zoomTransitionTime = 1000;
 
 function colorCitiesByEconData() {
-		let econDropdownElem = document.getElementById("econVarDropdown");
-		let chosenEconVar = econDropdownElem.value;
+	let econDropdownElem = document.getElementById("econVarDropdown");
+	let chosenEconVar = econDropdownElem.value;
 
-		if(chosenEconVar !== "None" && window.currZoomedState) {
-			let citiesEconData = window.statesEconData[window.currZoomedState];
-			if(citiesEconData) {
-				let minEconVarVal = Number.MAX_VALUE;
-				let maxEconVarVal = -Number.MAX_VALUE;
+	if(chosenEconVar !== "None" && window.currZoomedState) {
+		let citiesEconData = window.statesEconData[window.currZoomedState];
+		if(citiesEconData) {
+			let minEconVarVal = Number.MAX_VALUE;
+			let maxEconVarVal = -Number.MAX_VALUE;
 
-				for (const cityData of citiesEconData) {
-					let currVal = cityData[chosenEconVar];
+			for (const cityData of citiesEconData) {
+				let currVal = cityData[chosenEconVar];
 
-					if (currVal < minEconVarVal) { minEconVarVal = currVal; }
-					if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
-				}
+				if (currVal < minEconVarVal) { minEconVarVal = currVal; }
+				if (currVal > maxEconVarVal) { maxEconVarVal = currVal; }
+			}
 
-				let lowColor = d3.hsl("purple");
-				let highColor = d3.hsl("yellow");
+			let lowColor = d3.hsl("purple");
+			let highColor = d3.hsl("yellow");
 
-				let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
+			let colorInterpolator = d3.interpolateHsl(lowColor, highColor);
 
-				for (const cityData of citiesEconData) {
-					let cityElem = cityData["cityElement"];
-					let cityEconVarVal = cityData[chosenEconVar];
+			for (const cityData of citiesEconData) {
+				let cityElem = cityData["cityElement"];
+				let cityEconVarVal = cityData[chosenEconVar];
 
-					let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
-					let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
+				let econVarValInterpolatedToFraction = (cityEconVarVal-minEconVarVal)/(maxEconVarVal-minEconVarVal);
+				let cityColor = colorInterpolator(econVarValInterpolatedToFraction);
 
-					cityElem.style["fill"] = cityColor;
-				}
+				cityElem.style["fill"] = cityColor;
 			}
 		}
 	}
-
-
+}
 
 $(document).ready(function(){
-	$('.header').height($(window).height());
-	/*
-    ** Top Trends data from Philly:
-    ** http://18.214.197.203:5000/toptrends?woeid=247121
-    ** Locations data:
-    ** http://18.214.197.203:5000/locations
-    ** CORS proxy:
-    ** https://cors-anywhere.herokuapp.com/
-    */
+
 	let trend_data, centered;
 	const width = 1000, height = 600;
+	let xZoomed = 0, yZoomed = 0;
 
-	const Tooltip = d3.select(".row")
+	let Tooltip = d3.select(".row")
 		.append("div")
 		.attr("class", "tooltip");
 
@@ -65,8 +56,14 @@ $(document).ready(function(){
 	const mousemove = function(d) {
 		Tooltip
 			.html(d.city_id + "<br>" + "long: " + d.longitude + "<br>" + "lat: " + d.latitude)
-			.style("left", (d3.mouse(this)[0] + 50) + "px")
-			.style("top", (d3.mouse(this)[1]) + "px")
+			if(window.currZoomedState){
+				Tooltip.style("left", (xZoomed) + "px")
+					.style("top", (yZoomed) + "px")
+			} else {
+				Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
+					.style("top", (d3.mouse(this)[1]) + "px")
+			}
+
 	};
 
 	const mouseout = function(d){
@@ -83,8 +80,8 @@ $(document).ready(function(){
 
 	const mapsvg = d3.select("#mapsvg")
 		.append("svg")
-		.attr("width", width)
-		.attr("height", height);
+		.attr("viewBox", "0 0 1000 600")
+		.classed("svg-content-responsive", true);
 
 
 	const usDataUrl = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/us-states.json',
@@ -149,7 +146,9 @@ $(document).ready(function(){
 						let h_scale = (bounds[1][1] - bounds[0][1]) / height;
 						scalingFactor = .85 / Math.max(w_scale, h_scale);
 						xTranslation = (bounds[1][0] + bounds[0][0]) / 2;
+						xZoomed = xTranslation/scalingFactor;
 						yTranslation = ((bounds[1][1] + bounds[0][1]) / 2);
+						yZoomed = yTranslation/scalingFactor;
 						centered = d;
 
 						displayStateEconData(d,mapProjection);
@@ -158,10 +157,15 @@ $(document).ready(function(){
 						document.getElementById("econVarDropdown").style.opacity = "1";
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "1";
 						document.getElementById('econ-dropdown').style.zIndex = "1";
+
+						us_cities.attr("r", 1.5);
+
 					} else {
 						xTranslation = width / 2;
 						yTranslation = height / 2;
 						scalingFactor = 1;
+						xZoomed = xTranslation/scalingFactor;
+						yZoomed = yTranslation/scalingFactor;
 						centered = null;
 
 						document.getElementById("map-buttons").style.opacity = "1";
@@ -170,6 +174,7 @@ $(document).ready(function(){
 						document.querySelector('label[for="econVarDropdown"]').style.opacity = "0";
 						document.getElementById('econ-dropdown').style.zIndex = "-1";
 
+						us_cities.attr("r", 5);
 						//should this code transform the (empty) econCities <g> element back to normal zoom?
 					}
 
@@ -184,7 +189,7 @@ $(document).ready(function(){
 
 				});
 
-			let us_cities = mapsvg.append("g")
+			const us_cities = mapsvg.append("g")
 				.attr("class", "marker")
 				.selectAll('myCircles')
 				.data(locations)
@@ -232,7 +237,7 @@ $(document).ready(function(){
 		trend_data = retrieveTrends(worldUrl);
 	});
 
-	//getStartingInfo();
+	getStartingInfo();
 });
 
 function zoomTransformElements(d3ElementsSelection, transitionTime, projectionTranslation, xOffset, yOffset, scaleFactor) {
@@ -254,23 +259,34 @@ function retrieveTrends(trendUrl) {
 		trends = data;
 	}).then(function() {
 	    document.querySelector('#trend-1').innerHTML = trends[0].trend_content;
-        document.getElementById('trend-1').addEventListener('click', getMoreInfo);
+        document.getElementById('trend-1').addEventListener('click', function () {
+        	getMoreInfo(trends[0].trend_content);
+		});
 	    document.querySelector('#trend-2').innerHTML = trends[1].trend_content;
-	    document.getElementById('trend-2').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-2').addEventListener('click', function () {
+        	getMoreInfo(trends[1].trend_content);
+		});
 	    document.querySelector('#trend-3').innerHTML = trends[2].trend_content;
-	    document.getElementById('trend-3').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-3').addEventListener('click', function () {
+        	getMoreInfo(trends[2].trend_content);
+		});
 	    document.querySelector('#trend-4').innerHTML = trends[3].trend_content;
-	    document.getElementById('trend-4').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-4').addEventListener('click', function () {
+        	getMoreInfo(trends[3].trend_content);
+		});
 	    document.querySelector('#trend-5').innerHTML = trends[4].trend_content;
-	    document.getElementById('trend-5').addEventListener('click', getMoreInfo);
+	    document.getElementById('trend-5').addEventListener('click', function () {
+        	getMoreInfo(trends[4].trend_content);
+		});
 
 	});
 
 }
 
-function getMoreInfo() {
-	let trend = this.innerHTML;
-	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2');
+function getMoreInfo(trend) {
+	//let trend = this.innerHTML;
+	let news_trend = trend.replace(/([a-z])([A-Z])/g, '$1 $2'); // put spaces between words in camelcase trends
+	news_trend = news_trend.replace(/_/g, " "); // replace underscores with spaces
 	news_trend = encodeURIComponent(news_trend);
 	let tweet_trend = encodeURIComponent(trend);
 	let trend_news = null;
@@ -381,69 +397,17 @@ function getMoreInfo() {
 		}
 	})
 }
-/*
+
 function getStartingInfo() {
 	let world_trend_url = "http://18.214.197.203:5000/toptrends?woeid=23424775";
-	let world_trends = null;
-	let top_world_trend = null;
-
+	let trends = null;
 	$.getJSON(world_trend_url, function(data){
-		world_trends = data;
+		trends = data;
 	}).then(function() {
-		if (world_trends.length > 0) {
-			top_world_trend = world_trends[0].trend_content;
-			if (top_world_trend.startsWith('#')){
-				top_world_trend = top_world_trend.substring(1);
-			}
-			world_news_url = world_news_url + top_world_trend;
-			$.getJSON(world_news_url, function (news) {
-				world_news = news;
-
-				if(world_news.length > 0) {
-					document.getElementById('article-title-1').innerHTML = world_news[0].title;
-					let blurb = world_news[0].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-1').innerHTML = blurb;
-					document.getElementById('article-url-1').setAttribute("href", world_news[0].link_url);
-					document.getElementById('article-url-1').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-1').innerHTML = "";
-					document.getElementById('article-blurb-1').innerHTML ="";
-					document.getElementById('article-url-1').setAttribute("href", "");
-					document.getElementById('article-url-1').innerText = "";
-				}
-
-				if(world_news.length > 1) {
-					document.getElementById('article-title-2').innerHTML = world_news[1].title;
-					blurb = world_news[1].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-2').innerHTML = blurb;
-					document.getElementById('article-url-2').setAttribute("href", world_news[1].link_url);
-					document.getElementById('article-url-2').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-2').innerHTML = "";
-					document.getElementById('article-blurb-2').innerHTML ="";
-					document.getElementById('article-url-2').setAttribute("href", "");
-					document.getElementById('article-url-2').innerText = "";
-				}
-
-				if (world_news.length > 2) {
-					document.getElementById('article-title-3').innerHTML = world_news[2].title;
-					blurb = world_news[2].description;
-					blurb = blurb.slice(0, 150) + '...';
-					document.getElementById('article-blurb-3').innerHTML = blurb;
-					document.getElementById('article-url-3').setAttribute("href", world_news[2].link_url);
-					document.getElementById('article-url-3').innerText = 'Read More!';
-				} else {
-					document.getElementById('article-title-3').innerHTML = "";
-					document.getElementById('article-blurb-3').innerHTML ="";
-					document.getElementById('article-url-3').setAttribute("href", "");
-					document.getElementById('article-url-3').innerText = "";
-				}
-			});
-		}
+		getMoreInfo(trends[0].trend_content);
 	});
-}*/
+
+}
 
 function displayStateEconData(stateElem, projectionObject) {
 	let stateName = stateElem.properties.name;
@@ -511,3 +475,20 @@ function createEconCityElements(projectionObj) {
 
 	colorCitiesByEconData();
 }
+
+function setColMaxheight(){
+    let column = $(".col").first(),
+        mapHeight = $("#mapsvg").height();
+
+    column.css({
+        'max-height' : mapHeight + "px"
+    });
+}
+
+$(function(){
+    setColMaxheight();
+
+    $(window).resize(function(){
+        setColMaxheight();
+    });
+});
