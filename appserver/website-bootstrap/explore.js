@@ -181,7 +181,7 @@ $(document).ready(function(){
         let city = document.getElementById('myInput2').value;
         let woeid = citiesMap.get(city);
         cityTrendUrl += woeid;
-
+        let trends = null;
         if(woeid){
             cityTrendUrl += woeid;
             let fromDate = document.getElementById('start').value;
@@ -197,7 +197,7 @@ $(document).ready(function(){
                 if(startDate < startBoundary || endDate > endBoundary) {
                     alert("Please enter valid  dates between March 1, 2020 and today!");
                 } else if(startDate > endDate){
-                    alert("Please make sure end date is after start date!");
+                    alert("Please make sure end date is the same day or after start date!");
                 } else {
                     let startDateStr = startDate.toISOString();
                     startDateStr = startDateStr.replace("T", " ");
@@ -218,6 +218,27 @@ $(document).ready(function(){
                     cityTrendUrl += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
 
                     alert(cityTrendUrl);
+                    $.getJSON(cityTrendUrl, function(data){
+		                trends = data;
+	                }).then(function() {
+                        document.getElementById("city-time-title").innerHTML = "Top Trends for " + city + " Over the Specified Dates";
+                        let table = document.getElementById("display-timetrends-table");
+                        for(let i = 0; i < trends.length; i++){
+                            let row = table.insertRow(i+1);
+                            let cell1 = row.insertCell(0);
+                            //cell1.innerHTML =
+                            let cell2 = row.insertCell(1);
+                            //cell2.innerHTML =
+                            let cell3 = row.insertCell(2);
+                            //cell3.innerHTML =
+                            let cell4 = row.insertCell(3);
+                            //cell4.innerHTML =
+                            let cell5 = row.insertCell(4);
+                            //cell5.innerHTML =
+                            let cell6 = row.insertCell(5);
+                            //cell6.innerHTML =
+                        }
+                    });
                 }
             }
         } else {
