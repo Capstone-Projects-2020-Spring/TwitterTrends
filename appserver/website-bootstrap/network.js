@@ -68,30 +68,24 @@ $(document).ready(function(){
             ],
         "links": [
             {"source": "n1", "target": "n2", "value": 1},
-            {"source": "n1", "target": "n12", "value": 3},
-            {"source": "n1", "target": "n13", "value": 2},
-            {"source": "n1", "target": "n11", "value": 30},
-            {"source": "n13", "target": "n2", "value": 1},
-            {"source": "n15", "target": "n2", "value": 12},
-            {"source": "n4", "target": "n20", "value": 1},
-            {"source": "n17", "target": "n2", "value": 10},
-            {"source": "n18", "target": "n20", "value": 1},
-            {"source": "n19", "target": "n12", "value": 1},
-            {"source": "n19", "target": "n9", "value": 1},
-            {"source": "n11", "target": "n17", "value": 19},
-            {"source": "n9", "target": "n20", "value": 1},
-            {"source": "n17", "target": "n5", "value": 11},
+            {"source": "n1", "target": "n3", "value": 3},
+            {"source": "n1", "target": "n4", "value": 2},
+            {"source": "n1", "target": "n5", "value": 30},
+            {"source": "n1", "target": "n6", "value": 12},
+            {"source": "n1", "target": "n7", "value": 1},
+            {"source": "n1", "target": "n8", "value": 10},
+            {"source": "n1", "target": "n9", "value": 1},
+            {"source": "n1", "target": "n10", "value": 1},
+            {"source": "n1", "target": "n11", "value": 1},
+            {"source": "n1", "target": "n12", "value": 19},
+            {"source": "n1", "target": "n13", "value": 1},
             {"source": "n1", "target": "n14", "value": 3},
             {"source": "n1", "target": "n15", "value": 7},
             {"source": "n1", "target": "n16", "value": 12},
-            {"source": "n2", "target": "n4", "value": 7},
-            {"source": "n3", "target": "n5", "value": 9},
-            {"source": "n2", "target": "n10", "value": 7},
-            {"source": "n3", "target": "n9", "value": 7},
-            {"source": "n4", "target": "n8", "value": 20},
-            {"source": "n4", "target": "n7", "value": 15},
-            {"source": "n8", "target": "n1", "value": 1},
-            {"source": "n6", "target": "n1", "value": 1}
+            {"source": "n1", "target": "n17", "value": 7},
+            {"source": "n1", "target": "n18", "value": 9},
+            {"source": "n1", "target": "n19", "value": 7},
+            {"source": "n1", "target": "n20", "value": 7}
             ]
     };
     graphNetwork(graphData)
@@ -107,13 +101,11 @@ function graphNetwork(data) {
         .attr("height", height);
 
     let simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function(d) { return d.id; }))
-        .force("charge", d3.forceManyBody()
-                .strength(-300)
-                //.theta(0.8)
-                //.distanceMax(150)
-        )
-        .force("center", d3.forceCenter(width / 2, height / 2));
+        .force("x",d3.forceX(width/2).strength(0.2))
+		.force("y",d3.forceY(height/2).strength(0.35))
+		.force("charge",d3.forceManyBody().strength(-4000))
+		.force("link", d3.forceLink().id(d =>  d.id ))
+		.force("collide",d3.forceCollide().radius(d => d.r * 10));
 
     let link = svg.append("g")
         .style("stroke", "#224cb5")
@@ -152,11 +144,16 @@ function graphNetwork(data) {
         .data(data.nodes)
         .enter()
         .append("circle")
-		//also removing the dragging stuff because that wasn't great
-        //.call(d3.drag(simulation)
-            //.on("start", dragstarted)
-            //.on("drag", dragged)
-            //.on("end", dragended));
+		.attr("r", 20)
+		//if you really felt like ovals
+		//.append("ellipse")
+		//.attr("cx", 50)
+		//.attr("cy", 50)
+		//.attr("rx", 50)
+		//.attr("ry", 20)
+        .style("fill", "#ffffff")
+        .style("stroke", "#000000")
+        .style("stroke-width", "1px")
 		.on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave);
@@ -184,37 +181,34 @@ function graphNetwork(data) {
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; });
         node
-            .attr("r", 17)
-            .style("fill", "#ffffff")
-            .style("stroke", "#000000")
-            .style("stroke-width", "1px")
             .attr("cx", function (d) { return d.x+5; })
-            .attr("cy", function(d) { return d.y-3; });
+            .attr("cy", function(d) { return d.y; });
         //removing the node labels because they get messy when the labels are long 
 		//label
-            //.attr("x", function(d) { return d.x; })
+            //.attr("x", function(d) { return d.x-10; })
             //.attr("y", function (d) { return d.y; })
             //.style("font-size", "12px").style("fill", "#000000");
+
     }
 }
 
-function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-}
+//function dragstarted(d) {
+  //  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  // d.fx = d.x;
+  //  d.fy = d.y;
+//}
 
-function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-}
+//function dragged(d) {
+    //d.fx = d3.event.x;
+   // d.fy = d3.event.y;
+//}
 
-function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
+//function dragended(d) {
+    //if (!d3.event.active) simulation.alphaTarget(0);
+    //d.fx = null;
+    //d.fy = null;
     //below code doesn't retract after drag
     //d.fx = d3.event.x
     //d.fy = d3.event.y
     //if (!d3.event.active) simulation.alphaTarget(0);
-}
+//}
