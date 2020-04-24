@@ -13,6 +13,9 @@ from os import path
 from DataCache import DataCache
 from DatabaseRequester import DatabaseRequester
 from TwitterAPIManager import TwitterAPIManager
+
+from TemporalDataManager import TemporalDataManager
+
 # from flask import jsonify # pronbably not needed
 import DataStructures
 
@@ -24,6 +27,10 @@ NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 
 
 class AlgorithmsManager:
+
+    BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE="SELECT * FROM trends_snapshot " \
+                                        "WHERE created_date >= '{}' AND created_date < '{}' "
+
 
     def __init__(self, cache, db, twit):
         self.cache = cache
@@ -329,26 +336,51 @@ class AlgorithmsManager:
         self.database.query(querystr)
 
     def get_trends_snapshot_from_database(self, trends, fromdate, todate=datetime.now(), woeid=1):
-        querytemplate = "SELECT * FROM trends_snapshot " \
-                        "WHERE created_date >= '{}' AND created_date < '{}' " \
-                        "AND trend_content = '{}' "
+        queryTemplate = AlgorithmsManager.BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE + "\nAND trend_content = '{}' "
 
         # legacy query term checking query  # AND trend_content LIKE '%%{}%%'
 
-        woeidquery = ""
+        woeidQuery = ""
         if woeid != 1:
-            woeidquery = "AND woe_id = {} ".format(woeid)
-        querytemplate += woeidquery
-        querytemplate += " ORDER BY created_date ASC;"
+            woeidQuery = "AND woe_id = {} ".format(woeid)
+        queryTemplate += woeidQuery
+        queryTemplate += " ORDER BY created_date ASC;"
 
         snapsresultset = {}
         for trend in trends:
             trendalter = trend.replace("%", "%%")
-            querystr = querytemplate.format(fromdate, todate, trendalter, woeidquery)
+            # todo I think this 4th argument to format shouldn't be needed or work at all because
+            #  woeid was already formatted into woeidQuery & woeidQuery was just appended to queryTemplate
+            querystr = queryTemplate.format(fromdate, todate, trendalter, woeidQuery)
             print(querystr)
             res = self.database.query(querystr)
             snapsresultset[trend] = res.get_rows()
         return snapsresultset
+
+
+    def get_all_trends_with_snapshots(self, firstDate, lastDate, locationWoeid = None):
+        """Fetches the database rows for all trend snapshots within the given timeframe and possibly in the given location
+
+        Parameters:
+            firstDate (datetime): beginning of timeframe
+            lastDate (datetime): end of timeframe
+            locationWoeid (int): which location the snapshots should be from; if None, then fetches snapshots from all locations
+
+        Returns:
+            list: rows from database
+        """
+        snapshotsQuery = AlgorithmsManager.BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE.format(firstDate, lastDate)
+        woeidQueryTerm = ""
+        if locationWoeid != None:
+            woeidQueryTerm = "AND woe_id = {} ".format(locationWoeid)
+        snapshotsQuery += woeidQueryTerm
+        snapshotsQuery += " ORDER BY created_date ASC;"
+
+        queryResult = self.database.query(snapshotsQuery)
+        snapshotRows = queryResult.get_rows()
+
+        return snapshotRows
+
 
     # retrieves economic data for a state
     #   arg: state (full name)
@@ -626,7 +658,7 @@ class AlgorithmsManager:
             curtime = starttime
             tempbucket[curtime] = []
             for snap in snaps:
-                d = snap[6]
+                d = snap[TemporalDataManager.SNAPSHOT_DATE_COLUMN_INDEX]
                 dcap = curtime + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
 
                 num_bucket_cap_search_iter = 0
