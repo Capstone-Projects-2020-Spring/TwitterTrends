@@ -179,8 +179,8 @@ $(document).ready(function(){
     document.querySelector("#trends-display-city-time").addEventListener('click', function() {
         let cityTrendUrl = 'http://18.214.197.203:5000/temporal_options?';
         let city = document.getElementById('myInput2').value;
-        let woeid = citiesMap.get(city);
         if(city){ // check if a city was provided
+            let woeid = citiesMap.get(city);
             if(woeid){ // check if the provided city was valid (spelled correctly and in our map)
                 document.getElementById("city-time-title").innerHTML = "Top Trends for " + city + " Over the Specified Dates"; // change the header of the table to match the city provided by the user
                 cityTrendUrl += ('woeid=' + woeid); // append the woeid to the url before handling the date inputs
@@ -205,10 +205,8 @@ function fillTemporalTable(temporalCityUrl){
         table_body.id = "display-timetrends-table-body";
         if(trends.length > 50){
             trends = trends.slice(0, 50);
-            populateCells(table_body, trends);
-        } else {
-            populateCells(table_body, trends);
         }
+        populateCells(table_body, trends);
     });
 }
 
@@ -269,9 +267,9 @@ function startAndEndDate(start, end, url) {
     } else if(startDate > endDate){
         alert("Please make sure that the end date is after the start date!");
     } else {
-        let startDateStr = formatStart(startDate);
+        let startDateStr = formatDateForAPI(startDate);
         url += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
-        let endDateStr = formatEnd(endDate);
+        let endDateStr = formatDateForAPI(endDate);
         url += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
         fillTemporalTable(url);
     }
@@ -284,7 +282,7 @@ function startButNoEndDate(start, url) {
     if(startDate < startBoundary) {
         alert("Please enter a valid start date between March 1, 2020 and today!");
     } else {
-        let startDateStr = formatStart(startDate);
+        let startDateStr = formatDateForAPI(startDate);
         url += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
         fillTemporalTable(url);
     }
@@ -297,32 +295,21 @@ function startButNoEndDate(start, url) {
 //     if(endDate > endBoundary) {
 //         alert("Please enter a valid end date between March 1, 2020 and today!");
 //     } else {
-//         let endDateStr = formatEnd(endDate);
+//         let endDateStr = formatDateForAPI(endDate);
 //         url += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
 //         fillTemporalTable(url);
 //     }
 // }
 
-function formatStart(start){
-    let startDateStr = start.toISOString();
-    startDateStr = startDateStr.replace("T", " ");
+function formatDateForAPI(date){
+    let dateStr = date.toISOString();
+    dateStr = dateStr.replace("T", " ");
     //cuts off the milliseconds and the 'Z' at the end of the string
-    let millisPeriodIndex = startDateStr.lastIndexOf(".");
-    startDateStr = startDateStr.substring(0, millisPeriodIndex);
+    let millisPeriodIndex = dateStr.lastIndexOf(".");
+    dateStr = dateStr.substring(0, millisPeriodIndex);
 
-    startDateStr = encodeURIComponent(startDateStr);
-    return startDateStr;
-}
-
-function formatEnd(end){
-    let endDateStr = end.toISOString();
-        endDateStr = endDateStr.replace("T", " ");
-        //cuts off the milliseconds and the 'Z' at the end of the string
-        let millisPeriodIndex = endDateStr.lastIndexOf(".");
-        endDateStr = endDateStr.substring(0, millisPeriodIndex);
-
-        endDateStr = encodeURIComponent(endDateStr);
-        return endDateStr;
+    dateStr = encodeURIComponent(dateStr);
+    return dateStr;
 }
 
 function cleanUpDateFormat(date) {
