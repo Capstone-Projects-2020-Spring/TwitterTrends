@@ -196,7 +196,7 @@ $(document).ready(function(){
 
 function fillTemporalTable(temporalCityUrl){
     let trends = null;
-    alert(temporalCityUrl);
+    //alert(temporalCityUrl);
     $.getJSON(temporalCityUrl, function(data){
         trends = data;
     }).then(function() {
@@ -332,4 +332,3 @@ function cleanUpDateFormat(date) {
     d = d.replace("2020", "");
     return d;
 }
-
