@@ -1,4 +1,26 @@
 const time_svg_id= "time-svg";
+const location_field_id = "location-search-box";
+
+var citiesMap = new Map();
+
+locationsUrl = 'http://18.214.197.203:5000/locations';
+
+$.getJSON(locationsUrl, function (cityObjects) {
+
+    for (let cityObj of cityObjects) {
+        citiesMap.set(cityObj.city_id, cityObj.woeid);
+    }
+
+    citiesMap.set("United States", 23424977);
+    citiesMap.set("World", 23424775);
+
+    cityNamesArr = Array.from(citiesMap.keys())
+
+    autocomplete(document.getElementById(location_field_id), cityNamesArr);
+});
+
+
+
 
 $(document).ready(function(){
     const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
@@ -70,6 +92,13 @@ $(document).ready(function(){
 
         const svgPresent = !! document.getElementById(time_svg_id);
         if (svgPresent) { d3.select("#" + time_svg_id).remove(); }
+
+        let locationFieldElem = document.getElementById(location_field_id);
+        let locationVal = locationFieldElem.value;
+        if(locationVal && citiesMap.has(locationVal)) {
+            locationWoeid = citiesMap.get(locationVal);
+            temporalURL += "&woeid=" + locationWoeid;
+        }
 
 
         makeLineGraph(temporalURL, trendGroup);
@@ -194,7 +223,7 @@ function makeLineGraph(csv_url, trendGroup) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv(csv_url, function(data) {
+    d3.csv(csv_url, function (data) {
         if (data.length === 0) {
             console.log("no data received for graphing. terminating graphing routine")
             return;
@@ -204,7 +233,7 @@ function makeLineGraph(csv_url, trendGroup) {
 
         //convert datetime strings to Date objects accurate to the hour
         for (let snapshot of data) {
-            let jsDate = new Date(snapshot.datetime+"Z");
+            let jsDate = new Date(snapshot.datetime + "Z");
             jsDate.setMinutes(0);
             jsDate.setSeconds(0);
             jsDate.setMilliseconds(0);
@@ -212,30 +241,30 @@ function makeLineGraph(csv_url, trendGroup) {
         }
 
         const earliestDate = data.reduce(
-            (min, snap) => snap.datetime <= min ? snap.datetime : min , data[0].datetime);
+            (min, snap) => snap.datetime <= min ? snap.datetime : min, data[0].datetime);
 
-        let maxPopularity= 0;
+        let maxPopularity = 0;
         let latestHourOffset = 0;
 
         //format the data to get tuples
-        let dataReady = trendGroup.map( function(grpName) {
+        let dataReady = trendGroup.map(function (grpName) {
             return {
                 name: grpName,
-                values: data.map(function(d) {
+                values: data.map(function (d) {
                     //todo try removing this Math.abs() wrapper, it shouldn't be doing anything
                     const millisDiff = Math.abs(d.datetime.getTime() - earliestDate.getTime());
-                    const hoursDiff = millisDiff/(60*60*1000);
+                    const hoursDiff = millisDiff / (60 * 60 * 1000);
 
                     const popVal = +d[grpName];
 
                     if (popVal > maxPopularity) {
                         maxPopularity = popVal;
                     }
-                    if(hoursDiff > latestHourOffset) {
+                    if (hoursDiff > latestHourOffset) {
                         latestHourOffset = hoursDiff;
                     }
 
-                    return {time : hoursDiff, value: popVal};
+                    return {time: hoursDiff, value: popVal};
                 })
             };
         });
@@ -246,48 +275,58 @@ function makeLineGraph(csv_url, trendGroup) {
 
         //x axis
         let x = d3.scaleLinear()
-            .domain([-latestHourOffset,0])//0,latestHourOffset])
-            .range([ 0, width ]);
+            .domain([-latestHourOffset, 0])//0,latestHourOffset])
+            .range([0, width]);
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x));
 
         //y axis
         let y = d3.scaleLinear()
-            .domain( [0, maxPopularity])
-            .range([ height, 0 ]);
+            .domain([0, maxPopularity])
+            .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
 
-		// text label for the x axis
-		svg.append("text")             
-			.attr("transform",
-				"translate(" + (width/2) + " ," + 
-                           (height + margin.top + 20) + ")")
-			.style("text-anchor", "middle")
-			.text("Time (Hours Prior to Present)");
+        // text label for the x axis
+        svg.append("text")
+            .attr("transform",
+                "translate(" + (width / 2) + " ," +
+                (height + margin.top + 20) + ")")
+            .style("text-anchor", "middle")
+            .text("Time (Hours Prior to Present)");
 
-		// text label for the y axis
-		svg.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 0 - 100)
-			.attr("x",0 - (height / 2))
-			.attr("dy", "1em")
-			.style("text-anchor", "middle")
-			.text("Interactions");
+        // text label for the y axis
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 100)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Interactions");
 
 
         //lines
         let line = d3.line()
-            .x(function(d) { return x(-latestHourOffset+d.time) })
-            .y(function(d) { return y(+d.value) })
+            .x(function (d) {
+                return x(-latestHourOffset + d.time)
+            })
+            .y(function (d) {
+                return y(+d.value)
+            })
         svg.selectAll("myLines")
             .data(dataReady)
             .enter()
             .append("path")
-            .attr("class", function(d){ return d.name })
-            .attr("d", function(d){ return line(d.values) } )
-            .attr("stroke", function(d){ return myColor(d.name) })
+            .attr("class", function (d) {
+                return d.name
+            })
+            .attr("d", function (d) {
+                return line(d.values)
+            })
+            .attr("stroke", function (d) {
+                return myColor(d.name)
+            })
             .style("stroke-width", 4)
             .style("fill", "none");
 
@@ -297,21 +336,21 @@ function makeLineGraph(csv_url, trendGroup) {
             .style("opacity", 0)
             .attr("class", "tooltip");
 
-        let mouseover = function(d) {
+        let mouseover = function (d) {
             Tooltip
                 .style("opacity", 1)
-				.style("z-index", 1);
+                .style("z-index", 1);
         };
-        let mousemove = function(d) {
+        let mousemove = function (d) {
             Tooltip
                 .html("Value: " + d.value)
-                .style("left", (d3.mouse(this)[0]+30) + "px")
-                .style("top", (d3.mouse(this)[1]+40) + "px")
+                .style("left", (d3.mouse(this)[0] + 30) + "px")
+                .style("top", (d3.mouse(this)[1] + 40) + "px")
         };
-        let mouseleave = function(d) {
+        let mouseleave = function (d) {
             Tooltip
                 .style("opacity", 0)
-				.style("z-index", -1);
+                .style("z-index", -1);
         };
 
         //points
@@ -320,14 +359,24 @@ function makeLineGraph(csv_url, trendGroup) {
             .data(dataReady)
             .enter()
             .append('g')
-            .style("fill", function(d){ return myColor(d.name) })
-            .attr("class", function(d){ return d.name })
+            .style("fill", function (d) {
+                return myColor(d.name)
+            })
+            .attr("class", function (d) {
+                return d.name
+            })
             .selectAll("myPoints")
-            .data(function(d){ return d.values })
+            .data(function (d) {
+                return d.values
+            })
             .enter()
             .append("circle")
-            .attr("cx", function(d) { return x(-latestHourOffset+d.time) } )
-            .attr("cy", function(d) { return y(d.value) } )
+            .attr("cx", function (d) {
+                return x(-latestHourOffset + d.time)
+            })
+            .attr("cy", function (d) {
+                return y(d.value)
+            })
             .attr("r", 8)
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
@@ -340,33 +389,43 @@ function makeLineGraph(csv_url, trendGroup) {
             .enter()
             .append('g')
             .append("text")
-            .attr("class", function(d){ return d.name })
-            .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; }) // keep only the last value of each time series
-            .attr("transform", function(d) { return "translate(" + x(-latestHourOffset+d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
+            .attr("class", function (d) {
+                return d.name
+            })
+            .datum(function (d) {
+                return {name: d.name, value: d.values[d.values.length - 1]};
+            }) // keep only the last value of each time series
+            .attr("transform", function (d) {
+                return "translate(" + x(-latestHourOffset + d.value.time) + "," + y(d.value.value) + ")";
+            }) // Put the text at the position of the last point
             .attr("x", 12) // shift the text a bit more right
-            .text(function(d) { return d.name; })
-            .style("fill", function(d){ return myColor(d.name) })
+            .text(function (d) {
+                return d.name;
+            })
+            .style("fill", function (d) {
+                return myColor(d.name)
+            })
             .style("font-size", 15);
 
 
-		//this is for the legend labels, don't really need it because each individual line is labeled.
+        //this is for the legend labels, don't really need it because each individual line is labeled.
         //svg
-            //.selectAll("myLegend")
-            //.data(dataReady)
-            //.enter()
-            //.append('g')
-            //.append("text")
-            //.attr('x', function(d,i){return 30 + i*60})
-            //.attr('y', 30)
-            //.text(function(d) { return d.name; })
-            //.style("fill", function(d){ return myColor(d.name) })
-            //.style("font-size", 17)
-            //.on("click", function(d){
-             //   currentOpacity = d3.selectAll("." + d.name).style("opacity");
-            //    d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
-            //})
+        //.selectAll("myLegend")
+        //.data(dataReady)
+        //.enter()
+        //.append('g')
+        //.append("text")
+        //.attr('x', function(d,i){return 30 + i*60})
+        //.attr('y', 30)
+        //.text(function(d) { return d.name; })
+        //.style("fill", function(d){ return myColor(d.name) })
+        //.style("font-size", 17)
+        //.on("click", function(d){
+        //   currentOpacity = d3.selectAll("." + d.name).style("opacity");
+        //    d3.selectAll("." + d.name).transition().style("opacity", currentOpacity === 1 ? 0:1) //switch opacity
+        //})
     });
-	
+}
 
 //autocomplete
 function autocomplete(inp, arr) {
@@ -461,9 +520,4 @@ function autocomplete(inp, arr) {
   });
 }
 
-/*An array containing all the country names in the world:*/
-var cities = ["World","United States","New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Antonio","Dallas","San Diego","San Jose","Detroit", "San Francisco","Jacksonville","Indianapolis","Austin","Columbus","Charlotte","Memphis","Baltimore","Boston","El Paso","Milwaukee","Denver","Seattle","Nashville","Washington","Las Vegas","Portland","Louisville","Oklahoma City","Tucson","Atlanta","Albuquerque","Kansas City","Fresno","Sacramento","Long Beach","Mesa","Omaha","Cleveland","Virginia Beach","Miami","Raleigh","Minneapolis","Colorado Springs","Honolulu","St. Louis","Tampa","New Orleans","Cincinnati","Pittsburgh","Greensboro","Norfolk","Orlando","Birmingham","Baton Rouge","Richmond","Salt Lake City","Jackson","Tallahassee","Providence","New Haven","Harrisburg"];
-
-autocomplete(document.getElementById("location-search-box"), cities);
-}
 

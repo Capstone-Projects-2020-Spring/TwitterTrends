@@ -95,10 +95,6 @@ function autocomplete(inp, cities) {
     });
 }
 
-/*An array containing all the country names in the world:*/
-var cities = ["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Antonio","Dallas","San Diego","San Jose","Detroit", "San Francisco","Jacksonville","Indianapolis","Austin","Columbus","Charlotte","Memphis","Baltimore","Boston","El Paso","Milwaukee","Denver","Seattle","Nashville","Washington","Las Vegas","Portland","Louisville","Oklahoma City","Tucson","Atlanta","Albuquerque","Kansas City","Fresno","Sacramento","Long Beach","Mesa","Omaha","Cleveland","Virginia Beach","Miami","Raleigh","Minneapolis","Colorado Springs","Honolulu","St. Louis","Tampa","New Orleans","Cincinnati","Pittsburgh","Greensboro","Norfolk","Orlando","Birmingham","Baton Rouge","Richmond","Salt Lake City","Jackson","Tallahassee","Providence","New Haven","Harrisburg"];
-
-
 var citiesMap = new Map();
 
 locationsUrl = 'http://18.214.197.203:5000/locations';
