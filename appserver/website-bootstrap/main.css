@@ -883,8 +883,9 @@ table {
 
 }
 
-tr:nth-child(1){background-color: #f1f1f1}
-tr:nth-child(1){background-color: #f1f1f1}
+th {
+	background-color: #f1f1f1
+}
 
 th, td {
   	border: 1px solid black;
