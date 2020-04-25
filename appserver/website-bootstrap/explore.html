@@ -68,10 +68,11 @@
 
                 <div class="table-style">
                     <table id="display-trends-table">
-                        <tr>
-                          <th>Trend content</th>
-                          <th>Tweet volume</th>
-                        </tr>
+                        <thead>
+                          <th>Trend Content</th>
+                          <th>Tweet Volume</th>
+                        </thead>
+                        <tbody id="display-trends-table-body"></tbody>
                     </table>
                 </div>
 
@@ -89,13 +90,14 @@
 
                 <div class="table-style">
                     <table id="display-tweets-table">
-                        <tr>
-                            <th>Tweet content</th>
+                        <thead>
+                            <th>Tweet Content</th>
                             <th>Author Username</th>
                             <th>Posting Date/Time</th>
                             <th>#Retweets</th>
                             <th>#Likes</th>
-                        </tr>
+                        </thead>
+                        <tbody id="display-tweets-table-body"></tbody>
                     </table>
                 </div>
 
@@ -112,25 +114,26 @@
                 </form>
 
                 <div class="explore-title-text-sm">
-                    <span>From date: </span>
+                    <span>From Date: </span>
                     <input type="date" id="start" name="date-start" autocomplete="off"
-                        min="2020-03-01" max="2020-04-27">
+                        min="2020-03-01" max="2020-04-26">
 
-                    <span>To date: </span>
+                    <span>To Date: </span>
                     <input type="date" id="end" name="date-end" autocomplete="off"
-                        min="2020-03-01" max="2020-04-27">
+                        min="2020-03-02" max="2020-04-27">
                 </div>
 
                 <div class="table-style">
                     <table id="display-timetrends-table">
-                        <tr>
-                            <th>Trend content</th>
-                            <th>Tweet volume</th>
+                        <thead>
+                            <th>Trend Content</th>
                             <th>Earliest Date</th>
                             <th>Latest Date</th>
                             <th>Max Volume</th>
                             <th>Average Volume</th>
-                        </tr>
+                            <th>Location IDs</th>
+                        </thead>
+                        <tbody id="display-timetrends-table-body"></tbody>
                     </table>
                 </div>
             </header>

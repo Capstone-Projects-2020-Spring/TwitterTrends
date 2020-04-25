@@ -128,9 +128,11 @@ $(document).ready(function(){
 		        trends = data;
 	        }).then(function() {
 	            document.getElementById("city-title").innerHTML ="Top Trends for " + city;
-                let table = document.getElementById("display-trends-table");
+                let table_body = document.createElement('tbody');
+                document.getElementById("display-trends-table").replaceChild(table_body, document.getElementById("display-trends-table-body"));
+                table_body.id = "display-trends-table-body";
                 for(let i = 0; i < trends.length; i++){
-                    let row = table.insertRow(i+1);
+                    let row = table_body.insertRow(i);
                     let cell1 = row.insertCell(0);
                     cell1.innerHTML = trends[i].trend_content;
                     let cell2 = row.insertCell(1);
@@ -154,9 +156,11 @@ $(document).ready(function(){
 		        tweets = data;
 	        }).then(function() {
 	            document.getElementById("tweets-title").innerHTML = "Recent Tweets for " + trend;
-                let table = document.getElementById("display-tweets-table");
+                let table_body = document.createElement('tbody');
+                document.getElementById("display-tweets-table").replaceChild(table_body, document.getElementById("display-tweets-table-body"));
+                table_body.id = "display-tweets-table-body";
                 for(let i = 0; i < tweets.length; i++){
-                    let row = table.insertRow(i+1);
+                    let row = table_body.insertRow(i);
                     let cell1 = row.insertCell(0);
                     cell1.innerHTML = tweets[i].content;
                     let cell2 = row.insertCell(1);
@@ -177,73 +181,159 @@ $(document).ready(function(){
     });
 
     document.querySelector("#trends-display-city-time").addEventListener('click', function() {
-        let cityTrendUrl = 'http://18.214.197.203:5000/temporal?woeid=';
+        let cityTrendUrl = 'http://18.214.197.203:5000/temporal_options?';
         let city = document.getElementById('myInput2').value;
         let woeid = citiesMap.get(city);
-        let trends = null;
-        if(woeid){
-            cityTrendUrl += woeid;
-            let fromDate = document.getElementById('start').value;
-            let toDate = document.getElementById('end').value;
-            if(!fromDate || !toDate){
-                alert("Please provide start and ends dates!");
-            } else {
-                let startDate = new Date(fromDate);
-                let startBoundary = new Date("02/29/2020");
-                let endDate = new Date(toDate);
-                let endBoundary = Date.now();
-
-                if(startDate < startBoundary || endDate > endBoundary) {
-                    alert("Please enter valid  dates between March 1, 2020 and today!");
-                } else if(startDate > endDate){
-                    alert("Please make sure end date is the same day or after start date!");
-                } else {
-                    let startDateStr = startDate.toISOString();
-                    startDateStr = startDateStr.replace("T", " ");
-                    //cuts off the milliseconds and the 'Z' at the end of the string
-                    let millisPeriodIndex = startDateStr.lastIndexOf(".");
-                    startDateStr = startDateStr.substring(0, millisPeriodIndex);
-
-                    startDateStr = encodeURIComponent(startDateStr);
-                    cityTrendUrl += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
-
-                    let endDateStr = endDate.toISOString();
-                    endDateStr = endDateStr.replace("T", " ");
-                    //cuts off the milliseconds and the 'Z' at the end of the string
-                    millisPeriodIndex = endDateStr.lastIndexOf(".");
-                    endDateStr = endDateStr.substring(0, millisPeriodIndex);
-
-                    endDateStr = encodeURIComponent(endDateStr);
-                    cityTrendUrl += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
-
-                    alert(cityTrendUrl);
-                    $.getJSON(cityTrendUrl, function(data){
-		                trends = data;
-	                }).then(function() {
-                        document.getElementById("city-time-title").innerHTML = "Top Trends for " + city + " Over the Specified Dates";
-                        let table = document.getElementById("display-timetrends-table");
-                        for(let i = 0; i < trends.length; i++){
-                            let row = table.insertRow(i+1);
-                            let cell1 = row.insertCell(0);
-                            //cell1.innerHTML =
-                            let cell2 = row.insertCell(1);
-                            //cell2.innerHTML =
-                            let cell3 = row.insertCell(2);
-                            //cell3.innerHTML =
-                            let cell4 = row.insertCell(3);
-                            //cell4.innerHTML =
-                            let cell5 = row.insertCell(4);
-                            //cell5.innerHTML =
-                            let cell6 = row.insertCell(5);
-                            //cell6.innerHTML =
-                        }
-                    });
-                }
+        if(city){ // check if a city was provided
+            if(woeid){ // check if the provided city was valid (spelled correctly and in our map)
+                document.getElementById("city-time-title").innerHTML = "Top Trends for " + city + " Over the Specified Dates"; // change the header of the table to match the city provided by the user
+                cityTrendUrl += ('woeid=' + woeid); // append the woeid to the url before handling the date inputs
+                handleDates(cityTrendUrl);
+            } else { // if the city provided by the user doesn't return a woeid from our map(spelled wrong or not a city we have data for), let the user know it is not a valid option
+                alert(city + " is not a valid option!")
             }
-        } else {
-            alert("Please provide a valid city name!");
+        } else { // if no city provided handle to date inputs without appending a woeid to the url
+            handleDates(cityTrendUrl);
         }
     });
 });
 
+function fillTemporalTable(temporalCityUrl){
+    let trends = null;
+    alert(temporalCityUrl);
+    $.getJSON(temporalCityUrl, function(data){
+        trends = data;
+    }).then(function() {
+        let table_body = document.createElement('tbody');
+        document.getElementById("display-timetrends-table").replaceChild(table_body, document.getElementById("display-timetrends-table-body"));
+        table_body.id = "display-timetrends-table-body";
+        if(trends.length > 50){
+            trends = trends.slice(0, 50);
+            populateCells(table_body, trends);
+        } else {
+            populateCells(table_body, trends);
+        }
+    });
+}
+
+function populateCells(table, trends) {
+    for(let i = 0; i < trends.length; i++){
+        let row = table.insertRow(i);
+        let cell1 = row.insertCell(0);
+        cell1.innerHTML = trends[i].trend_content;
+        let cell2 = row.insertCell(1);
+        cell2.innerHTML = cleanUpDateFormat(trends[i].first_date);
+        let cell3 = row.insertCell(2);
+        cell3.innerHTML = cleanUpDateFormat(trends[i].last_date); //(trends[i].last_date).substring(4, 19).replace(/-/g, " ").replace("T", " ");
+        let cell4 = row.insertCell(3);
+        cell4.innerHTML = trends[i].max_tweet_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        let cell5 = row.insertCell(4);
+        if(Number.isInteger(trends[i].avg_tweet_volume)){
+            cell5.innerHTML = trends[i].avg_tweet_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } else {
+            let avg = trends[i].avg_tweet_volume;
+            avg = avg.toFixed(0);
+            cell5.innerHTML = avg.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        let cell6 = row.insertCell(5);
+        let numLocIds = trends[i].locations.length;
+        if(numLocIds > 5){
+            cell6.innerHTML = numLocIds + " Locations";
+        } else {
+            cell6.innerHTML = trends[i].locations[0];
+            for(let j = 1; j < numLocIds; j++){
+                cell6.innerHTML += ", " + trends[i].locations[j];
+            }
+        }
+    }
+}
+
+function handleDates(url) {
+    let fromDate = document.getElementById('start').value;
+    let toDate = document.getElementById('end').value;
+    if(!fromDate && !toDate){ // if no dates are provided, don't need to add from or to parameters to the url
+        fillTemporalTable(url);
+    } else if(fromDate && !toDate){ // if a start date is provided but not an end date
+        startButNoEndDate(fromDate, url);
+    } else if(!fromDate && toDate){ // if an end date is provided but not a start date
+        alert("If you enter a To Date, please also enter a From Date!");
+    } else { // if both a start date and an end date is provided
+        startAndEndDate(fromDate, toDate, url);
+    }
+}
+
+function startAndEndDate(start, end, url) {
+    let startDate = new Date(start);
+    let startBoundary = new Date("02/29/2020");
+    let endDate = new Date(end);
+    let endBoundary = Date.now();
+
+    if(startDate < startBoundary || endDate > endBoundary) {
+        alert("Please enter valid  dates between March 1, 2020 and today!");
+    } else if(startDate > endDate){
+        alert("Please make sure that the end date is after the start date!");
+    } else {
+        let startDateStr = formatStart(startDate);
+        url += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
+        let endDateStr = formatEnd(endDate);
+        url += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
+        fillTemporalTable(url);
+    }
+}
+
+function startButNoEndDate(start, url) {
+    let startDate = new Date(start);
+    let startBoundary = new Date("02/29/2020");
+
+    if(startDate < startBoundary) {
+        alert("Please enter a valid start date between March 1, 2020 and today!");
+    } else {
+        let startDateStr = formatStart(startDate);
+        url += '&from=' + startDateStr; //YYYY-mm-dd HH:MM:SS
+        fillTemporalTable(url);
+    }
+}
+
+// function endButNoStartDate(end, url) {
+//     let endDate = new Date(end);
+//     let endBoundary = Date.now();
+//
+//     if(endDate > endBoundary) {
+//         alert("Please enter a valid end date between March 1, 2020 and today!");
+//     } else {
+//         let endDateStr = formatEnd(endDate);
+//         url += '&to=' + endDateStr; //YYYY-mm-dd HH:MM:SS
+//         fillTemporalTable(url);
+//     }
+// }
+
+function formatStart(start){
+    let startDateStr = start.toISOString();
+    startDateStr = startDateStr.replace("T", " ");
+    //cuts off the milliseconds and the 'Z' at the end of the string
+    let millisPeriodIndex = startDateStr.lastIndexOf(".");
+    startDateStr = startDateStr.substring(0, millisPeriodIndex);
+
+    startDateStr = encodeURIComponent(startDateStr);
+    return startDateStr;
+}
+
+function formatEnd(end){
+    let endDateStr = end.toISOString();
+        endDateStr = endDateStr.replace("T", " ");
+        //cuts off the milliseconds and the 'Z' at the end of the string
+        let millisPeriodIndex = endDateStr.lastIndexOf(".");
+        endDateStr = endDateStr.substring(0, millisPeriodIndex);
+
+        endDateStr = encodeURIComponent(endDateStr);
+        return endDateStr;
+}
+
+function cleanUpDateFormat(date) {
+    let d = new Date(date);
+    d = d.toString();
+    d = d.substring(0, 24);
+    d = d.replace("2020", "");
+    return d;
+}
 
