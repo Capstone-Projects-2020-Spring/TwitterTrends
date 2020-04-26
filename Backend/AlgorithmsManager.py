@@ -29,7 +29,7 @@ NEWS_API_KEY_ENV_VAR="NEWS_API_KEY"
 class AlgorithmsManager:
 
     BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE="SELECT * FROM trends_snapshot " \
-                                        "WHERE created_date >= '{}' AND created_date < '{}' "
+                                        "\nWHERE created_date >= '{}' AND created_date < '{}' "
 
 
     def __init__(self, cache, db, twit):
@@ -372,9 +372,10 @@ class AlgorithmsManager:
         snapshotsQuery = AlgorithmsManager.BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE.format(firstDate, lastDate)
         woeidQueryTerm = ""
         if locationWoeid != None:
-            woeidQueryTerm = "AND woe_id = {} ".format(locationWoeid)
+            woeidQueryTerm = " AND woe_id = {} ".format(locationWoeid)
         snapshotsQuery += woeidQueryTerm
-        snapshotsQuery += " ORDER BY created_date ASC;"
+        snapshotsQuery += "\nORDER BY created_date ASC;"
+        print(snapshotsQuery)
 
         queryResult = self.database.query(snapshotsQuery)
         snapshotRows = queryResult.get_rows()

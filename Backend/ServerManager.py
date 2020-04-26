@@ -1,6 +1,7 @@
 import flask
 from flask import request, jsonify, send_file
 from flask_cors import CORS
+import json
 from datetime import datetime, timedelta
 import traceback
 
@@ -321,22 +322,23 @@ def api_get_trends_history_summary():
     toDateArg = request.args.get("to")  # YYYY-mm-dd HH:MM:SS
     locArg = request.args.get("woeid")  # optional woeid argument
 
-    startDate = datetime.now()- timedelta(hours=12)
     endDate = datetime.now()
+    startDate = endDate- timedelta(hours=12)
     locId = None
 
     try:
         print("/temporal_options args: ", fromDateArg, toDateArg, locArg)
 
         try:
-            startDateVal = datetime.strptime(fromDateArg, DATETIME_FORMAT)
-            endDateVal = datetime.strptime(toDateArg, DATETIME_FORMAT)
+            if fromDateArg is not None:
+                startDate = datetime.strptime(fromDateArg, DATETIME_FORMAT)
+            if toDateArg is not None:
+                endDate = datetime.strptime(toDateArg, DATETIME_FORMAT)
             # Final check to make sure since and until datetimes are valid
-            if startDate < endDate:
-                startDate = startDateVal
-                endDate = endDateVal
-            else:
+            if startDate >= endDate:
                 print("/temporal_options -- datetimes not in valid order -- using default start and end dates")
+                endDate = datetime.now()
+                startDate = endDate - timedelta(hours=12)
         except Exception as e:
             print("/temporal_options -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default start and end dates")
             print("Exception: ", e.__doc__, str(e))

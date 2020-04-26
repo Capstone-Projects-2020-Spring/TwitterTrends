@@ -167,7 +167,6 @@ class TemporalDataManager:
             would be listed before a trend whose first moment of popularity was later
         """
 
-
         snapshots = self.algo.get_all_trends_with_snapshots(initDate, finalDate, locationId)
 
         trendContentLabel = "trend_content"
@@ -208,18 +207,19 @@ class TemporalDataManager:
         historicalTrendsSummary = []
 
         for histTrend, trendDetails in historicalTrends.items():
-            trendLocations = list(trendDetails[locationsLabel])
             trendTweetVolumes = trendDetails[tweetVolumesLabel]
-
             maxTweetVol = 0
             avgTweetVol = 0
-
             if len(trendTweetVolumes) > 0:
-                maxTweetVol = np.max(trendTweetVolumes)
-                avgTweetVol = np.average(trendTweetVolumes)
+                maxTweetVol = int(np.max(trendTweetVolumes))
+                avgTweetVol = float(np.average(trendTweetVolumes))
 
-            trendSummary = {trendContentLabel:histTrend, firstDateLabel:trendDetails[firstDateLabel],
-                            lastDateLabel:trendDetails[lastDateLabel], maxTweetVolumeLabel:maxTweetVol,
+            trendLocations = list(trendDetails[locationsLabel])
+            trendEarliestDate = trendDetails[firstDateLabel].isoformat()
+            trendLatestDate = trendDetails[lastDateLabel].isoformat()
+
+            trendSummary = {trendContentLabel:histTrend, firstDateLabel:trendEarliestDate,
+                            lastDateLabel:trendLatestDate, maxTweetVolumeLabel:maxTweetVol,
                             avgTweetVolumeLabel:avgTweetVol, locationsLabel:trendLocations}
             historicalTrendsSummary.append(trendSummary)
 

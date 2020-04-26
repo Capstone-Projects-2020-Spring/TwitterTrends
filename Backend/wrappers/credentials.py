@@ -29,7 +29,7 @@ def getStandardTweepyTwitterCreds(accountInd= 0):
     auth = tweepy.OAuthHandler(apiKey, apiSecretKey)
     auth.set_access_token(accessToken, accessTokenSecret)
 
-    twitterStandardAPI = tweepy.API(auth)
+    twitterStandardAPI = tweepy.API(auth, retry_count=6, retry_delay=5, retry_errors=[500, 503, 504])
 
     try:
         twitterStandardAPI.verify_credentials()
