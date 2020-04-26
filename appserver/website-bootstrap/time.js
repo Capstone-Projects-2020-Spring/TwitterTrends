@@ -26,7 +26,7 @@ $.getJSON(locationsUrl, function (cityObjects) {
 
 $(document).ready(function(){
     const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
-    makeLineGraph(default_csv);
+    //makeLineGraph(default_csv, ["valueA", "valueB", "valueC"]);
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';
