@@ -39,6 +39,8 @@ $(document).ready(function(){
                 networkData.links = links;
                 // alert(JSON.stringify(networkData)); // check that data was correctly parsed
                 graphNetwork(networkData)
+            }).fail(function () {//todo add arguments for the error message
+                alert("failed to fetch data about the " + retweeter_count + " retweeters of user " + uname);
             });
         }
     });

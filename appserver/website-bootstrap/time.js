@@ -17,6 +17,8 @@ $.getJSON(locationsUrl, function (cityObjects) {
     cityNamesArr = Array.from(citiesMap.keys())
 
     autocomplete(document.getElementById(location_field_id), cityNamesArr);
+}).fail(function () {//todo add arguments for the error message
+    alert("Unable to fetch available locations data for location field autocomplete");
 });
 
 

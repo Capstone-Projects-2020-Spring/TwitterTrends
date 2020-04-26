@@ -1,3 +1,7 @@
+const MAX_NUM_LOCATIONS = 5
+const MAX_TREND_HISTORY_ROWS=50
+
+
 function autocomplete(inp, cities) {
     let arr = Array.from(cities.keys());
     var currentFocus;
@@ -96,6 +100,7 @@ function autocomplete(inp, cities) {
 }
 
 var citiesMap = new Map();
+var woeidsToCitiesMap = new Map();
 
 locationsUrl = 'http://18.214.197.203:5000/locations';
 
@@ -103,13 +108,18 @@ $.getJSON(locationsUrl, function (cityObjects) {
 
     for (let cityObj of cityObjects) {
         citiesMap.set(cityObj.city_id, cityObj.woeid);
+        woeidsToCitiesMap.set(cityObj.woeid, cityObj.city_id);
     }
 
     citiesMap.set("United States", 23424977);
     citiesMap.set("World", 23424775);
+    woeidsToCitiesMap.set(23424977, "United States");
+    woeidsToCitiesMap.set(23424775, "World");
 
     autocomplete(document.getElementById("myInput"), citiesMap);
     autocomplete(document.getElementById("myInput2"), citiesMap);
+}).fail(function () {//todo add arguments for the error message
+    alert("Unable to fetch available locations data for location field autocomplete");
 });
 
 $(document).ready(function(){
@@ -134,6 +144,8 @@ $(document).ready(function(){
                     let cell2 = row.insertCell(1);
                     cell2.innerHTML = trends[i].tweet_volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // adds commas every third digit for numbers greater than 999
                 }
+            }).fail(function () {//todo add arguments for the error message
+                alert("failed to fetch trends for the city "+ city);
             });
         } else {
             alert("Please provide a valid city name!");
@@ -169,6 +181,8 @@ $(document).ready(function(){
                     let cell5 = row.insertCell(4);
                     cell5.innerHTML = tweets[i].likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // adds commas every third digit for numbers greater than 999
                 }
+            }).fail(function () {//todo add arguments for the error message
+                alert("failed to fetch tweets matching the query " + trend);
             });
 
         } else {
@@ -203,10 +217,15 @@ function fillTemporalTable(temporalCityUrl){
         let table_body = document.createElement('tbody');
         document.getElementById("display-timetrends-table").replaceChild(table_body, document.getElementById("display-timetrends-table-body"));
         table_body.id = "display-timetrends-table-body";
-        if(trends.length > 50){
-            trends = trends.slice(0, 50);
+
+        //sorting is reversed so that the trends with the highest max_tweet_volume end up at the start of the list & get displayed
+        trends.sort((a,b) => (a.max_tweet_volume < b.max_tweet_volume) ? 1 : -1);
+        if(trends.length > MAX_TREND_HISTORY_ROWS){
+            trends = trends.slice(0, MAX_TREND_HISTORY_ROWS);
         }
         populateCells(table_body, trends);
+    }).fail(function () {//todo add arguments for the error message
+        alert("failed to fetch trend history data from this url: " + temporalCityUrl);
     });
 }
 
@@ -231,12 +250,14 @@ function populateCells(table, trends) {
         }
         let cell6 = row.insertCell(5);
         let numLocIds = trends[i].locations.length;
-        if(numLocIds > 5){
+        if(numLocIds > MAX_NUM_LOCATIONS){
             cell6.innerHTML = numLocIds + " Locations";
         } else {
-            cell6.innerHTML = trends[i].locations[0];
+            let locName = woeidsToCitiesMap.get(trends[i].locations[0]);
+            cell6.innerHTML = locName;
             for(let j = 1; j < numLocIds; j++){
-                cell6.innerHTML += ", " + trends[i].locations[j];
+                locName = woeidsToCitiesMap.get(trends[i].locations[j]);
+                cell6.innerHTML += ", " + locName;
             }
         }
     }

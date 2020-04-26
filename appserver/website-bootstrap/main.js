@@ -279,6 +279,8 @@ function retrieveTrends(trendUrl) {
         	getMoreInfo(trends[4].trend_content);
 		});
 
+	}).fail(function () { //todo add arguments for the error message
+		alert("Fetching trends from this url failed: " + trendUrl);
 	});
 
 }
@@ -335,6 +337,8 @@ function getMoreInfo(trend) {
 			document.getElementById('article-url-3').setAttribute("href", "");
 			document.getElementById('article-url-3').innerText = "";
 		}
+	}).fail( function () {//todo add arguments for the error message
+		alert("fetching news stories about this trend failed: " + trend);
 	});
 
 	//alert("about to fetch example tweets")
@@ -395,7 +399,9 @@ function getMoreInfo(trend) {
 			}
 			document.getElementById('tweets').style.display = 'none';
 		}
-	})
+	}).fail(function () {//todo add arguments for the error message
+		alert("fetching example tweets with this trend failed: " + trend);
+	});
 }
 
 function getStartingInfo() {
@@ -405,6 +411,8 @@ function getStartingInfo() {
 		trends = data;
 	}).then(function() {
 		getMoreInfo(trends[0].trend_content);
+	}).fail(function () {//todo add arguments for the error message
+		console.log("WARN- fetching starting info for the map page failed");
 	});
 
 }
@@ -445,8 +453,10 @@ function displayStateEconData(stateElem, projectionObject) {
 
 				createEconCityElements(projectionObject);
 			} else if(stateEconData.length <= 0) {
-				console.log("couldn't find any additional cities' economic data for state " + stateName);
+				console.log("couldn't find any cities' economic data for state " + stateName);
 			}
+		}).fail(function () {//todo add arguments for the error message
+			alert("fetching economic data for the current state " + stateName + " failed");
 		});
 	}
 }
