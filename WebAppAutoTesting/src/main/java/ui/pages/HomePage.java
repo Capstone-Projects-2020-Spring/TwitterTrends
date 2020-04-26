@@ -5,7 +5,7 @@ import base.enums.States;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import ui.components.HomePageNavBar;
+import ui.components.NavBar;
 import ui.components.TrendsDialog;
 import ui.pages.base.BasePage;
 
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * POM representation of the starting page of the website
  */
-public class HomePage extends BasePage<HomePageNavBar>
+public class HomePage extends BasePage
 {
 protected TrendsDialog trendsDialog;
 
@@ -35,8 +35,8 @@ final protected static int MILLIS_WAIT_FOR_ZOOM_TRANSITION = 1250;
 
 public HomePage( final WebDriver driver )
 {
-	super(driver);
-	navBar = new HomePageNavBar(driver);
+	super(driver, "Analyze Location");
+	navBar = new NavBar(driver);
 	this.trendsDialog = new TrendsDialog(driver);
 }
 
@@ -181,7 +181,4 @@ protected WebElement getLocationMarker( final Locations loc )
 	
 	return locMarkerElem;
 }
-
-@Override
-public boolean isCurrentPage( ) { return navBar.isSearchBarEnabled(); }
 }

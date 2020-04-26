@@ -1,11 +1,10 @@
 package ui;
 
+import org.junit.jupiter.api.Test;
 import ui.base.BaseUiTest;
-import ui.components.HomePageNavBar;
 import ui.components.NavBar;
 import ui.components.base.BaseAnalysisControlBar;
 import ui.enums.AnalysisPages;
-import org.junit.jupiter.api.Test;
 import ui.pages.HomePage;
 import ui.pages.base.BaseAnalysisPage;
 import ui.pages.base.BasePage;
@@ -39,29 +38,27 @@ public void mapLoadsTest( )
 @Test
 public void pagesNavigableTest( )
 {
-	HomePageNavBar navBar = startPage.getNavBar();
+	NavBar navBar = startPage.getNavBar();
 	assertTrue(navBar.isDropdownEnabled());
 	assertTrue(navBar.isSiteLogoDisplayed());
-	assertTrue(navBar.isSearchBarEnabled());
 	assertTrue(startPage.isCurrentPage());
 	
-	BasePage<HomePageNavBar> currPage = startPage;
+	BasePage currPage = startPage;
 	for ( AnalysisPages pageDesc : AnalysisPages.values() )
 	{
 		BaseAnalysisPage<? extends BaseAnalysisControlBar> analysisPage = currPage.getNavBar()
 																				  .openAnalysisPage(pageDesc);
 		NavBar analysisNavBar = analysisPage.getNavBar();
-		assertTrue(analysisNavBar.isDropdownEnabled());
-		assertTrue(analysisNavBar.isSiteLogoDisplayed());
-		assertTrue(analysisPage.isCurrentPage());
+		assertTrue(analysisNavBar.isDropdownEnabled(), pageDesc.getDropdownOptionText());
+		assertTrue(analysisNavBar.isSiteLogoDisplayed(), pageDesc.getDropdownOptionText());
+		assertTrue(analysisPage.isCurrentPage(), pageDesc.getDropdownOptionText());
 	}
 	
 	HomePage homePage = currPage.getNavBar()
 								.openHomePage();
-	HomePageNavBar homeNavBar = homePage.getNavBar();
+	NavBar homeNavBar = homePage.getNavBar();
 	assertTrue(homeNavBar.isDropdownEnabled());
 	assertTrue(homeNavBar.isSiteLogoDisplayed());
-	assertTrue(homeNavBar.isSearchBarEnabled());
 	assertTrue(homePage.isCurrentPage());
 }
 }

@@ -1,11 +1,11 @@
 package ui.components;
 
-import ui.components.base.BaseAnalysisControlBar;
-import ui.components.base.BaseComponent;
-import ui.enums.AnalysisPages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import ui.components.base.BaseAnalysisControlBar;
+import ui.components.base.BaseComponent;
+import ui.enums.AnalysisPages;
 import ui.pages.HomePage;
 import ui.pages.base.BaseAnalysisPage;
 
@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class NavBar extends BaseComponent
 {
-protected By siteLogoLoc = By.className("navbar-brand");
-protected By analysisPageDropdownButtonLoc = By.id("ui.pages-drop-btn");
-protected By analysisPageDropdownOptionsContainerLoc = By.id("ui.pages-dropdown-menu");
+protected By siteLogoLoc = By.className("logo");
+protected By analysisPageDropdownButtonLoc = By.id("pages-drop-btn");
+protected By analysisPageDropdownOptionsContainerLoc = By.id("pages-dropdown-menu");
 protected By analysisPageDropdownOption = By.tagName("a");
 
 public NavBar( final WebDriver driver )
