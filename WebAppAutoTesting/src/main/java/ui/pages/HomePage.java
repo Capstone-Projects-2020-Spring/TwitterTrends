@@ -5,7 +5,6 @@ import base.enums.States;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import ui.components.NavBar;
 import ui.components.TrendsDialog;
 import ui.pages.base.BasePage;
 
@@ -36,7 +35,6 @@ final protected static int MILLIS_WAIT_FOR_ZOOM_TRANSITION = 1250;
 public HomePage( final WebDriver driver )
 {
 	super(driver, "Analyze Location");
-	navBar = new NavBar(driver);
 	this.trendsDialog = new TrendsDialog(driver);
 }
 

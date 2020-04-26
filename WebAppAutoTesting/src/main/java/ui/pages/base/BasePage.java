@@ -21,6 +21,7 @@ protected BasePage( final WebDriver driver, final String titleText )
 {
 	super(driver);
 	this.pageTitle = titleText;
+	navBar = new NavBar(driver);
 }
 
 public NavBar getNavBar( ) { return navBar; }

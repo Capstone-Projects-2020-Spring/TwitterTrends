@@ -3,10 +3,8 @@ package ui;
 import org.junit.jupiter.api.Test;
 import ui.base.BaseUiTest;
 import ui.components.NavBar;
-import ui.components.base.BaseAnalysisControlBar;
-import ui.enums.AnalysisPages;
+import ui.enums.TwitterTrendsPages;
 import ui.pages.HomePage;
-import ui.pages.base.BaseAnalysisPage;
 import ui.pages.base.BasePage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,14 +42,14 @@ public void pagesNavigableTest( )
 	assertTrue(startPage.isCurrentPage());
 	
 	BasePage currPage = startPage;
-	for ( AnalysisPages pageDesc : AnalysisPages.values() )
+	for ( TwitterTrendsPages pageDesc : TwitterTrendsPages.values() )
 	{
-		BaseAnalysisPage<? extends BaseAnalysisControlBar> analysisPage = currPage.getNavBar()
-																				  .openAnalysisPage(pageDesc);
-		NavBar analysisNavBar = analysisPage.getNavBar();
-		assertTrue(analysisNavBar.isDropdownEnabled(), pageDesc.getDropdownOptionText());
-		assertTrue(analysisNavBar.isSiteLogoDisplayed(), pageDesc.getDropdownOptionText());
-		assertTrue(analysisPage.isCurrentPage(), pageDesc.getDropdownOptionText());
+		currPage = currPage.getNavBar()
+						   .openPage(pageDesc);
+		NavBar currNavBar = currPage.getNavBar();
+		assertTrue(currNavBar.isDropdownEnabled(), pageDesc.getDropdownOptionText());
+		assertTrue(currNavBar.isSiteLogoDisplayed(), pageDesc.getDropdownOptionText());
+		assertTrue(currPage.isCurrentPage(), pageDesc.getDropdownOptionText());
 	}
 	
 	HomePage homePage = currPage.getNavBar()

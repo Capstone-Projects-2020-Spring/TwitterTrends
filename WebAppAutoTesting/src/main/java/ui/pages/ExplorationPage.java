@@ -6,7 +6,7 @@ import ui.pages.base.BasePage;
 public class ExplorationPage extends BasePage
 {
 
-protected ExplorationPage( final WebDriver driver )
+public ExplorationPage( final WebDriver driver )
 {
 	super(driver, "Analyze Tweets/Trends");
 }

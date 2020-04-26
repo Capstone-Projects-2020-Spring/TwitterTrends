@@ -3,11 +3,10 @@ package ui.components;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import ui.components.base.BaseAnalysisControlBar;
 import ui.components.base.BaseComponent;
-import ui.enums.AnalysisPages;
+import ui.enums.TwitterTrendsPages;
 import ui.pages.HomePage;
-import ui.pages.base.BaseAnalysisPage;
+import ui.pages.base.BasePage;
 
 import java.util.List;
 
@@ -38,9 +37,9 @@ public boolean isDropdownEnabled( ) { return checkForEnabledElement(analysisPage
  *
  * @return a POM representation of the analysis page which will be navigated to
  */
-public <T extends BaseAnalysisPage<? extends BaseAnalysisControlBar>> T openAnalysisPage( AnalysisPages pageDesc )
+public <T extends BasePage> T openPage( TwitterTrendsPages pageDesc )
 {
-	T analysisPage = null;
+	T pageRepresentation = null;
 	
 	WebElement navDropdown = getEnabledElement(analysisPageDropdownButtonLoc);
 	clickElem(navDropdown);
@@ -60,9 +59,9 @@ public <T extends BaseAnalysisPage<? extends BaseAnalysisControlBar>> T openAnal
 	clickElem(targetDropdownOption);
 	
 	waitForPageLoad(targetDropdownOption);
-	analysisPage = pageDesc.getPageInstance(driver);
+	pageRepresentation = pageDesc.getPageInstance(driver);
 	
-	return analysisPage;
+	return pageRepresentation;
 }
 
 /**

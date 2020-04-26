@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * describes the different pages on the website
  */
-public enum AnalysisPages
+public enum TwitterTrendsPages
 {
 	TIME("Time", TimeAnalysisPage.class),
 	//this needs to not be first because this refers to the home page and some tests cycle through the pages listed here, starting with the home page
@@ -23,7 +23,7 @@ public enum AnalysisPages
 private String dropdownOptionText;
 private Class<? extends BasePage> pageClass;
 
-<T extends BasePage> AnalysisPages( final String navBarOptionText, final Class<T> linkedPageClass )
+<T extends BasePage> TwitterTrendsPages( final String navBarOptionText, final Class<T> linkedPageClass )
 {
 	this.dropdownOptionText = navBarOptionText;
 	this.pageClass = linkedPageClass;
@@ -48,8 +48,8 @@ public <T extends BasePage> T getPageInstance( final WebDriver driver )
 		newPage = pageConstructor.newInstance(driver);
 	} catch ( NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e )
 	{
-		System.err.println("FATAL- PAGE CLASS" + dropdownOptionText + " NOT INSTANTIABLE");
-		System.exit(1);
+		System.err.println("FATAL- PAGE CLASS " + dropdownOptionText + " NOT INSTANTIABLE");
+		throw new RuntimeException("Unable to instantiate " + this.pageClass.toString());
 	}
 	
 	return newPage;

@@ -5,7 +5,7 @@ import ui.pages.base.BasePage;
 
 public class HelpPage extends BasePage
 {
-protected HelpPage( final WebDriver driver )
+public HelpPage( final WebDriver driver )
 {
 	super(driver, "Help Page");
 }

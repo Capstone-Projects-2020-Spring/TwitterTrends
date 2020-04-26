@@ -1,7 +1,6 @@
 package ui.pages.base;
 
 import org.openqa.selenium.WebDriver;
-import ui.components.NavBar;
 import ui.components.base.BaseAnalysisControlBar;
 
 /**
@@ -15,7 +14,6 @@ protected T controlBar;
 protected BaseAnalysisPage( final WebDriver driver, final String titleText )
 {
 	super(driver, titleText);
-	this.navBar = new NavBar(driver);
 }
 
 public T getControlBar( ) { return controlBar; }
