@@ -31,6 +31,9 @@ class AlgorithmsManager:
     BASE_TREND_SNAPSHOTS_QUERY_TEMPLATE="SELECT * FROM trends_snapshot " \
                                         "\nWHERE created_date >= '{}' AND created_date < '{}' "
 
+    FRIEND_NETWORK_TYPE= "friends"
+    FOLLOWER_NETWORK_TYPE = "followers"
+
 
     def __init__(self, cache, db, twit):
         self.cache = cache
@@ -507,14 +510,14 @@ class AlgorithmsManager:
 
         return res
 
-    def get_network_tweets_text(self, id2, username, count, depth):
+    def get_network_tweets_text(self, id2, username, count, depth, network_type):
         textsStr = ""
         if id2 > 0 or username is not None:
             # get bunch of tweets starting with the user of given id
             n = depth  # goes depth level deep
             # array of tweet texts
             texts = []
-            self.append_texts_recursive(texts, count, n, 0, id2, username)
+            self.append_texts_recursive(texts, count, n, 0, id2, username, network_type)
 
             for text in texts:
                 splittext = text.split(' ')
@@ -523,24 +526,31 @@ class AlgorithmsManager:
                         textsStr += (split + " ")
         return textsStr
 
-    def append_texts_recursive(self, texts, count, n, i, id2, username):
+    def append_texts_recursive(self, texts, count, n, i, id2, username, network_type):
         tweets = self.twitter.getTweetsFromUser(id2, username, count)
         for text in tweets:
             texts.append(text)
         if i < n:
-            friendsid = self.twitter.getFriendsID(id2, username, count)
-            for id3 in friendsid:
-                screen_name = self.twitter.get_username_from_id(id3)
-                self.append_texts_recursive(texts, n, count, i+1, id3, screen_name)
+            otherUserIds = []
+            if network_type == AlgorithmsManager.FRIEND_NETWORK_TYPE:
+                otherUserIds = self.twitter.getFriendsID(id2, username, count)
+            elif network_type == AlgorithmsManager.FOLLOWER_NETWORK_TYPE:
+                otherUserIds = self.twitter.getFollowersID(id2, username, count)
+            else:
+                raise ValueError("invalid network type " + network_type)
 
-    def create_wordcloud_image(self, id2=0, username=None, count=20, depth=1, querystr=None, c_time = 15):
+            for id3 in otherUserIds:
+                screen_name = self.twitter.get_username_from_id(id3)
+                self.append_texts_recursive(texts, n, count, i+1, id3, screen_name, network_type)
+
+    def create_wordcloud_image(self, network_type, id2=0, username=None, count=5, depth=1, querystr=None, c_time = 15):
         if querystr is None:
-            querystr = "/wordcloud{}{}".format(id2, username)
+            querystr = "/wordcloud{}{}{}".format(network_type, id2, username)
 
         cachetime = c_time  # n minutes cache time check
 
         if self.cache.should_update(querystr, cachetime):
-            words = self.get_network_tweets_text(id2, username, count, depth)
+            words = self.get_network_tweets_text(id2, username, count, depth, network_type)
             if words != "":
                 workingdir = os.path.dirname(__file__)
                 stopwords = set(STOPWORDS)
