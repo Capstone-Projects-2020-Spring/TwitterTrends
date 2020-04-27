@@ -193,6 +193,7 @@ $(document).ready(function(){
     document.querySelector("#trends-display-city-time").addEventListener('click', function() {
         let cityTrendUrl = 'http://18.214.197.203:5000/temporal_options?';
         let city = document.getElementById('myInput2').value;
+        document.getElementById("city-time-title").innerHTML = "Top Trends";
         if(city){ // check if a city was provided
             let woeid = citiesMap.get(city);
             if(woeid){ // check if the provided city was valid (spelled correctly and in our map)
