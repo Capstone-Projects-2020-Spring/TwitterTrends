@@ -4,8 +4,14 @@ import time
 import DataStructures
 
 import traceback
+import numpy as np
+from collections import OrderedDict
 
 class TemporalDataManager:
+    SNAPSHOT_WOEID_COLUMN_INDEX = 1
+    SNAPSHOT_TREND_CONTENT_COLUMN_INDEX = 2
+    SNAPSHOT_TWEET_VOLUME_COLUMN_INDEX = 4
+    SNAPSHOT_DATE_COLUMN_INDEX = 6
 
     # TODO: set up instance of algorithm manager (and anything else needed)
     # TODO: tasked to set up threads that can access trends data retrieving functions
@@ -144,3 +150,79 @@ class TemporalDataManager:
 
         print(csv)
         return csv
+
+    def collect_trend_history_options(self, initDate, finalDate, locationId= None):
+        """assembles a summary of the trends that were popular at one or more times
+        Only looks within a given period and possibly only in one location
+
+        Parameters:
+            initDate (datetime): beginning of time window to look for snapshots in
+            finalDate (datetime): end of time window to look for snapshots in
+            locationId (int): woeid of a location which the snapshots should be from
+
+        Returns:
+            list: a list of dictionaries, where each dict summarizes the history of a trend's popularity within the
+            given window
+            Note- this dictionary should be ordered so that a trend whose first moment of popularity was earlier
+            would be listed before a trend whose first moment of popularity was later
+        """
+
+        snapshots = self.algo.get_all_trends_with_snapshots(initDate, finalDate, locationId)
+
+        trendContentLabel = "trend_content"
+        maxTweetVolumeLabel = "max_tweet_volume"
+        avgTweetVolumeLabel = "avg_tweet_volume"
+
+        firstDateLabel = "first_date"
+        lastDateLabel = "last_date"
+        locationsLabel = "locations"
+        tweetVolumesLabel = "tweet_volumes"
+
+        historicalTrends = OrderedDict()
+
+        for trendSnap in snapshots:
+            snapWoeid = trendSnap[TemporalDataManager.SNAPSHOT_WOEID_COLUMN_INDEX]
+            snapTrend = trendSnap[TemporalDataManager.SNAPSHOT_TREND_CONTENT_COLUMN_INDEX]
+            snapTweetVol = trendSnap[TemporalDataManager.SNAPSHOT_TWEET_VOLUME_COLUMN_INDEX]
+            snapDate = trendSnap[TemporalDataManager.SNAPSHOT_DATE_COLUMN_INDEX]
+
+            if snapTrend not in historicalTrends:
+                historicalTrends[snapTrend] = \
+                    {firstDateLabel:snapDate, lastDateLabel: snapDate, locationsLabel: {snapWoeid},
+                     tweetVolumesLabel:[]}
+            else:
+                prevEarliestDate = historicalTrends[snapTrend][firstDateLabel]
+                if prevEarliestDate > snapDate:
+                    historicalTrends[snapTrend][firstDateLabel] = snapDate
+
+                prevLatestDate = historicalTrends[snapTrend][lastDateLabel]
+                if prevLatestDate < snapDate:
+                    historicalTrends[snapTrend][lastDateLabel] = snapDate
+
+                historicalTrends[snapTrend][locationsLabel].add(snapWoeid)
+
+            if snapTweetVol > 0:
+                historicalTrends[snapTrend][tweetVolumesLabel].append(snapTweetVol)
+
+        historicalTrendsSummary = []
+
+        for histTrend, trendDetails in historicalTrends.items():
+            trendTweetVolumes = trendDetails[tweetVolumesLabel]
+            maxTweetVol = 0
+            avgTweetVol = 0
+            if len(trendTweetVolumes) > 0:
+                maxTweetVol = int(np.max(trendTweetVolumes))
+                avgTweetVol = float(np.average(trendTweetVolumes))
+
+            trendLocations = list(trendDetails[locationsLabel])
+            trendEarliestDate = trendDetails[firstDateLabel].isoformat()
+            trendLatestDate = trendDetails[lastDateLabel].isoformat()
+
+            trendSummary = {trendContentLabel:histTrend, firstDateLabel:trendEarliestDate,
+                            lastDateLabel:trendLatestDate, maxTweetVolumeLabel:maxTweetVol,
+                            avgTweetVolumeLabel:avgTweetVol, locationsLabel:trendLocations}
+            historicalTrendsSummary.append(trendSummary)
+
+
+        return historicalTrendsSummary
+

@@ -132,7 +132,7 @@ class standardAPI:
         return texts
 
     # get list of userID in a user's follow list
-    def getFriendsID(self, id2, username, count=20):
+    def getFriendsID(self, id2, username, count=3):
         queryfriends_ids = []
         if username is not None:
             try:
@@ -152,10 +152,37 @@ class standardAPI:
 
         #todo remove or lessen this restriction?
         trimmedids = []
-        # only check up to first 3 of the followers id
+        # only include to first 3 of the friends' ids
         # initial implementation to speed up word cloud generation time
-        for i in range(0, min(3, len(queryfriends_ids))):
+        for i in range(0, min(count, len(queryfriends_ids))):
             trimmedids.append(queryfriends_ids[i])
+        return trimmedids
+
+    # get list of userID in a user's follower list
+    def getFollowersID(self, id2, username, count=3):
+        queryFollowers_ids = []
+        if username is not None:
+            try:
+                queryFollowers_ids = self.tweepy.followers_ids(screen_name=username)
+            except RateLimitError as rle:
+                self._rotate_tweepy_accounts()
+                print("hit rate limit while fetching the followers of a user ", username)
+                queryFollowers_ids = self.tweepy.followers_ids(screen_name=username)
+        elif id2 > 0:
+            try:
+                queryFollowers_ids = self.tweepy.followers_ids(id=id2)
+            except RateLimitError as rle:
+                self._rotate_tweepy_accounts()
+                queryFollowers_ids = self.tweepy.followers_ids(id=id2)
+        else:
+            return queryFollowers_ids
+
+        # todo remove or lessen this restriction?
+        trimmedids = []
+        # only check up to first 3 of the followers' ids
+        # initial implementation to speed up word cloud generation time
+        for i in range(0, min(count, len(queryFollowers_ids))):
+            trimmedids.append(queryFollowers_ids[i])
         return trimmedids
 
     # Get twitter user profile with screen_name (e.g. @ttclaire2)

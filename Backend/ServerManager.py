@@ -1,6 +1,7 @@
 import flask
 from flask import request, jsonify, send_file
 from flask_cors import CORS
+import json
 from datetime import datetime, timedelta
 import traceback
 
@@ -38,6 +39,8 @@ timedata = TemporalDataManager(algo)
 app = flask.Flask(__name__)
 # app.config["DEBUG"] = True
 CORS(app)
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 @app.route('/', methods=['GET'])
@@ -245,9 +248,9 @@ def api_get_trends_snapshot():
 
             try:
                 if fromdate is not None:
-                    since = datetime.strptime(fromdate, "%Y-%m-%d %H:%M:%S")
+                    since = datetime.strptime(fromdate, DATETIME_FORMAT)
                 if todate is not None:
-                    until = datetime.strptime(todate, "%Y-%m-%d %H:%M:%S")
+                    until = datetime.strptime(todate, DATETIME_FORMAT)
                 # Final check to make sure since and until datetimes are valid
                 if since >= until:
                     since = until - timedelta(hours=12)
@@ -313,6 +316,54 @@ def api_get_trends_snapshot():
     #todo cut unreachable code?
     return str(trendsparsed)
 
+@app.route('/temporal_options', methods=['GET'])
+def api_get_trends_history_summary():
+    fromDateArg = request.args.get("from")  # YYYY-mm-dd HH:MM:SS
+    toDateArg = request.args.get("to")  # YYYY-mm-dd HH:MM:SS
+    locArg = request.args.get("woeid")  # optional woeid argument
+
+    endDate = datetime.now()
+    startDate = endDate- timedelta(hours=12)
+    locId = None
+
+    try:
+        print("/temporal_options args: ", fromDateArg, toDateArg, locArg)
+
+        try:
+            if fromDateArg is not None:
+                startDate = datetime.strptime(fromDateArg, DATETIME_FORMAT)
+            if toDateArg is not None:
+                endDate = datetime.strptime(toDateArg, DATETIME_FORMAT)
+            # Final check to make sure since and until datetimes are valid
+            if startDate >= endDate:
+                print("/temporal_options -- datetimes not in valid order -- using default start and end dates")
+                endDate = datetime.now()
+                startDate = endDate - timedelta(hours=12)
+        except Exception as e:
+            print("/temporal_options -- datetimes not in the proper format of YYYY-mm-dd HH-MM-SS -- using default start and end dates")
+            print("Exception: ", e.__doc__, str(e))
+            traceback.print_exc()
+
+        if locArg is not None:
+            try:
+                locId = int(locArg)
+            except Exception as e:
+                print("/temporal_options -- invalid location woeid -- fetching from all locations")
+                print("Exception: ", e.__doc__, str(e))
+                traceback.print_exc()
+
+        trendsHistoryOptions = timedata.collect_trend_history_options(startDate, endDate, locId)
+        return jsonify(trendsHistoryOptions)
+
+    except Exception as e:
+        errStr = str(e)
+        print('ERROR ENDPOINT /temporal_options')
+        print("Exception: ", e.__doc__, errStr)
+        traceback.print_exc()
+        return 'ERROR ENDPOINT ' + errStr
+
+
+
 
 @app.route('/economics', methods=['GET'])
 def api_get_economic_data():
@@ -352,6 +403,7 @@ def api_get_wordcloud():
     username = request.args.get('username')
     countstr = request.args.get('count')
     depthstr = request.args.get('depth')
+    networkType = request.args.get('networkType')
 
     id2 = 0
     count = 20
@@ -364,6 +416,9 @@ def api_get_wordcloud():
         if depthstr is not None:
             depth = int(depthstr)
 
+        if networkType != AlgorithmsManager.FOLLOWER_NETWORK_TYPE and networkType != AlgorithmsManager.FRIEND_NETWORK_TYPE:
+            raise ValueError("Invalid network type " + networkType)
+
     except Exception as e:
         errStr = str(e)
         print('ERROR ENDPOINT /wordcloud')
@@ -371,9 +426,9 @@ def api_get_wordcloud():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
-    print("\n/wordcloud args: ", id2, username, count, depth, "\n")
+    print("\n/wordcloud args: ", id2, username, count, depth, networkType, "\n")
 
-    wordcloudpath = algo.create_wordcloud_image(id2, username, count, depth)
+    wordcloudpath = algo.create_wordcloud_image(networkType, id2, username, count, depth)
     if wordcloudpath is None:
         return "Invalid user id or screen name"
     return send_file(wordcloudpath, mimetype='image/png')
