@@ -403,6 +403,7 @@ def api_get_wordcloud():
     username = request.args.get('username')
     countstr = request.args.get('count')
     depthstr = request.args.get('depth')
+    networkType = request.args.get('networkType')
 
     id2 = 0
     count = 20
@@ -415,6 +416,9 @@ def api_get_wordcloud():
         if depthstr is not None:
             depth = int(depthstr)
 
+        if networkType != AlgorithmsManager.FOLLOWER_NETWORK_TYPE and networkType != AlgorithmsManager.FRIEND_NETWORK_TYPE:
+            raise ValueError("Invalid network type " + networkType)
+
     except Exception as e:
         errStr = str(e)
         print('ERROR ENDPOINT /wordcloud')
@@ -424,7 +428,7 @@ def api_get_wordcloud():
 
     print("\n/wordcloud args: ", id2, username, count, depth, "\n")
 
-    wordcloudpath = algo.create_wordcloud_image(id2, username, count, depth)
+    wordcloudpath = algo.create_wordcloud_image(networkType, id2, username, count, depth)
     if wordcloudpath is None:
         return "Invalid user id or screen name"
     return send_file(wordcloudpath, mimetype='image/png')
