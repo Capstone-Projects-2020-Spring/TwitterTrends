@@ -426,7 +426,7 @@ def api_get_wordcloud():
         traceback.print_exc()
         return 'ERROR ENDPOINT ' + errStr
 
-    print("\n/wordcloud args: ", id2, username, count, depth, "\n")
+    print("\n/wordcloud args: ", id2, username, count, depth, networkType, "\n")
 
     wordcloudpath = algo.create_wordcloud_image(networkType, id2, username, count, depth)
     if wordcloudpath is None:

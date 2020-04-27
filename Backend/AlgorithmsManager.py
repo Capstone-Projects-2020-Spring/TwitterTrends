@@ -545,7 +545,7 @@ class AlgorithmsManager:
 
     def create_wordcloud_image(self, network_type, id2=0, username=None, count=5, depth=1, querystr=None, c_time = 15):
         if querystr is None:
-            querystr = "/wordcloud{}{}".format(id2, username)
+            querystr = "/wordcloud{}{}{}".format(network_type, id2, username)
 
         cachetime = c_time  # n minutes cache time check
 
