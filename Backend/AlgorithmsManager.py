@@ -507,20 +507,42 @@ class AlgorithmsManager:
 
         return res
 
+
+
     def get_network_tweets_text(self, id2, username, count, depth):
         textsStr = ""
         if id2 > 0 or username is not None:
             # get bunch of tweets starting with the user of given id
             n = depth  # goes depth level deep
             # array of tweet texts
-            texts = []
-            self.append_texts_recursive(texts, count, n, 0, id2, username)
 
-            for text in texts:
-                splittext = text.split(' ')
-                for split in splittext:
-                    if not split.startswith('http'):
-                        textsStr += (split + " ")
+            #texts = []
+            # self.append_texts_recursive(texts, count, n, 0, id2, username)
+
+            # New network tweets method without using Recursive
+            depthDict = {}
+            depthDict[0] = [[id2, username]]
+
+            for i in range(0, depth+1):
+                for l in range(0, len(depthDict[i])):
+                    tweets = self.twitter.getTweetsFromUser(depthDict[i][l][0], depthDict[i][l][1], count)
+                    for text in tweets:
+                        splittext = text.split(' ')
+                        for split in splittext:
+                            if not split.startswith('http'):
+                                textsStr += (split + " ")
+                    friendsid = self.twitter.getFriendsID(depthDict[i][l][0], depthDict[i][l][1], count)
+                    for id3 in friendsid:
+                        screen_name = self.twitter.get_username_from_id(id3)
+                        if i+1 not in depthDict:
+                            depthDict[i+1] = []
+                        depthDict[i+1].append([id3, screen_name])
+
+        #    for text in texts:
+        #        splittext = text.split(' ')
+        #        for split in splittext:
+        #            if not split.startswith('http'):
+        #                textsStr += (split + " ")
         return textsStr
 
     def append_texts_recursive(self, texts, count, n, i, id2, username):
