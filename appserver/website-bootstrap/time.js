@@ -25,8 +25,9 @@ $.getJSON(locationsUrl, function (cityObjects) {
 
 
 $(document).ready(function(){
-    const default_csv = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv";
-    //makeLineGraph(default_csv, ["valueA", "valueB", "valueC"]);
+    const default_linegraph = "http://18.214.197.203:5000/temporal?trends=COVID-19,Trump";
+    const default_group = ['COVID-19', 'Trump'];
+    makeLineGraph(default_linegraph, default_group);
 
     document.getElementById('update-graph-btn').addEventListener('click', function () {
         let temporalURL = 'http://18.214.197.203:5000/temporal?trends=';

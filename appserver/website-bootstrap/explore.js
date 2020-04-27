@@ -163,7 +163,7 @@ $(document).ready(function(){
             $.getJSON(tweetTrendUrl, function(data){
 		        tweets = data;
 	        }).then(function() {
-	            document.getElementById("tweets-title").innerHTML = "Recent Tweets for " + trend;
+	            document.getElementById("tweets-title").innerHTML = "Recent Tweets Containing " + trend;
                 let table_body = document.createElement('tbody');
                 document.getElementById("display-tweets-table").replaceChild(table_body, document.getElementById("display-tweets-table-body"));
                 table_body.id = "display-tweets-table-body";
@@ -196,7 +196,7 @@ $(document).ready(function(){
         if(city){ // check if a city was provided
             let woeid = citiesMap.get(city);
             if(woeid){ // check if the provided city was valid (spelled correctly and in our map)
-                document.getElementById("city-time-title").innerHTML = "Top Trends for " + city + " Over the Specified Dates"; // change the header of the table to match the city provided by the user
+                document.getElementById("city-time-title").innerHTML = "Top Trends for " + city; // change the header of the table to match the city provided by the user
                 cityTrendUrl += ('woeid=' + woeid); // append the woeid to the url before handling the date inputs
                 handleDates(cityTrendUrl);
             } else { // if the city provided by the user doesn't return a woeid from our map(spelled wrong or not a city we have data for), let the user know it is not a valid option

@@ -56,13 +56,8 @@ $(document).ready(function(){
 	const mousemove = function(d) {
 		Tooltip
 			.html(d.city_id + "<br>" + "long: " + d.longitude + "<br>" + "lat: " + d.latitude)
-			if(window.currZoomedState){
-				Tooltip.style("left", (xZoomed) + "px")
-					.style("top", (yZoomed) + "px")
-			} else {
-				Tooltip.style("left", (d3.mouse(this)[0] + 50) + "px")
-					.style("top", (d3.mouse(this)[1]) + "px")
-			}
+			.style("left", (d3.event.pageX + 25) + "px")
+			.style("top", (d3.event.pageY - 25) + "px")
 
 	};
 
