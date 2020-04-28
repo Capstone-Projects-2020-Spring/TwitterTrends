@@ -16,7 +16,6 @@ Twitter Trends squad
   * > MarkupSafe 1.1.1
   * > ItsDangerous 1.1.0
   * > Click 7.0
-  * flask-cors 3.0.8
   *
   * tweepy 3.8.0
   * > requests 2.23.0 
@@ -48,6 +47,7 @@ Twitter Trends squad
   * jsonify 0.5
  
   * The below libraries were installed at various points during project implementation and were added here from pip list just before the first/only project release:
+  * > flask-cors 3.0.8
   * > numpy 1.18.2
   * > newsapi-python 0.2.6
   * > pillow 7.1.1
@@ -55,8 +55,8 @@ Twitter Trends squad
   * > future 0.18.2
   * > geographiclib 1.50
   * > geopy 1.21.0
-  * > kiwisolver
-  * > matplotlib
+  * > kiwisolver 1.2.0
+  * > matplotlib 3.2.1
   * > pyparsing 2.4.7
   * > python-dateutil 2.8.1
   * > python-twitter 3.5
