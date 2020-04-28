@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Analyze Tweets/Trends</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	    <script src="https://d3js.org/d3.v4.js"></script>
+	    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="explore.js"></script>
+	
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="index.html#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="index.html#"><img src="images/logo2.png"></a>
+            </div>
+
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Analyze Tweets/Trends</h3>
+                </div>
+
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div id="pages-dropdown-menu">
+                        <a href="index.html">Location</a>
+                        <a href="time.html">Time</a>
+                        <a href="network.html">Network</a>
+                        <a href="cloud.html">Word Cloud</a>
+                        <a href="help.html">Help</a>
+                    </div>
+                </div>
+
+
+            </div>
+        </nav>
+
+
+         <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
+        <div class="row">
+            <header class="page-header header container-fluid">
+
+                <!-- Trends Display -->
+                <div id="city-title" class="explore-title-text">
+                     <h6> Top Trends Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input id="myInput" type="text" name="myCity" placeholder="City">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-city">Search</button>
+                </form>
+
+                <div class="table-style">
+                    <table id="display-trends-table">
+                        <thead>
+                          <th>Trend Content</th>
+                          <th>Tweet Volume</th>
+                        </thead>
+                        <tbody id="display-trends-table-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Tweets Display -->
+                <div id="tweets-title" class="explore-title-text">
+                     <h6> Recent Tweets Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input type="text" placeholder="Keyword" name="tweets" id="tweet-trend">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-tweets">Search</button>
+                </form>
+
+                <div class="table-style">
+                    <table id="display-tweets-table">
+                        <thead>
+                            <th>Tweet Content</th>
+                            <th>Author Username</th>
+                            <th>Posting Date/Time</th>
+                            <th>Retweets</th>
+                            <th>Likes</th>
+                        </thead>
+                        <tbody id="display-tweets-table-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Trends History Display -->
+                <div id="city-time-title"class="explore-title-text">
+                     <h6> Trends Display </h6>
+                </div>
+
+                <form autocomplete="off" >
+                    <div class="trends-display">
+                        <input id="myInput2" type="text" name="myCity2" placeholder="City (Optional)">
+                    </div>
+                    <button class="trends-display-button" type="reset" id="trends-display-city-time">Search</button>
+                </form>
+
+                <div class="explore-title-text-sm">
+                    <span>Start Date: </span>
+                    <input type="date" id="start" name="date-start" autocomplete="off"
+                        min="2020-03-01" max="2020-04-26">
+
+                    <span>End Date: </span>
+                    <input type="date" id="end" name="date-end" autocomplete="off"
+                        min="2020-03-02" max="2020-04-27">
+                </div>
+
+                <div class="table-style">
+                    <table id="display-timetrends-table">
+                        <thead>
+                            <th>Trend Content</th>
+                            <th>Earliest Date</th>
+                            <th>Latest Date</th>
+                            <th>Max Volume</th>
+                            <th>Average Volume</th>
+                            <th>Location IDs</th>
+                        </thead>
+                        <tbody id="display-timetrends-table-body"></tbody>
+                    </table>
+                </div>
+            </header>
+        </div>
+        <footer class="page-footer footer container-fluid">
+        <ul class="team-members">
+            <li>Jennifer Chao</li>
+            <li>Conor Kennedy</li>
+            <li>Mike Lauw</li>
+            <li>Chris Nelson</li>
+            <li>Scott Salisbury</li>
+            <li>Dan Tran</li>
+            <li>Thanh Tran</li>
+        </ul>
+    </footer>
+    </body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Analyze Time</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	    <script src="https://d3js.org/d3.v4.js"></script>
+	    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="time.js"></script>
+	
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+<body>
+    <!-- Navigation bar -->
+	<nav class="navbar navbar-expand-md">
+        <!-- Title and Logo -->
+        <div class="top-nav-left">
+            <a href="index.html#"><h1 class="site-title">TwitterTrends</h1></a>
+            <a class="logo" href="index.html#"><img src="images/logo2.png"></a>
+        </div>
+
+        <div class="top-nav-right">
+            <div id="title">
+                <h3>Analyze Time</h3>
+            </div>
+
+            <!-- Drop down menu -->
+            <div id="pages-drop-box">
+                <button id="pages-drop-btn" type="reset">ANALYZE
+                    <i class="fas fa-caret-down"></i>
+                </button>
+
+                <div id="pages-dropdown-menu">
+                    <a href="index.html">Location</a>
+                    <a href="network.html">Network</a>
+					<a href="cloud.html">Word Cloud</a>
+					<a href="explore.html">Tweets/Trends</a>
+                    <a href="help.html">Help</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- First grid view d3.js Line graph and User inputs -->
+	<div class="row">
+        <!-- First column -->
+		<div class="col-12 col-md-10">
+		    <header class="page-header header container-fluid">
+                <div id="linegraph"></div>
+            </header>
+        </div>
+	
+		<!-- Second column -->
+		<div class="col">
+			<!-- Location trend -->
+			<form autocomplete="off" >
+				<div class="time-display" style="width:210px;">
+				<input id="location-search-box" type="text" placeholder="Location (Optional)">
+				</div>
+			</form>
+			
+		    <div id="user-inputs">
+                <!-- Search bar -->
+                <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search1" name="search1">
+                <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search2" name="search2">
+                <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search3" name="search3">
+                <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search4" name="search4">
+                <input type="text" placeholder="Search Tweets. ." autocomplete="off" id="search5" name="search5">
+            </div>
+            <!-- Slider -->
+		    <div id="rangeslider">
+				<div id="rangeslider-text">
+			        <h6> Time Span: </h6>
+				</div>
+			    <input autocomplete="off" type="range" min="1" max="10" value="1" class="slider" id="temporal-slider">
+				<div class="rangeslider-value">
+					<b> 1 Day </b>
+				</div>
+		    </div>
+		
+		    <!-- "Add another trend button" -->
+		    <div id="add-remove-trends">
+                <div id="add-trend">
+                    <button id="add-trend-btn" onclick="addSearch()">
+                        <i class="fas fa-plus"></i>Add Trend
+                    </button>
+                </div>
+
+                <!-- "Remove trend button" -->
+                <div id="remove-trend">
+                    <button id="remove-trend-btn" onclick="removeSearch()">
+                        <i class="fas fa-minus"></i>Remove Trend
+                    </button>
+                </div>
+		    </div>
+			
+		    <!-- Update Graph button -->
+		    <div id="update-graph">
+                <button id="update-graph-btn">
+				    Update Graph
+			    </button>
+		    </div>
+        </div>
+	</div>
+    <footer class="page-footer footer container-fluid">
+        <ul class="team-members">
+            <li>Jennifer Chao</li>
+            <li>Conor Kennedy</li>
+            <li>Mike Lauw</li>
+            <li>Chris Nelson</li>
+            <li>Scott Salisbury</li>
+            <li>Dan Tran</li>
+            <li>Thanh Tran</li>
+        </ul>
+    </footer>
+</body>
+</html>

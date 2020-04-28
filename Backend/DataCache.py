@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 
 
-# data class for the string result and timestamp of a query
+# data class for the object result and timestamp of a query
 class DataCacheResult:
 
-    def __init__(self, result_string, timestamp):
-        self.result = result_string
+    def __init__(self, result_object, timestamp):
+        self.result = result_object
         self.timestamp = timestamp
 
     def get_result(self):
@@ -18,16 +18,17 @@ class DataCacheResult:
 class DataCache:
 
     # TODO: Constructor takes a cache_max argument but is not yet implemented
-    def __init__(self, cache_max=5):
+    def __init__(self, cache_max=20):
         self.cache = {}
         self.cache_max = cache_max
 
     # Check if its a valid time to update the query in the cache
     # Add new query and results and return true if valid time
+    # Query key is a string and result is any object
     # Return false if invalid time
-    def add(self, query_string, result_string, mins=5):
+    def add(self, query_string, result_object, mins=5):
         if self.should_update(query_string, mins):
-            self.cache[query_string] = DataCacheResult(result_string, datetime.now())
+            self.cache[query_string] = DataCacheResult(result_object, datetime.now())
             print("Cache updated query [", query_string, "]")
             return True
         else:

@@ -1,148 +1,158 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
+    <head>
+        <title>Twitter Trends</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Twitter Trends</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
-	
-	
-	<!-- d3js stuff -->
-	<!--<svg width="960" height="600"></svg> -->
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script src="https://d3js.org/topojson.v2.min.js"></script>
-	<!-- -->
-	
-	
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
+	    <script src="https://kit.fontawesome.com/7b1d958192.js" crossorigin="anonymous"></script>
+	    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+        </script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <script src="main.js"></script>
 
-  </head>
-<body>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	    <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md">
+            <!-- Title and Logo -->
+            <div class="top-nav-left">
+                <a href="#"><h1 class="site-title">TwitterTrends</h1></a>
+                <a class="logo" href="#"><img src="images/logo2.png"></a>
+            </div>
 
-	<!-- Navigation bar -->
-	
-	<!-- Logo -->
-	<nav class="navbar navbar-expand-md">
-		<a class="navbar-brand" href="#">Logo</a>  
+            <div class="top-nav-right">
+                <div id="title">
+                    <h3>Analyze Location</h3>
+		        </div>
 
-		<!-- Search Bar -->
-		<div id="search-box">
-			<input id="search-txt" type="text" placeholder="Search . . ." name="">
-			<a id="search-btn">
-				<i class="fas fa-search"></i>
-			</a>
-		</div>
-		
-		<!-- Drop down menu -->
-		<div id="drop-box">
-			<button id="drop-btn" type="reset">ANALYZE
-			<i class="fas fa-caret-down"></i>
-			</button>
-			
-			<div id="dropdown-menu">
-				<a href="#">Time</a>
-				<a href="#">Location</a>
-				<a href="#">Network</a>
-			</div> 
-		</div>	
-		
-	</nav>
+                <!-- Drop down menu -->
+                <div id="pages-drop-box">
+                    <button id="pages-drop-btn" type="reset">ANALYZE
+                    <i class="fas fa-caret-down"></i>
+                    </button>
 
+                    <div id="pages-dropdown-menu">
+                        <a href="time.html">Time</a>
+                        <a href="network.html">Network</a>
+						<a href="cloud.html">Word Cloud</a>
+						<a href="explore.html">Tweets/Trends</a>
+                        <a href="help.html">Help</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
-     <!-- First grid view ( "Temple Logo"(d3.js stuff) and "Top Tweets and Top News" -->
-	<div class="row">
-        
-		<!-- First column -->
-		<div class="col-12 col-md-10">
-	<header class="page-header header container-fluid">
-		<!--<div id="overlay"></div> <!-- Temple Logo(delete after d3.js done*maybe*) -->
-			<!-- d3js map stuff -->
-			<svg width="960" height="600"></svg>
-			<script>
-			var svg = d3.select("svg");
-			var path = d3.geoPath();
+        <!-- First grid view d3.js stuff and "Top Tweets and Top News" -->
+        <div class="row">
 
-			d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
-				if (error) throw error;
+		    <!-- First column -->
+		    <div class="col-md-10">
+	            <header class="page-header header container-fluid">
+                    <div id="bg-modal">
+                        <div class="modal-content">
+                            <div id="close">+</div>
+                            <h1 class="top-trends-title">Top Trends</h1>
+                            <ul class="top-trends-ul">
+                                <li>1. <span id="trend-1"></span></li>
+                                <li>2. <span id="trend-2"></span></li>
+                                <li>3. <span id="trend-3"></span></li>
+                                <li>4. <span id="trend-4"></span></li>
+                                <li>5. <span id="trend-5"></span></li>
+                            </ul>
+                        </div>
+                    </div>
 
-				svg.append("g")
-					.attr("class", "states")
-					.selectAll("path")
-					.data(topojson.feature(us, us.objects.states).features)
-					.enter().append("path")
-					.attr("d", path);
+			        <!-- d3js map stuff -->
+			        <div id="svg-display">
+				        <div id="mapsvg">
+                            <div id="map-buttons">
+                                <div class="button-div">
+                                    <span>World Trends</span>
+                                    <button id="world_button"><img src="images/world.png"></button>
+                                </div>
+                                <div class="button-div">
+                                    <span>U.S. Trends</span>
+                                    <button id="us_button"><img src="images/usa.png"></button>
+                                </div>
+                            </div>
+                            <div id="econ-dropdown">
+                                <label for="econVarDropdown">Choose an economic variable to visualize:</label>
+                                <select id="econVarDropdown">
+                                    <option value="None">None</option>
+                                </select>
+                            </div>
+                        </div>
+			        </div>
+                </header>
+		    </div>
 
-				svg.append("path")
-					.attr("class", "state-borders")
-					.attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })));
-			});
-			</script>
-		</div>
-	</header>
-	
-		<!-- Second column -->
-		<div class="col" style="background-color: #470a0a"> <!-- Second column background color -->
-		
-		<br>
-		<h3 class="side-title">Top Tweets</h3> 
-		<img src="images/tweets-1.jpeg" class="img-fluid">
-		
-		<br>
-		<br>
-		<br>
-		<br>
-		
-		<h3 class="side-title">Top News</h3>
-		<img src="images/tweets-2.png" class="img-fluid">
-		
-		
-		
-		</div>
-	</div>
+            <!-- Second column -->
+		    <div class="col">
 
-	
-	<!-- Second grid view -->
-	<div class="container features">
-      <div class="row">
-	  <!-- First column -->
-        <div class="col-lg-4 col-md-4 col-sm-12">
-		  <br>
-		  <br>
-          <h3 class="feature-title">Stuff</h3>
-          <img src="images/icon-1.png" class="img-fluid">
-			<p>Bla Bla Bla</p>
-        </div>
-		
-		<!-- Second column -->
-        <div class="col-lg-4 col-md-4 col-sm-12">
-		  <br>
-		  <br>
-          <h3 class="feature-title">Stuff</h3>
-          <img src="images/icon-2.png" class="img-fluid">
-			<p>Bla Bla Bla</p>
-        </div>
-		
-		<!-- Third column -->
-          <div class="col-lg-4 col-md-4 col-sm-12">  
-		  <br>
-		  <br>
-		  <h3 id="feature-title">Team Members</h3>
-			<p>Jennifer Chao</p>
-			<p>Conor Kennedy</p>
-			<p>Mike Lauw</p>
-			<p>Chris Nelson</p>
-			<p>Scott Salisbury</p>
-			<p>Dan Tran</p>
-			<p>Thanh Tran</p>
-        </div>
-      </div> 
-    </div>
+                <!-- Tweets -->
+                <div id="trend-tweets">
+                    <h3 class="side-title">Recent Tweets</h3>
+                    <div id="tweets">
+                        <blockquote class="tweet">
+                            <a id="tweet-url-1" target="_blank"><div class="trend-pop-retweet">
+                                <h6 id="tweet-author-1"></h6>
+                                <p id="tweet-content-1"></p>
+                                <span id="tweet-date-1"></span>
+                            </div></a>
+                        </blockquote>
+                        <blockquote class="tweet">
+                           <a id="tweet-url-2" target="_blank"><div class="trend-pop-likes">
+                                <h6 id="tweet-author-2"></h6>
+                                <p id="tweet-content-2"></p>
+                                <span id="tweet-date-2"></span>
+                           </div></a>
+                        </blockquote>
+                    </div>
+                </div>
 
-<script src="jquery-3.3.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
-</body>
+                <!-- News -->
+                <div id="trend-news">
+                    <h3 class="side-title">Recent News</h3>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-1"></h6>
+                        <p id="article-blurb-1"></p>
+                        <a id="article-url-1" href="" target="_blank"></a>
+                    </div>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-2"></h6>
+                        <p id="article-blurb-2"></p>
+                        <a id="article-url-2" href="" target="_blank"></a>
+                    </div>
+                    <div class="trend-news-article">
+                        <h6 id="article-title-3"></h6>
+                        <p id="article-blurb-3"></p>
+                        <a id="article-url-3" href="" target="_blank"></a>
+                    </div>
+                </div>
+            </div>
+	    </div>
+
+        <!-- Footer -->
+        <footer class="page-footer footer container-fluid">
+            <ul class="team-members">
+                <li>Jennifer Chao</li>
+                <li>Conor Kennedy</li>
+                <li>Mike Lauw</li>
+                <li>Chris Nelson</li>
+                <li>Scott Salisbury</li>
+                <li>Dan Tran</li>
+                <li>Thanh Tran</li>
+            </ul>
+        </footer>
+    </body>
 </html>
